@@ -1,3 +1,6 @@
+"""
+Confession Tests.
+"""
 import sys
 import pytest
 

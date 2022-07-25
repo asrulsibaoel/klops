@@ -1,3 +1,6 @@
+"""
+Base Tests
+"""
 from klops.base import NAME
 
 

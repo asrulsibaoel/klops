@@ -1,3 +1,6 @@
+google-cloud
+google-cloud-container
+google-auth
 mlflow
 seldon-core
 pandas
