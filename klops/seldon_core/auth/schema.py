@@ -9,6 +9,9 @@ class AbstractKubernetesAuth(ABC):
     Abstract Class for Kubernetes get authentication
     """
 
+    def __init__(self, **kwargs) -> None:
+        self.kwargs = kwargs
+
     @abstractmethod
     def get_token(self) -> str:
         """
@@ -18,9 +21,9 @@ class AbstractKubernetesAuth(ABC):
         """
 
     @abstractmethod
-    def get_host(self) -> str:
+    def get_custer_endpoint(self) -> str:
         """
-        Get cluster host URI from platfroms.
+        Get cluster host URI endpoint from platfroms.
         Returns:
-            A string of host URI.
+            A string of host URI endpoint.
         """

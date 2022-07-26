@@ -10,11 +10,11 @@ class DefaultAuthentication(AbstractKubernetesAuth):
     Default Class Implementation for Kubernetes authentication.
     """
 
-    def get_host(self) -> str:
+    def get_custer_endpoint(self) -> str:
         """
-        Get Default Cluster Host
+        Get Default Cluster Host URI endpoint
         Returns:
-            A String of Basic Cluster Host URI.
+            A String of Basic Cluster Host URI endpoint.
         """
         return ""
 
@@ -26,3 +26,5 @@ class DefaultAuthentication(AbstractKubernetesAuth):
         """
         return ""
 
+
+__all__ = ["DefaultAuthentication"]
