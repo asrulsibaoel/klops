@@ -48,7 +48,8 @@ class SeldonDeployment:
         """
         Load the deployment configuration file into a Python dictionary.
         Args:
-            file_name (str): the deployment file name. It can be Yaml file (.yml or .yaml) or JSON file.
+            file_name (str): the deployment file name. 
+            It can be Yaml file (.yml or .yaml) or JSON file.
         Returns:
             deployment_config (dict): Seldon Deployment configuration dictionary.
         Raises:
@@ -74,6 +75,8 @@ class SeldonDeployment:
         Args:
             deployment_config (Union[object, Dict]):
                 Deployment Configuration Object.
+        Returns:
+            deployment_result (Dict): The deployment result metadata in a dictionary.
         Raises:
             SeldonDeploymentException: Raised when the deployment failed.
         """
@@ -124,3 +127,31 @@ class SeldonDeployment:
                         deployment.get("metadata").get("name"))
         return deployment_name in deployment_names
 
+    def delete(self, deployment_config) -> bool:
+        """
+        Deploy the ML Model
+        Args:
+            deployment_config (Union[object, Dict]):
+                Deployment Configuration Object.
+        Returns:
+            bool: Boolean result of deployment deletion.
+        Raises:
+            SeldonDeploymentException: Raised when the deployment failed.
+        """
+        try:
+            deployment_existence = self._check_deployment_exist(
+                deployment_name=deployment_config["metadata"]["name"])
+            if not deployment_existence:
+                return False
+            else:
+                deletion_result = self.api.delete_namespaced_custom_object(
+                        group="machinelearning.seldon.io",
+                        version="v1alpha2",
+                        name=deployment_config["metadata"]["name"],
+                        plural="seldondeployments",
+                        namespace=self.namespace)
+                if deletion_result:
+                    return True
+        except SeldonDeploymentException as deployment_exception:
+            print("Deployment failed,", str(deployment_exception))
+            return False
