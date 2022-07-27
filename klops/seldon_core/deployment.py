@@ -36,10 +36,10 @@ class SeldonDeployment:
             Exception: fff.
         """
         configuration = client.Configuration()
-        configuration.host = self.authentication.get_custer_endpoint
+        configuration.host = self.authentication.get_custer_endpoint()
         configuration.verify_ssl = False
         configuration.api_key['authorization'] = "Bearer " + \
-            self.authentication.get_token
+            self.authentication.get_token()
 
         api_client = client.ApiClient(configuration=configuration)
         self.api = client.CustomObjectsApi(api_client=api_client)
@@ -80,30 +80,29 @@ class SeldonDeployment:
         Raises:
             SeldonDeploymentException: Raised when the deployment failed.
         """
-        try:
-            deployment_existence = self._check_deployment_exist(
-                deployment_name=deployment_config["metadata"]["name"])
-            if not deployment_existence:
+        deployment_name = deployment_config["metadata"]["name"]
 
-                deployment_result = self.api.create_namespaced_custom_object(
-                    group="machinelearning.seldon.io",
-                    version="v1alpha2",
-                    plural="seldondeployments",
-                    body=deployment_config,
-                    namespace=self.namespace)
-            else:
-                deployment_result = self.api.patch_namespaced_custom_object(
-                        group="machinelearning.seldon.io",
-                        version="v1alpha2",
-                        name=deployment_config["metadata"]["name"],
-                        plural="seldondeployments",
-                        body=deployment_config,
-                        namespace=self.namespace)
-            return deployment_result
-        except client.ApiException as api_exception:
-            raise SeldonDeploymentException(f"Deployment Failed, reason {api_exception.reason}")
+        deployment_existence = self.check_deployment_exist(
+            deployment_name=deployment_name)
+        if not deployment_existence:
 
-    def _check_deployment_exist(self, deployment_name: str) -> bool:
+            deployment_result = self.api.create_namespaced_custom_object(
+                group="machinelearning.seldon.io",
+                version="v1alpha2",
+                plural="seldondeployments",
+                body=deployment_config,
+                namespace=self.namespace)
+        else:
+            deployment_result = self.api.patch_namespaced_custom_object(
+                group="machinelearning.seldon.io",
+                version="v1alpha2",
+                name=deployment_name,
+                plural="seldondeployments",
+                body=deployment_config,
+                namespace=self.namespace)
+        return deployment_result
+
+    def check_deployment_exist(self, deployment_name: str) -> bool:
         """
         Check the deployment already exists.
         Args:
@@ -115,19 +114,16 @@ class SeldonDeployment:
             NoneTypeException: Raised when wrong compared with None Object.
         """
         deployment_names = []
-        respose = self.api.list_namespaced_custom_object(
+        response = self.api.list_namespaced_custom_object(
             group="machinelearning.seldon.io",
             version="v1alpha2",
             plural="seldondeployments",
             namespace=self.namespace)
-        for items in respose.items():
-            if "items" in items:
-                for deployment in items[1]:
-                    deployment_names.append(
-                        deployment.get("metadata").get("name"))
+        for item in response["items"]:
+            deployment_names.append(item["metadata"]["name"])
         return deployment_name in deployment_names
 
-    def delete(self, deployment_config) -> bool:
+    def delete(self, deployment_config: Dict) -> bool:
         """
         Deploy the ML Model
         Args:
@@ -139,17 +135,17 @@ class SeldonDeployment:
             SeldonDeploymentException: Raised when the deployment failed.
         """
         try:
-            deployment_existence = self._check_deployment_exist(
+            deployment_existence = self.check_deployment_exist(
                 deployment_name=deployment_config["metadata"]["name"])
             if not deployment_existence:
                 return False
             else:
                 deletion_result = self.api.delete_namespaced_custom_object(
-                        group="machinelearning.seldon.io",
-                        version="v1alpha2",
-                        name=deployment_config["metadata"]["name"],
-                        plural="seldondeployments",
-                        namespace=self.namespace)
+                    group="machinelearning.seldon.io",
+                    version="v1alpha2",
+                    name=deployment_config["metadata"]["name"],
+                    plural="seldondeployments",
+                    namespace=self.namespace)
                 if deletion_result:
                     return True
         except SeldonDeploymentException as deployment_exception:
