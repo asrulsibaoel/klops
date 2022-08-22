@@ -42,7 +42,7 @@ class Experiment:
               tuner_args: Dict = {},
               metrices: Dict = {
                   "mean_squared_error": {},
-                  "root_mean_squared_error": {"squared": True}},
+                  "root_mean_squared_error": {"squared": False}},
               **kwargs: Any) -> Experiment:
         """_summary_
 
