@@ -48,7 +48,7 @@ class Experiment:
             y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
             tuner (None): _description_
             tuner_args (Dict, optional): _description_. Defaults to {}.
-            metrices (_type_, optional): _description_. Defaults to 
+            metrices (_type_, optional): _description_. Defaults to
                 { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.
 
         Raises:
@@ -58,7 +58,7 @@ class Experiment:
             Experiment: _description_
         """
         # try:
-        if "tags" in kwargs.keys():
+        if "tags" in kwargs:
             if isinstance(kwargs["tags"], Dict):
                 mlflow.set_tags(kwargs["tags"])
             else:

@@ -37,7 +37,8 @@ class BasicRunner(BaseRunner):
         """_summary_
 
         Args:
-            metrices (_type_, optional): _description_. Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
+            metrices (_type_, optional): _description_.
+                Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
 
         Returns:
             Any: _description_
