@@ -1,7 +1,9 @@
 google-cloud
 google-cloud-container
 google-auth
+hyperopt
 mlflow
+scikit-learn
 seldon-core
 pandas
 numpy
