@@ -6,7 +6,6 @@ from typing import Any, Union, List, Dict
 import mlflow
 import numpy as np
 import pandas as pd
-from sklearn import metrics
 
 from klops.experiment.runner.base import BaseRunner
 
