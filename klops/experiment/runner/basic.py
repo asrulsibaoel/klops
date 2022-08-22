@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 
-from klops.experiment.runner.base_runner import BaseRunner
+from klops.experiment.runner.base import BaseRunner
 
 
 class BasicRunner(BaseRunner):

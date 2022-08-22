@@ -3,8 +3,7 @@ Main module for Klops MLflow Experiment.
 """
 
 from __future__ import annotations
-from pprint import pprint
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 import os
 
 import joblib
@@ -14,9 +13,7 @@ import numpy as np
 from mlflow.tracking import MlflowClient
 
 from klops.config import LOGGER
-from klops.experiment.runner import BasicRunner
-from klops.experiment.runner.gridsearch_runner import GridsearchRunner
-from klops.experiment.runner.hyperopt_runner import HyperOptRunner
+from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 
 
 class Experiment:
@@ -27,7 +24,7 @@ class Experiment:
     def __init__(self, name: str, tracking_uri: str) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-        
+
         self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
         mlflow.end_run() # prevent duplicate MLflow current if exist.
@@ -42,8 +39,6 @@ class Experiment:
               metrices: Dict = {
                   "mean_squared_error": {},
                   "root_mean_squared_error": {"squared": True}},
-            #   log_artifact: bool = True,
-            #   log_model: bool = False,
               **kwargs: Any) -> Experiment:
         """_summary_
 
