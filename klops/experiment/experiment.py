@@ -12,11 +12,13 @@ import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
+import klops
 from klops.config import LOGGER
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
+klops_path = klops.__path__
 
 class Experiment:
     """_summary_
@@ -125,21 +127,25 @@ class Experiment:
                deployment_name: str,
                model_name: str,
                authentication: AbstractKubernetesAuth,
-               namespace: str = 'default') -> None:
+               namespace: str = 'default',
+               deployment_template: str = None) -> None:
         """_summary_
-
+        Deploy experiment to Seldon Environment.
         Args:
             artifact_uri (str): _description_
             deployment_name (str): _description_
             model_name (str): _description_
             authentication (AbstractKubernetesAuth): _description_
             namespace (str, optional): _description_. Defaults to 'default'.
+            deployment_template (str, optional): _description_. Defaults to None.
         """
         try:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
-            config = deployment.load_deployment_configuration(
-                "../templates/deployment_template.json")
+            if deployment_template is None:
+                deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
+
+            config = deployment.load_deployment_configuration(deployment_template)
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
