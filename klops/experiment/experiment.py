@@ -3,8 +3,7 @@ Main module for Klops MLflow Experiment.
 """
 
 from __future__ import annotations
-from pprint import pprint
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 import os
 
 import joblib
@@ -14,9 +13,12 @@ import numpy as np
 from mlflow.tracking import MlflowClient
 
 from klops.config import LOGGER
+from klops.seldon_core import SeldonDeployment
+from klops.seldon_core.auth import GKEAuthentication
 from klops.experiment.runner import BasicRunner
 from klops.experiment.runner.gridsearch_runner import GridsearchRunner
 from klops.experiment.runner.hyperopt_runner import HyperOptRunner
+from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
 
 class Experiment:
@@ -27,10 +29,10 @@ class Experiment:
     def __init__(self, name: str, tracking_uri: str) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-        
+
         self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run() # prevent duplicate MLflow current if exist.
+        mlflow.end_run()  # prevent duplicate MLflow current if exist.
         mlflow.set_experiment(name)
 
     def start(self,
@@ -42,8 +44,8 @@ class Experiment:
               metrices: Dict = {
                   "mean_squared_error": {},
                   "root_mean_squared_error": {"squared": True}},
-            #   log_artifact: bool = True,
-            #   log_model: bool = False,
+              #   log_artifact: bool = True,
+              #   log_model: bool = False,
               **kwargs: Any) -> Experiment:
         """_summary_
 
@@ -67,12 +69,13 @@ class Experiment:
             if isinstance(kwargs["tags"], Dict):
                 mlflow.set_tags(kwargs["tags"])
             else:
-                raise ValueError("Tags should be a dictionary with key-value pair.")
+                raise ValueError(
+                    "Tags should be a dictionary with key-value pair.")
         if tuner in ["basic", None, "default"]:
             runner = BasicRunner(estimator=classifier,
-                                x_train=x_train_data,
-                                y_train=y_train_data,
-                                hyparams=tuner_args)
+                                 x_train=x_train_data,
+                                 y_train=y_train_data,
+                                 hyparams=tuner_args)
         elif tuner == "hyperopt":
             runner = HyperOptRunner(estimator=classifier,
                                     x_train=x_train_data,
@@ -80,9 +83,9 @@ class Experiment:
                                     search_spaces=tuner_args)
         elif tuner == "gridsearch":
             runner = GridsearchRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    grid_params=tuner_args)
+                                      x_train=x_train_data,
+                                      y_train=y_train_data,
+                                      grid_params=tuner_args)
         mlflow.end_run()
         runner.run(metrices, **tuner_args)
 
@@ -119,6 +122,34 @@ class Experiment:
         """
         mlflow.log_metric(key=key, value=value)
 
+    def deploy(self,
+               artifact_uri: str,
+               deployment_name: str,
+               model_name: str,
+               authentication: AbstractKubernetesAuth,
+               namespace: str = 'default') -> None:
+        """_summary_
+
+        Args:
+            artifact_uri (str): _description_
+            deployment_name (str): _description_
+            model_name (str): _description_
+            authentication (AbstractKubernetesAuth): _description_
+            namespace (str, optional): _description_. Defaults to 'default'.
+        """
+        try:
+            deployment = SeldonDeployment(
+                authentication=authentication, namespace=namespace)
+            config = deployment.load_deployment_configuration(
+                "../templates/deployment_template.json")
+            config["metadata"]["name"] = deployment_name
+            config["spec"]["name"] = model_name
+            config["spec"]["predictors"][0]["graph"]["modelUri"] = os.path.join(
+                artifact_uri, "model.pkl")
+            deployment.deploy(config)
+        except Exception:
+            LOGGER.error("Deployment Failed.")
+
 
 def start_experiment(
         name: str,
@@ -131,7 +162,7 @@ def start_experiment(
         metrices: Dict = {
             "mean_squared_error": {},
             "root_mean_squared_error": {"squared": True}}
-        ) -> Experiment:
+) -> Experiment:
     """_summary_
 
     Args:
