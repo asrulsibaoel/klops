@@ -144,8 +144,7 @@ class Experiment:
                 "../templates/deployment_template.json")
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
-            config["spec"]["predictors"][0]["graph"]["modelUri"] = os.path.join(
-                artifact_uri, "model.pkl")
+            config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
             deployment.deploy(config)
         except Exception:
             LOGGER.error("Deployment Failed.")
