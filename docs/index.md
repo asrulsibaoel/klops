@@ -3,9 +3,9 @@
 # Tutorials and API Overview  
 
 ## Tutorials  
-- [`Klops Experiment`](/docs/tutorial.experiment.md) The complete tutorials on how to deal with machine learning experiments using Klops.
-- [`Klops Deployment`](/docs/tutorial.deployment.md) The complete tutorials on how to deploy our machine learning projects.
-- [`Klops Versioning`](/docs/tutorial.versioning.md) The complete tutorials on how to deal with data versioning. 
+- [`Klops Experiment`](/docs/tutorial.experiment.md): The complete tutorials on how to deal with machine learning experiments using Klops.
+- [`Klops Deployment`](/docs/tutorial.deployment.md): The complete tutorials on how to deploy our machine learning projects.
+- [`Klops Versioning`](/docs/tutorial.versioning.md): The complete tutorials on how to deal with data versioning. 
 
 ## Modules  
 
@@ -46,4 +46,4 @@
 
 ---
 
-_This file was automatically generated via [lazydocs](https://github.com/ml-tooling/lazydocs)._
+_This documentation was developed by Koinworks Data Team._
