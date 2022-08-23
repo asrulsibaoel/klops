@@ -17,9 +17,7 @@ from klops.config import LOGGER
 
 class BaseRunner(ABC):
     """_summary_
-
-    Args:
-        ABC (_type_): _description_
+    Abstract class as Base runner implementation.
     """
     def __init__(self, x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                          y_train: Union[pd.DataFrame, np.ndarray, List, Dict]) -> None:
@@ -28,10 +26,10 @@ class BaseRunner(ABC):
     @abstractmethod
     def run(self, metrices: Dict, **kwargs: Any) -> Any:
         """_summary_
-
+        The abstract method for base implementation to execute the experiment.
         Args:
-            metrices (Dict): _description_
-
+            metrices (Dict): _description_ The metrices that would be invoked as measurements.
+            **kwargs (Any): _description_ The key-word arguments hyper-parameters for the given class Model.
         Returns:
             Any: _description_
         """
@@ -41,10 +39,12 @@ class BaseRunner(ABC):
                          y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                          test_size: float = .2, random_state: int = 11) -> None:
         """_summary_
-
+        Splits the given datasets of features and its class into train-test group pair.
         Args:
             x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+                The features data.
             y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+                The class data.
         """
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             x_train, y_train, test_size=test_size, random_state=random_state)
@@ -53,7 +53,9 @@ class BaseRunner(ABC):
         """_summary_
         Call the measurement metrices (inherited from sklearn metrices), log as mlflow metric.
         Args:
-            metric_name (str): _description_
+            metric_name (str): _description_ The sklearn metrices.
+            All metrices method name could be seen here:
+            https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
         try:
             if metric_name != "root_mean_squared_error":

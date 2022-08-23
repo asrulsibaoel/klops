@@ -60,13 +60,12 @@ class HyperOptRunner(BaseRunner):
             metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
-
+        Run the experiment using hyperopt.fmin function.
         Args:
             metrices (_type_, optional): _description_.
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
-
-        Returns:
-            Any: _description_
+                The sklearn metrices. All metrices method name could be seen here:
+                https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
         fmin(
             fn=self.objective,

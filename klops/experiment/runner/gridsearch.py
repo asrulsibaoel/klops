@@ -36,13 +36,12 @@ class GridsearchRunner(BaseRunner):
             metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
-
+        Run the experiment using sklearn.model_selection.GridsearchCV tuner.
         Args:
             metrices (_type_, optional): _description_.
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
-
-        Returns:
-            Any: _description_
+                The sklearn metrices. All metrices method name could be seen here:
+                https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
 
         model = self.estimator()
