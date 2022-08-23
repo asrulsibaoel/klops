@@ -40,6 +40,18 @@ class Versioning:
         """
         shell_executor("dvc push")
 
+    def pull(self) -> None:
+        """_summary_
+        Pull the commited data.
+        """
+        shell_executor("dvc pull")
+
+    def repro(self) -> None:
+        """_summary_
+        Reproduce the DVC pipeline.
+        """
+        shell_executor("dvc repro")
+
     def run(self,
             entry_point: str,
             name: str = None,

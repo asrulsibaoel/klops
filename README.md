@@ -12,7 +12,7 @@
     <a href="#" title="Python Version"><img src="https://img.shields.io/badge/Python-3.6%2B-green"></a>
     <!-- <a href="https://www.codacy.com/gh/ml-tooling/lazydocs/dashboard" title="Codacy Analysis"><img src="https://app.codacy.com/project/badge/Grade/1c8ad486ce9547b6b713cce7ca1d1ec3"></a> -->
     <!-- <a href="" title="Build status"><img src="https://img.shields.io/github/workflow/status/ml-tooling/lazydocs/build-pipeline?style=flat"></a> -->
-    <a href="#" title="Project License"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat"></a>
+    <a href="#" title="Project License"><img src="https://img.shields.io/badge/License-Koinworks-red"></a>
     <!-- <a href="https://gitter.im/ml-tooling/lazydocs" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/lazydocs.svg"></a> -->
     <a href="https://twitter.com/mltooling" title="ML Tooling on Twitter"><img src="https://img.shields.io/twitter/follow/mltooling.svg?label=follow&style=social"></a>
 </p>
@@ -58,8 +58,7 @@ $ python setup.py install
 Klops consists of three modules. Versioning, Experiment and Deployment.
 
 ### Klops Experiment  
-#### Experiment without Tuner  
-Below is the example how to start Experiment without using tuner.
+Klops Experiment is a class that wraps the [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html). Below are the simple example to begin with.
 ```py
 from klops.experiment import Experiment
 from sklearn.datasets import load_iris
@@ -76,56 +75,28 @@ HYPERPARAMETERS = {
 
 experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner_args=HYPERPARAMETERS)
 ```
-#### Experiment with HyperOpt Tuner  
-Below is the example how to start Experiment without using tuner.
-```py
-from klops.experiment import Experiment
-from sklearn.datasets import load_iris
-from sklearn.naive_bayes import GaussianNB
-
-from hyperopt import hp
-from hyperopt.pyll import scope
-
-experiment = Experiment(name="your-experiment-name", tracking_uri="http://<your-mlflow-host>:<port>")
-
-X, y = load_iris(return_X_y=True)
-SEARCH_SPACE = {
-    "n_estimators": scope.int(hp.quniform("n_estimators", 10, 50, 1)),
-    "max_depth": scope.int(hp.quniform("max_depth", 10, 30, 1))
-}
-
-experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner=None, tuner_args=SEARCH_SPACE)
-```
-#### Experiment with GridsearchCV Tuner  
-Below is the example how to start Experiment without using tuner.
-```py
-from klops.experiment import Experiment
-from sklearn.datasets import load_iris
-from sklearn.naive_bayes import GaussianNB
-
-experiment = Experiment(name="your-experiment-name", tracking_uri="http://<your-mlflow-host>:<port>")
-
-X, y = load_iris(return_X_y=True)
-GRID_PARAMS = {
-    "n_estimators": [10, 20, 50],
-    "max_depth": [10, 20, 30]
-}
-
-experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner='gridsearch', tuner_args=GRID_PARAMS)
-```
+For the complete tutorials could be seen through this [documentation](/docs/tutorial.experiment.md).  
 ### Klops Versioning  
 Klops Versioning is a kind of version control based on DVC. This module wrapped the commandline and python APIs from [DVC](https://dvc.org).
 ```py
 from klops.versioning import Versioning
 
-# Create Versioning Instances
+versioning = Versioning()
 
-# add your work
+# Track your file into dvc
+versioning.add("myfile.csv")
 
-```
+# Add your DVC repository storage
+versioning.add_remote("gs://your-bucket-name/your-path/")
+
+# Push your changes to DVC
+versioning.push()
+```  
+
+Complete examples could be seen on this [tutorial](/docs/tutorial.versioning.md) page.  
 
 ### Klops Deployment  
-Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. 
+Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. Below is the example on how to done with.
 
 ```py
 from klops import BaseClass
