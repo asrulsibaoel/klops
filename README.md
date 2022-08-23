@@ -44,7 +44,7 @@ Change your directory to your klops folder:
 ```bash
 cd klops
 ```  
-Run below command  
+Install
 ```bash
 python setup.py install
 ```
