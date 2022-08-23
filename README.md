@@ -18,10 +18,10 @@
 </p>
 
 <p align="center">
-  <a href="#getting-started">Getting Started</a> •
-  <a href="/documentation">Documentation</a> •
+  <a href="#installation">Getting Started</a> •
+  <a href="/docs">Documentation</a> •
   <a href="#support--feedback">Support</a> •
-  <a href="#contribution">Contribution</a>
+  <a href="#development">Contribution</a>
   <!-- <a href="https://github.com/ml-tooling/lazydocs/releases">Changelog</a> -->
 </p>
 
