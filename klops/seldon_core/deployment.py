@@ -13,7 +13,7 @@ from klops.seldon_core.exception import SeldonDeploymentException
 
 
 class SeldonDeployment:
-    """
+    """_summary_
     CRUD Kubernetes operation class implementation for Seldon ML Deployment.
     """
 
@@ -22,18 +22,20 @@ class SeldonDeployment:
     def __init__(self,
                  authentication: AbstractKubernetesAuth,
                  namespace: str) -> None:
+        """_summary_
+        The contructor for SeldonDeployment class.
+        Args:
+            authentication (AbstractKubernetesAuth): _description_
+                The authentication instances. Currently only supports for local cluster or GKE.
+            namespace (str): _description_ The kubernetes namespace deployment target.
+        """
         self.authentication = authentication
         self.namespace = namespace
         self.connect_to_cluster()
 
     def connect_to_cluster(self) -> None:
-        """
-        connect_to_cluster.
-        Args:
-            cluster_name (str):
-                String of cluster name.
-        Raises:
-            Exception: fff.
+        """_summary_
+        Connect to the kubernetes cluster given from the constructor arguments.
         """
         configuration = client.Configuration()
         configuration.host = self.authentication.get_custer_endpoint()
@@ -45,17 +47,17 @@ class SeldonDeployment:
         self.api = client.CustomObjectsApi(api_client=api_client)
 
     def load_deployment_configuration(self, file_name: str):
-        """
+        """_summary_
         Load the deployment configuration file into a Python dictionary.
         Args:
-            file_name (str): the deployment file name. 
-            It can be Yaml file (.yml or .yaml) or JSON file.
+            file_name (str): _description_ The deployment file name.
+                It can be Yaml file (.yml or .yaml) or JSON file.
         Returns:
-            deployment_config (dict): Seldon Deployment configuration dictionary.
+            deployment_config (dict): _description_ Seldon Deployment configuration dictionary.
         Raises:
-            ValueError: When the file type are not yaml or json.
-            JSONDecodeError: When the JSON file contains wrong format.
-            YAMLError: When the Yaml contains wrong format.
+            ValueError: _description_ When the file type are not yaml or json.
+            JSONDecodeError: _description_ When the JSON file contains wrong format.
+            YAMLError: _description_ When the Yaml contains wrong format.
         """
         deployment_config = {}
 
@@ -70,15 +72,15 @@ class SeldonDeployment:
         return deployment_config
 
     def deploy(self, deployment_config: Dict) -> Dict:
-        """
+        """_description_
         Deploy the ML Model
         Args:
-            deployment_config (Union[object, Dict]):
+            deployment_config (Union[object, Dict]): _description_
                 Deployment Configuration Object.
         Returns:
-            deployment_result (Dict): The deployment result metadata in a dictionary.
+            deployment_result (Dict): _description_ The deployment result metadata in a dictionary.
         Raises:
-            SeldonDeploymentException: Raised when the deployment failed.
+            SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
         deployment_name = deployment_config["metadata"]["name"]
 
@@ -103,15 +105,15 @@ class SeldonDeployment:
         return deployment_result
 
     def check_deployment_exist(self, deployment_name: str) -> bool:
-        """
+        """ _summary_
         Check the deployment already exists.
         Args:
-            deployment_name (str): The deployment name, Example: iris-model
+            deployment_name (str): _description_ The deployment name, Example: iris-model
         Returns:
-            bool: The deployment existence.
+            bool: _description_ The deployment existence.
         Raises:
-            AttributeError: Raised when the key doesn't exists.
-            NoneTypeException: Raised when wrong compared with None Object.
+            AttributeError: _description_ Raised when the key doesn't exists.
+            NoneTypeException: _description_ Raised when wrong compared with None Object.
         """
         deployment_names = []
         response = self.api.list_namespaced_custom_object(
@@ -124,15 +126,15 @@ class SeldonDeployment:
         return deployment_name in deployment_names
 
     def delete(self, deployment_config: Dict) -> bool:
-        """
+        """_summary_
         Deploy the ML Model
         Args:
-            deployment_config (Union[object, Dict]):
+            deployment_config (Union[object, Dict]): _description_
                 Deployment Configuration Object.
         Returns:
-            bool: Boolean result of deployment deletion.
+            bool: _description_ Boolean result of deployment deletion.
         Raises:
-            SeldonDeploymentException: Raised when the deployment failed.
+            SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
         try:
             deployment_existence = self.check_deployment_exist(

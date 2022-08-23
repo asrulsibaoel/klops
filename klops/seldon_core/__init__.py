@@ -1,5 +1,5 @@
 """
-Init Seldon Module.
+The Deployment init module.
 """
 
 from .deployment import SeldonDeployment
