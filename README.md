@@ -74,7 +74,10 @@ HYPERPARAMETERS = {
 }
 
 experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner_args=HYPERPARAMETERS)
-```
+```  
+
+You would see your experiment result in your Mlflow Tracking UI like below:  
+![Tracking result](/resources/images/experiment_ui.png)
 For the complete tutorials could be seen through this [documentation](/docs/tutorial.experiment.md).  
 ### Klops Versioning  
 Klops Versioning is a kind of version control based on DVC. This module wrapped the commandline and python APIs from [DVC](https://dvc.org).
@@ -99,19 +102,20 @@ Complete examples could be seen on this [tutorial](/docs/tutorial.versioning.md)
 Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. Below is the example on how to done with.
 
 ```py
-from klops import BaseClass
-from klops import base_function
+from klops.seldon_core import SeldonDeployment
+from klops.seldon_core.auth import GKEAuthentication
 
-BaseClass().base_method()
-base_function()
-```
+gke = GKEAuthentication(
+    project_id="koinworks-data-staging",
+    zone="asia-southeast2",
+    cluster_id="seldon-system-dev")
+deployment = SeldonDeployment(gke, "seldon")
+config = deployment.load_deployment_configuration("iris.json")
+deployment.deploy(config)
+```  
+Now you can access your API through this doc `http://<ingress_url>/seldon/<namespace>/<model-name>/api/v1.0/doc/`. Example result:  
+![Deployment Example](/resources/images/deployment_result_example.jpg)
 
-```bash
-$ python -m klops
-#or
-$ klops
-```
+## Development  
 
-## Development
-
-Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+We are open for anyone who wants to contribute! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) guide.
