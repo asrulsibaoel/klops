@@ -25,7 +25,12 @@
   <!-- <a href="https://github.com/ml-tooling/lazydocs/releases">Changelog</a> -->
 </p>
 
-Klops is an End-to-End machine learning development pipeline ops. Its build on top of Seldon Core, MLflow and DVC. The goal of this project is to make easier for Data Scientist to develop, maintain, log their experiments and deploy their machine learning projects.
+Klops is an End-to-End machine learning development pipeline ops. Its build on top of Seldon Core, MLflow and DVC. The goal of this project is to make easier for Data Scientist to develop, maintain, log their experiments and deploy their machine learning projects.  
+
+## Prerequisites  
+- Seldon Core Installed on your Kubernetes cluster. Guidance [here](https://docs.seldon.io/projects/seldon-core/en/latest/workflow/install.html)  
+- MLflow Tracking Server deployed. Recommended to use the schenario 5  [here](https://www.mlflow.org/docs/latest/tracking.html#scenario-5-mlflow-tracking-server-enabled-with-proxied-artifact-storage-access)  
+- Local or remote storage such as Amazon S3 or Google Cloud Storage (GCS) or similar.
 
 ## Installation  
 ### From PyPI
@@ -49,7 +54,7 @@ Install
 python setup.py install
 ```
 
-## Usages 
+## Basic Usages 
 Klops consists of three modules. Versioning, Experiment and Deployment.
 
 ### Klops Experiment  
@@ -109,7 +114,7 @@ GRID_PARAMS = {
 experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner='gridsearch', tuner_args=GRID_PARAMS)
 ```
 ### Klops Versioning  
-Klops Versioning is kind of version control based on DVC. This module 
+Klops Versioning is a kind of version control based on DVC. This module 
 
 ### Klops Deployment  
 Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. 
