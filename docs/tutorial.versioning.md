@@ -5,6 +5,9 @@ from klops.versioning import Versioning
 
 versioning = Versioning()
 
+# Add your DVC repository storage
+versioning.add_remote("gs://your-bucket-name/your-path/")
+
 # Track your file into dvc
 versioning.add("myfile.csv")
 
@@ -16,9 +19,6 @@ model = versioning.read_binary("file-path/file_binary.pkl")
 
 # Read a dataset.
 data = versioning.read_dataset("file-path/dataset.csv")
-
-# Add your DVC repository storage
-versioning.add_remote("gs://your-bucket-name/your-path/")
 
 # Push your changes to DVC
 versioning.push()
