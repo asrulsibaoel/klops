@@ -106,11 +106,13 @@ from klops.seldon_core import SeldonDeployment
 from klops.seldon_core.auth import GKEAuthentication
 
 gke = GKEAuthentication(
-    project_id="koinworks-data-staging",
-    zone="asia-southeast2",
-    cluster_id="seldon-system-dev")
+    project_id="your-project-id",
+    zone="your-project-region",
+    cluster_id="your-cluster-id")
 deployment = SeldonDeployment(gke, "seldon")
-config = deployment.load_deployment_configuration("iris.json")
+
+## Config file could be json or yaml/yml file.
+config = deployment.load_deployment_configuration("<deployment-config>.json")
 deployment.deploy(config)
 ```  
 Now you can access your API through this doc `http://<ingress_url>/seldon/<namespace>/<model-name>/api/v1.0/doc/`. Example result:  
