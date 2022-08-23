@@ -20,7 +20,7 @@ class Versioning:
 
     def add_remote(self, name: str, remote_url: str) -> None:
         """_summary_
-        Add remote repository.
+        Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3.
         Args:
             remote_url (str): _description_
         """
@@ -36,7 +36,7 @@ class Versioning:
 
     def push(self) -> None:
         """_summary_
-        Push changes into dvc
+        Push every tracked changes into dvc.
         """
         shell_executor("dvc push")
 
@@ -46,12 +46,12 @@ class Versioning:
             dependencies: List = [],
             outputs: List = []) -> None:
         """_summary_
-
+        Run the defined DVC pipeline.
         Args:
-            entry_point (str): _description_
-            name (str, optional): _description_. Defaults to None.
-            dependencies (List, optional): _description_. Defaults to [].
-            outputs (List, optional): _description_. Defaults to [].
+            entry_point (str): _description_ The main program to be executed.
+            name (str, optional): _description_. Defaults to None. The Pipeline name.
+            dependencies (List, optional): _description_. Defaults to []. List of dependencies. The same as `-d` options in dvc command.
+            outputs (List, optional): _description_. Defaults to []. List of the outputs, The same as `-o` options in dvc command.
         """
         deps = ""
         outs = ""
@@ -66,12 +66,12 @@ class Versioning:
 
     def read_binary(self, file_name: str) -> Any:
         """_summary_
-
+        Read the binary file such as .pkl, .joblib, etc. stored in the DVC storage / repository.
         Args:
-            file_name (str): _description_
+            file_name (str): _description_ The file name. Including its path.
 
         Returns:
-            Any: _description_
+            Any: _description_ Object pointer instances.
         """
         try:
             model = pickle.loads(dvc.api.read(file_name, mode='rb'))
@@ -83,12 +83,12 @@ class Versioning:
 
     def read_dataset(self, file_name: str) -> Union[List, Dict, pd.DataFrame, np.ndarray]:
         """_summary_
-
+        Read dataset from DVC artifact storage.
         Args:
-            file_name (str): _description_
+            file_name (str): _description_ The file name. Including it's path.
 
         Returns:
-            Union[List, Dict, pd.DataFrame, np.ndarray]: _description_
+            Union[List, Dict, pd.DataFrame, np.ndarray]: _description_ The dataset values.
         """
         try:
             data = dvc.api.read(file_name, mode="r")

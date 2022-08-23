@@ -36,22 +36,22 @@ Klops is an End-to-End machine learning development pipeline ops. Its build on t
 ### From PyPI
 Using pip is the best option if you want to get the stable version and easier way to install.
 ```bash
-pip install klops
+$ pip install klops
 ```
 ### Build From Source  
 This is the best way to get the lastest published library, including the experimental version.
 
 Clone this repo  
 ```bash
-git clone https://gitlab-engineering.koinworks.com/data-team/klops.git
+$ git clone https://gitlab-engineering.koinworks.com/data-team/klops.git
 ```  
 Change your directory to your klops folder:  
 ```bash
-cd klops
+$ cd klops
 ```  
 Install
 ```bash
-python setup.py install
+$ python setup.py install
 ```
 
 ## Basic Usages 
@@ -114,7 +114,15 @@ GRID_PARAMS = {
 experiment.start(GaussianNB, x_train_data=X, y_train_data=y, tuner='gridsearch', tuner_args=GRID_PARAMS)
 ```
 ### Klops Versioning  
-Klops Versioning is a kind of version control based on DVC. This module 
+Klops Versioning is a kind of version control based on DVC. This module wrapped the commandline and python APIs from [DVC](https://dvc.org).
+```py
+from klops.versioning import Versioning
+
+# Create Versioning Instances
+
+# add your work
+
+```
 
 ### Klops Deployment  
 Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. 
