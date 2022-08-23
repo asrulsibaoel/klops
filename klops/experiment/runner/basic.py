@@ -6,9 +6,8 @@ from typing import Any, Union, List, Dict
 import mlflow
 import numpy as np
 import pandas as pd
-from sklearn import metrics
 
-from klops.experiment.runner.base_runner import BaseRunner
+from klops.experiment.runner.base import BaseRunner
 
 
 class BasicRunner(BaseRunner):
@@ -38,7 +37,8 @@ class BasicRunner(BaseRunner):
         """_summary_
 
         Args:
-            metrices (_type_, optional): _description_. Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
+            metrices (_type_, optional): _description_.
+                Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
 
         Returns:
             Any: _description_

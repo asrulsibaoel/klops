@@ -12,14 +12,13 @@ import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
+import klops
 from klops.config import LOGGER
 from klops.seldon_core import SeldonDeployment
-from klops.seldon_core.auth import GKEAuthentication
-from klops.experiment.runner import BasicRunner
-from klops.experiment.runner.gridsearch_runner import GridsearchRunner
-from klops.experiment.runner.hyperopt_runner import HyperOptRunner
+from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
+klops_path = klops.__path__
 
 class Experiment:
     """_summary_
@@ -43,9 +42,7 @@ class Experiment:
               tuner_args: Dict = {},
               metrices: Dict = {
                   "mean_squared_error": {},
-                  "root_mean_squared_error": {"squared": True}},
-              #   log_artifact: bool = True,
-              #   log_model: bool = False,
+                  "root_mean_squared_error": {"squared": False}},
               **kwargs: Any) -> Experiment:
         """_summary_
 
@@ -55,7 +52,7 @@ class Experiment:
             y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
             tuner (None): _description_
             tuner_args (Dict, optional): _description_. Defaults to {}.
-            metrices (_type_, optional): _description_. Defaults to 
+            metrices (_type_, optional): _description_. Defaults to
                 { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.
 
         Raises:
@@ -64,31 +61,34 @@ class Experiment:
         Returns:
             Experiment: _description_
         """
-        # try:
-        if "tags" in kwargs.keys():
-            if isinstance(kwargs["tags"], Dict):
-                mlflow.set_tags(kwargs["tags"])
-            else:
-                raise ValueError(
-                    "Tags should be a dictionary with key-value pair.")
-        if tuner in ["basic", None, "default"]:
-            runner = BasicRunner(estimator=classifier,
-                                 x_train=x_train_data,
-                                 y_train=y_train_data,
-                                 hyparams=tuner_args)
-        elif tuner == "hyperopt":
-            runner = HyperOptRunner(estimator=classifier,
+        try:
+            if "tags" in kwargs:
+                if isinstance(kwargs["tags"], Dict):
+                    mlflow.set_tags(kwargs["tags"])
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+            if tuner in ["basic", None, "default"]:
+                runner = BasicRunner(estimator=classifier,
                                     x_train=x_train_data,
                                     y_train=y_train_data,
-                                    search_spaces=tuner_args)
-        elif tuner == "gridsearch":
-            runner = GridsearchRunner(estimator=classifier,
-                                      x_train=x_train_data,
-                                      y_train=y_train_data,
-                                      grid_params=tuner_args)
-        mlflow.end_run()
-        runner.run(metrices, **tuner_args)
-
+                                    hyparams=tuner_args)
+            elif tuner == "hyperopt":
+                runner = HyperOptRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        search_spaces=tuner_args)
+            elif tuner == "gridsearch":
+                runner = GridsearchRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        grid_params=tuner_args)
+            mlflow.end_run()
+            runner.run(metrices, **tuner_args)
+        except ValueError as value_error:
+            LOGGER.error(str(value_error))
+        except Exception as exception:
+            LOGGER.error(str(exception))
         return self
 
     def store_artifact(self, model: Any, local_path: str, artifact_path: str) -> None:
@@ -127,27 +127,31 @@ class Experiment:
                deployment_name: str,
                model_name: str,
                authentication: AbstractKubernetesAuth,
-               namespace: str = 'default') -> None:
+               namespace: str = 'default',
+               deployment_template: str = None) -> None:
         """_summary_
-
+        Deploy experiment to Seldon Environment.
         Args:
             artifact_uri (str): _description_
             deployment_name (str): _description_
             model_name (str): _description_
             authentication (AbstractKubernetesAuth): _description_
             namespace (str, optional): _description_. Defaults to 'default'.
+            deployment_template (str, optional): _description_. Defaults to None.
         """
         try:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
-            config = deployment.load_deployment_configuration(
-                "../templates/deployment_template.json")
+            if deployment_template is None:
+                deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
+
+            config = deployment.load_deployment_configuration(deployment_template)
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
             deployment.deploy(config)
-        except Exception:
-            LOGGER.error("Deployment Failed.")
+        except Exception as exception:
+            LOGGER.error("Deployment Failed. caused by: %s", str(exception))
 
 
 def start_experiment(

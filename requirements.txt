@@ -1,3 +1,4 @@
+dvc
 google-cloud
 google-cloud-container
 google-auth
