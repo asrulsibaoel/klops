@@ -93,18 +93,18 @@ class Versioning:
         except dvc.exceptions.PathMissingError as path_missing:
             LOGGER.error(str(path_missing))
 
-    def read_dataset(self, file_name: str) -> Union[List, Dict, pd.DataFrame, np.ndarray]:
+    def read_dataset(self, file_name: str) -> Any:
         """_summary_
         Read dataset from DVC artifact storage.
         Args:
             file_name (str): _description_ The file name. Including it's path.
 
         Returns:
-            Union[List, Dict, pd.DataFrame, np.ndarray]: _description_ The dataset values.
+            Any: _description_ The dataset buffer. Need to parse.
         """
         try:
-            data = dvc.api.read(file_name, mode="r")
-            return data
+            with dvc.api.open(file_name) as file_buffer:
+                return file_buffer
         except dvc.exceptions.FileMissingError as file_missing:
             LOGGER.error(str(file_missing))
         except dvc.exceptions.PathMissingError as path_missing:

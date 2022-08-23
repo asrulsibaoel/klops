@@ -19,8 +19,8 @@
 
 <p align="center">
   <a href="#installation">Getting Started</a> •
-  <a href="/docs">Documentation</a> •
-  <a href="#support--feedback">Support</a> •
+  <a href="/docs#tutorials-and-api-overview">Documentation</a> •
+  <a href="/issues">Support</a> •
   <a href="#development">Contribution</a>
   <!-- <a href="https://github.com/ml-tooling/lazydocs/releases">Changelog</a> -->
 </p>
