@@ -9,17 +9,36 @@ Default Module for Authentication Implementation
 
 ---
 
-<a href="../klops/seldon_core/auth/default.py#L8"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/auth/default.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `DefaultAuthentication`
 Default Class Implementation for Kubernetes authentication. 
+
+<a href="../klops/seldon_core/auth/default.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(
+    cluster_host: str = 'localhost',
+    token: str = 'TokenString123',
+    **kwargs: Any
+) → None
+```
+
+_summary_ Default Class Implementation for Kubernetes authentication. 
+
+**Args:**
+ 
+ - <b>`cluster_host`</b> (str, optional):  _description_. Defaults to "localhost". 
+ - <b>`token`</b> (str, optional):  _description_. Defaults to "TokenString123". 
 
 
 
 
 ---
 
-<a href="../klops/seldon_core/auth/default.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/auth/default.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_custer_endpoint`
 
@@ -27,14 +46,15 @@ Default Class Implementation for Kubernetes authentication.
 get_custer_endpoint() → str
 ```
 
-Get Default Cluster Host URI endpoint 
+_summary_ Get Default Cluster Host URI endpoint. 
 
 **Returns:**
-  A String of Basic Cluster Host URI endpoint. 
+ 
+ - <b>`str`</b>:  _description_ A string of Basic Cluster Host URI endpoint. 
 
 ---
 
-<a href="../klops/seldon_core/auth/default.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/auth/default.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_token`
 
@@ -42,10 +62,11 @@ Get Default Cluster Host URI endpoint
 get_token() → str
 ```
 
-Get Default Bearer Token String. 
+_summary_ Get Default Bearer Token String. 
 
 **Returns:**
-  A String of Bearer Token. 
+ 
+ - <b>`str`</b>:  _description_ A string of Bearer Token. 
 
 
 

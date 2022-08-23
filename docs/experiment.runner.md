@@ -7,10 +7,10 @@ _summary_ Main module tobe called for experiment runner.
 
 **Global Variables**
 ---------------
-- **base_runner**
-- **basic_runner**
-- **gridsearch_runner**
-- **hyperopt_runner**
+- **base**
+- **basic**
+- **gridsearch**
+- **hyperopt**
 
 
 

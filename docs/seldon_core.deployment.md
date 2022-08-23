@@ -12,7 +12,7 @@ Deployment Module for Seldon Core.
 <a href="../klops/seldon_core/deployment.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `SeldonDeployment`
-CRUD Kubernetes operation class implementation for Seldon ML Deployment. 
+_summary_ CRUD Kubernetes operation class implementation for Seldon ML Deployment. 
 
 <a href="../klops/seldon_core/deployment.py#L22"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
@@ -22,16 +22,19 @@ CRUD Kubernetes operation class implementation for Seldon ML Deployment.
 __init__(authentication: AbstractKubernetesAuth, namespace: str) → None
 ```
 
+_summary_ The contructor for SeldonDeployment class. 
 
-
-
+**Args:**
+ 
+ - <b>`authentication`</b> (AbstractKubernetesAuth):  _description_  The authentication instances. Currently only supports for local cluster or GKE. 
+ - <b>`namespace`</b> (str):  _description_ The kubernetes namespace deployment target. 
 
 
 
 
 ---
 
-<a href="../klops/seldon_core/deployment.py#L105"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/deployment.py#L107"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `check_deployment_exist`
 
@@ -39,24 +42,24 @@ __init__(authentication: AbstractKubernetesAuth, namespace: str) → None
 check_deployment_exist(deployment_name: str) → bool
 ```
 
-Check the deployment already exists. 
+_summary_ Check the deployment already exists. 
 
 **Args:**
  
- - <b>`deployment_name`</b> (str):  The deployment name, Example: iris-model 
+ - <b>`deployment_name`</b> (str):  _description_ The deployment name, Example: iris-model 
 
 **Returns:**
  
- - <b>`bool`</b>:  The deployment existence. 
+ - <b>`bool`</b>:  _description_ The deployment existence. 
 
 **Raises:**
  
- - <b>`AttributeError`</b>:  Raised when the key doesn't exists. 
- - <b>`NoneTypeException`</b>:  Raised when wrong compared with None Object. 
+ - <b>`AttributeError`</b>:  _description_ Raised when the key doesn't exists. 
+ - <b>`NoneTypeException`</b>:  _description_ Raised when wrong compared with None Object. 
 
 ---
 
-<a href="../klops/seldon_core/deployment.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/deployment.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `connect_to_cluster`
 
@@ -64,18 +67,11 @@ Check the deployment already exists.
 connect_to_cluster() → None
 ```
 
-connect_to_cluster. 
-
-**Args:**
-  cluster_name (str):  String of cluster name. 
-
-**Raises:**
- 
- - <b>`Exception`</b>:  fff. 
+_summary_ Connect to the kubernetes cluster given from the constructor arguments. 
 
 ---
 
-<a href="../klops/seldon_core/deployment.py#L126"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/deployment.py#L128"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `delete`
 
@@ -83,22 +79,23 @@ connect_to_cluster.
 delete(deployment_config: Dict) → bool
 ```
 
-Deploy the ML Model 
+_summary_ Deploy the ML Model 
 
 **Args:**
-  deployment_config (Union[object, Dict]):  Deployment Configuration Object. 
+ 
+ - <b>`deployment_config`</b> (Union[object, Dict]):  _description_  Deployment Configuration Object. 
 
 **Returns:**
  
- - <b>`bool`</b>:  Boolean result of deployment deletion. 
+ - <b>`bool`</b>:  _description_ Boolean result of deployment deletion. 
 
 **Raises:**
  
- - <b>`SeldonDeploymentException`</b>:  Raised when the deployment failed. 
+ - <b>`SeldonDeploymentException`</b>:  _description_ Raised when the deployment failed. 
 
 ---
 
-<a href="../klops/seldon_core/deployment.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/deployment.py#L74"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `deploy`
 
@@ -106,22 +103,23 @@ Deploy the ML Model
 deploy(deployment_config: Dict) → Dict
 ```
 
-Deploy the ML Model 
+_description_ Deploy the ML Model 
 
 **Args:**
-  deployment_config (Union[object, Dict]):  Deployment Configuration Object. 
+ 
+ - <b>`deployment_config`</b> (Union[object, Dict]):  _description_  Deployment Configuration Object. 
 
 **Returns:**
  
- - <b>`deployment_result`</b> (Dict):  The deployment result metadata in a dictionary. 
+ - <b>`deployment_result`</b> (Dict):  _description_ The deployment result metadata in a dictionary. 
 
 **Raises:**
  
- - <b>`SeldonDeploymentException`</b>:  Raised when the deployment failed. 
+ - <b>`SeldonDeploymentException`</b>:  _description_ Raised when the deployment failed. 
 
 ---
 
-<a href="../klops/seldon_core/deployment.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/deployment.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `load_deployment_configuration`
 
@@ -129,21 +127,21 @@ Deploy the ML Model
 load_deployment_configuration(file_name: str)
 ```
 
-Load the deployment configuration file into a Python dictionary. 
+_summary_ Load the deployment configuration file into a Python dictionary. 
 
 **Args:**
  
- - <b>`file_name`</b> (str):  the deployment file name.  It can be Yaml file (.yml or .yaml) or JSON file. 
+ - <b>`file_name`</b> (str):  _description_ The deployment file name.  It can be Yaml file (.yml or .yaml) or JSON file. 
 
 **Returns:**
  
- - <b>`deployment_config`</b> (dict):  Seldon Deployment configuration dictionary. 
+ - <b>`deployment_config`</b> (dict):  _description_ Seldon Deployment configuration dictionary. 
 
 **Raises:**
  
- - <b>`ValueError`</b>:  When the file type are not yaml or json. 
- - <b>`JSONDecodeError`</b>:  When the JSON file contains wrong format. 
- - <b>`YAMLError`</b>:  When the Yaml contains wrong format. 
+ - <b>`ValueError`</b>:  _description_ When the file type are not yaml or json. 
+ - <b>`JSONDecodeError`</b>:  _description_ When the JSON file contains wrong format. 
+ - <b>`YAMLError`</b>:  _description_ When the Yaml contains wrong format. 
 
 
 
