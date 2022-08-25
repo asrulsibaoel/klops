@@ -27,8 +27,8 @@ class GridsearchRunner(BaseRunner):
         self.estimator = estimator
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
         mlflow.set_tags({
-            "opt": "grid-search",
-            "model": self.estimator.__class__.__name__
+            "opt": "gridsearch",
+            "estimator_name": self.estimator.__class__.__name__
         })
         super(GridsearchRunner, self).__init__(
             x_train=x_train, y_train=y_train)

@@ -39,7 +39,7 @@ class HyperOptRunner(BaseRunner):
         """
         with mlflow.start_run():
             mlflow.set_tags({
-                "model": self.estimator.__name__,
+                "estimator_name": self.estimator.__name__,
                 "opt": "hyperopt"
             })
             mlflow.log_params(hyper_parameters)

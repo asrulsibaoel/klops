@@ -16,7 +16,7 @@ from mlflow.tracking import MlflowClient
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 
 
-warnings.simplefilter('ignore')
+warnings.filterwarnings(action="ignore")
 
 class Experiment:
     """_summary_
