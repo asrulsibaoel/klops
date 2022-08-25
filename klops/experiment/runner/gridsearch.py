@@ -1,6 +1,6 @@
 """_summary_
 """
-from typing import Any, Union, List, Dict
+from typing import Any, Type, Union, List, Dict
 import mlflow
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ class GridsearchRunner(BaseRunner):
     """
 
     def __init__(self,
-                 estimator: Any,
+                 estimator: Type[Any],
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  grid_params: Dict = {},
@@ -45,9 +45,8 @@ class GridsearchRunner(BaseRunner):
             Any: _description_
         """
 
-        model = self.estimator()
         grid_search = GridSearchCV(
-            estimator=model,
+            estimator=self.estimator(),
             param_grid=self.grid_params,
             **kwargs
         )

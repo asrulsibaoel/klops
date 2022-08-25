@@ -12,7 +12,6 @@ import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
-from klops.config import LOGGER
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 
 
@@ -21,13 +20,14 @@ class Experiment:
     Main class for MLflow Experiment
     """
 
-    def __init__(self, name: str, tracking_uri: str) -> None:
+    def __init__(self, name: str,
+                 tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-
-        self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run() # prevent duplicate MLflow current if exist.
+        self.mlflow_client = MlflowClient()
+
+        mlflow.end_run()  # prevent duplicate MLflow current if exist.
         mlflow.set_experiment(name)
 
     def start(self,
@@ -57,17 +57,20 @@ class Experiment:
         Returns:
             Experiment: _description_
         """
-        # try:
+
         if "tags" in kwargs:
             if isinstance(kwargs["tags"], Dict):
                 mlflow.set_tags(kwargs["tags"])
             else:
-                raise ValueError("Tags should be a dictionary with key-value pair.")
+                raise ValueError(
+                    "Tags should be a dictionary with key-value pair.")
+        # End the previous experiment if exists. Prevent the duplicates experiment error issues.
+        mlflow.end_run()
         if tuner in ["basic", None, "default"]:
             runner = BasicRunner(estimator=classifier,
-                                x_train=x_train_data,
-                                y_train=y_train_data,
-                                hyparams=tuner_args)
+                                 x_train=x_train_data,
+                                 y_train=y_train_data,
+                                 hyparams=tuner_args)
         elif tuner == "hyperopt":
             runner = HyperOptRunner(estimator=classifier,
                                     x_train=x_train_data,
@@ -75,11 +78,11 @@ class Experiment:
                                     search_spaces=tuner_args)
         elif tuner == "gridsearch":
             runner = GridsearchRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    grid_params=tuner_args)
-        mlflow.end_run()
-        runner.run(metrices, **tuner_args)
+                                      x_train=x_train_data,
+                                      y_train=y_train_data,
+                                      grid_params=tuner_args)
+        
+        runner.run(metrices, **kwargs)
 
         return self
 
@@ -126,7 +129,7 @@ def start_experiment(
         metrices: Dict = {
             "mean_squared_error": {},
             "root_mean_squared_error": {"squared": True}}
-        ) -> Experiment:
+) -> Experiment:
     """_summary_
 
     Args:

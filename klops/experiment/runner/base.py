@@ -21,6 +21,7 @@ class BaseRunner(ABC):
     Args:
         ABC (_type_): _description_
     """
+
     def __init__(self, x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                          y_train: Union[pd.DataFrame, np.ndarray, List, Dict]) -> None:
         self.split_train_test(x_train=x_train, y_train=y_train)

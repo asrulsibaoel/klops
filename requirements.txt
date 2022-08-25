@@ -2,6 +2,7 @@ google-cloud
 google-cloud-container
 google-auth
 hyperopt
+matplotlib
 mlflow
 scikit-learn
 seldon-core
