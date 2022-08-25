@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.model_selection import GridSearchCV
 
 from klops.experiment.runner import BaseRunner
+from klops.experiment.exception import ExperimentFailedException
 
 
 class GridsearchRunner(BaseRunner):
@@ -44,13 +45,17 @@ class GridsearchRunner(BaseRunner):
         Returns:
             Any: _description_
         """
+        try:
 
-        grid_search = GridSearchCV(
-            estimator=self.estimator(),
-            param_grid=self.grid_params,
-            **kwargs
-        )
-        best_fit = grid_search.fit(self.x_train, self.y_train)
-        preds = best_fit.predict(self.x_test)
-        for metric, arguments in metrices.items():
-            self.call_metrices(metric, self.y_test, preds, **arguments)
+            grid_search = GridSearchCV(
+                estimator=self.estimator(),
+                param_grid=self.grid_params,
+                **kwargs
+            )
+            best_fit = grid_search.fit(self.x_train, self.y_train)
+            preds = best_fit.predict(self.x_test)
+            for metric, arguments in metrices.items():
+                self.call_metrices(metric, self.y_test, preds, **arguments)
+            mlflow.end_run()
+        except Exception as exception:
+            raise ExperimentFailedException(message=str(exception)) from exception

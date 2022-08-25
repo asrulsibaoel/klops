@@ -5,6 +5,7 @@ Main module for Klops MLflow Experiment.
 from __future__ import annotations
 from typing import Any, Dict, List, Union
 import os
+import warnings
 
 import joblib
 import pandas as pd
@@ -14,6 +15,8 @@ from mlflow.tracking import MlflowClient
 
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 
+
+warnings.simplefilter('ignore')
 
 class Experiment:
     """_summary_
@@ -27,7 +30,6 @@ class Experiment:
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
         self.mlflow_client = MlflowClient()
 
-        mlflow.end_run()  # prevent duplicate MLflow current if exist.
         mlflow.set_experiment(name)
 
     def start(self,
@@ -61,11 +63,11 @@ class Experiment:
         if "tags" in kwargs:
             if isinstance(kwargs["tags"], Dict):
                 mlflow.set_tags(kwargs["tags"])
+                del kwargs["tags"]
             else:
                 raise ValueError(
                     "Tags should be a dictionary with key-value pair.")
-        # End the previous experiment if exists. Prevent the duplicates experiment error issues.
-        mlflow.end_run()
+
         if tuner in ["basic", None, "default"]:
             runner = BasicRunner(estimator=classifier,
                                  x_train=x_train_data,
@@ -81,7 +83,7 @@ class Experiment:
                                       x_train=x_train_data,
                                       y_train=y_train_data,
                                       grid_params=tuner_args)
-        
+
         runner.run(metrices, **kwargs)
 
         return self
