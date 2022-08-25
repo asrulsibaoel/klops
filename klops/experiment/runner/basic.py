@@ -43,13 +43,12 @@ class BasicRunner(BaseRunner):
         Returns:
             Any: _description_
         """
-        with mlflow.start_run(run_name="test run"):
-            mlflow.log_params(kwargs)
-            model = self.estimator(
-                **kwargs
-            )
+        mlflow.log_params(kwargs)
+        model = self.estimator(
+            **kwargs
+        )
 
-            model.fit(self.x_train, self.y_train)
-            preds = model.predict(self.x_test)
-            for metric, arguments in metrices.items():
-                self.call_metrices(metric, self.y_test, preds, **arguments)
+        model.fit(self.x_train, self.y_train)
+        preds = model.predict(self.x_test)
+        for metric, arguments in metrices.items():
+            self.call_metrices(metric, self.y_test, preds, **arguments)
