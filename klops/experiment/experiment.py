@@ -9,17 +9,20 @@ import warnings
 
 import joblib
 import pandas as pd
+from kubernetes.client import ApiException
 import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
+
 import klops
-from klops.config import LOGGER
+from klops.experiment.exception import ExperimentFailedException
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
+from klops.seldon_core.exception import SeldonDeploymentException
 
-klops_path = klops.__path__
+klops_path = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
 
@@ -146,34 +149,44 @@ class Experiment:
                model_name: str,
                authentication: AbstractKubernetesAuth,
                namespace: str = 'default',
-               deployment_template: str = None) -> None:
-        """_summary_
-        Deploy experiment to Seldon Environment.
+               deployment_template: str = None) -> Dict:
+        """_summary_ Deploy experiment to Seldon Environment.
+
+        This method would invoke the Deployment class and its dependencies to deploy
+        the experiment using default / user defined template.
+
         Args:
-            artifact_uri (str): _description_ The artifact URI.
+            artifact_uri (str): _description_ The artifact URI. \
                 We could see it in the MLflow Tracking Server UI.
+
             deployment_name (str): _description_ The Kubernetes deployment name.
             model_name (str): _description_ The model name.
-            authentication (AbstractKubernetesAuth): _description_ The authentication object.
+            authentication (AbstractKubernetesAuth): _description_ The authentication object. \
                 Currently supports for GCP and default / minikube Auth.
-            namespace (str, optional): _description_. Defaults to 'default'.
+            namespace (str, optional): _description_. Defaults to 'default'. \
                 The Kubernetes target namespace.
-            deployment_template (str, optional): _description_. Defaults to None.
+            deployment_template (str, optional): _description_. Defaults to None. \
                 Kubernetes JSON template file path. Recommended using default template.
         """
         try:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
             if deployment_template is None:
+                print("Klops path:", klops_path)
                 deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
 
             config = deployment.load_deployment_configuration(deployment_template)
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
-            deployment.deploy(config)
+            return deployment.deploy(config)
+        except ApiException as api_exception:
+            raise SeldonDeploymentException(
+                status=api_exception.status,
+                reason=api_exception.reason,
+                http_resp="Failed to deploy.") from api_exception
         except Exception as exception:
-            LOGGER.error("Deployment Failed. caused by: %s", str(exception))
+            raise ExperimentFailedException(message=str(exception)) from exception
 
 
 def start_experiment(
