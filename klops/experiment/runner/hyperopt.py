@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn import metrics
 
 from klops.experiment.runner import BaseRunner
+from klops.experiment.exception import ExperimentFailedException
 
 
 class HyperOptRunner(BaseRunner):
@@ -27,34 +28,29 @@ class HyperOptRunner(BaseRunner):
         self.estimator = estimator
         self.search_spaces = search_spaces
         self.max_evals = max_evals
-        mlflow.set_tags({
-                "model": self.estimator.__name__,
-                "opt": "hyperopt"
-            })
+
         super(HyperOptRunner, self).__init__(x_train=x_train, y_train=y_train)
 
-    def objective(self, **kwargs: Any) -> Dict:
+    def objective(self, hyper_parameters: Dict) -> Dict:
         """_summary_
 
         Returns:
             Dict: _description_
         """
-        metrices = {"mean_squared_error": {}, "root_mean_squared_error": {"squared": False}}
-        if "metrices" in kwargs:
-            metrices = kwargs["metrices"]
-            del kwargs["metrices"]
-        hyper_parameters = kwargs
         with mlflow.start_run():
+            
+            mlflow.set_tags({
+                "estimator_name": self.estimator.__class__.__name__,
+                "opt": "hyperopt"
+            })
             mlflow.log_params(hyper_parameters)
-            model = self.estimator(
-                **hyper_parameters
-            )
+            model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
             rmse = metrics.mean_squared_error(self.y_test, preds, squared=False)
-            for metric in metrices:
-                self.call_metrices(metric, self.y_test, preds, **metric)
-        return {"loss": rmse, "status": STATUS_OK}
+            for metric, arguments in self.metrices.items():
+                self.call_metrices(metric, self.y_test, preds, **arguments)
+            return {"loss": rmse, "status": STATUS_OK}
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
@@ -67,9 +63,14 @@ class HyperOptRunner(BaseRunner):
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
-        fmin(
-            fn=self.objective,
-            space={**self.search_spaces, "metrices": metrices},
-            max_evals=self.max_evals,
-            **kwargs
-        )
+        try:
+
+            self.metrices = metrices
+            fmin(
+                fn=self.objective,
+                space=self.search_spaces,
+                max_evals=self.max_evals,
+                **kwargs
+            )
+        except Exception as exception:
+            raise ExperimentFailedException(message=str(exception)) from exception

@@ -5,6 +5,7 @@ Main module for Klops MLflow Experiment.
 from __future__ import annotations
 from typing import Any, Dict, List, Union
 import os
+import warnings
 
 import joblib
 import pandas as pd
@@ -20,13 +21,16 @@ from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
 klops_path = klops.__path__
 
+warnings.filterwarnings(action="ignore")
+
 class Experiment:
     """_summary_
     Main class for MLflow Experiment. This class would wrap the MLFlow client and
     it's experiments features.
     """
 
-    def __init__(self, name: str, tracking_uri: str) -> None:
+    def __init__(self, name: str,
+                 tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         """_summary_
         The Experiment class constructor. Every arguments sets here,
         would be implemented to all experiments with the same name.
@@ -37,10 +41,9 @@ class Experiment:
         """
         self.name = name
         self.tracking_uri = tracking_uri
-
-        self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run()  # Prevent duplicate error on MLflow current experiment session if exist.
+        self.mlflow_client = MlflowClient()
+
         mlflow.set_experiment(name)
 
     def start(self,
@@ -77,34 +80,33 @@ class Experiment:
         Returns:
             Experiment: _description_ The itself class.
         """
-        try:
-            if "tags" in kwargs:
-                if isinstance(kwargs["tags"], Dict):
-                    mlflow.set_tags(kwargs["tags"])
-                else:
-                    raise ValueError(
-                        "Tags should be a dictionary with key-value pair.")
-            if tuner in ["basic", None, "default"]:
-                runner = BasicRunner(estimator=classifier,
+
+        if "tags" in kwargs:
+            if isinstance(kwargs["tags"], Dict):
+                mlflow.set_tags(kwargs["tags"])
+                del kwargs["tags"]
+            else:
+                raise ValueError(
+                    "Tags should be a dictionary with key-value pair.")
+
+        if tuner in ["basic", None, "default"]:
+            runner = BasicRunner(estimator=classifier,
+                                 x_train=x_train_data,
+                                 y_train=y_train_data,
+                                 hyparams=tuner_args)
+        elif tuner == "hyperopt":
+            runner = HyperOptRunner(estimator=classifier,
                                     x_train=x_train_data,
                                     y_train=y_train_data,
-                                    hyparams=tuner_args)
-            elif tuner == "hyperopt":
-                runner = HyperOptRunner(estimator=classifier,
-                                        x_train=x_train_data,
-                                        y_train=y_train_data,
-                                        search_spaces=tuner_args)
-            elif tuner == "gridsearch":
-                runner = GridsearchRunner(estimator=classifier,
-                                        x_train=x_train_data,
-                                        y_train=y_train_data,
-                                        grid_params=tuner_args)
-            mlflow.end_run()
-            runner.run(metrices, **tuner_args)
-        except ValueError as value_error:
-            LOGGER.error(str(value_error))
-        except Exception as exception:
-            LOGGER.error(str(exception))
+                                    search_spaces=tuner_args)
+        elif tuner == "gridsearch":
+            runner = GridsearchRunner(estimator=classifier,
+                                      x_train=x_train_data,
+                                      y_train=y_train_data,
+                                      grid_params=tuner_args)
+
+        runner.run(metrices, **kwargs)
+
         return self
 
     def store_artifact(self, model: Any, local_path: str, artifact_path: str) -> None:
