@@ -46,9 +46,7 @@ class BasicRunner(BaseRunner):
         """
         try:
             mlflow.log_params(kwargs)
-            model = self.estimator(
-                **kwargs
-            )
+            model = self.estimator
 
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)

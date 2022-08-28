@@ -38,14 +38,13 @@ class HyperOptRunner(BaseRunner):
             Dict: _description_
         """
         with mlflow.start_run():
+            
             mlflow.set_tags({
-                "estimator_name": self.estimator.__name__,
+                "estimator_name": self.estimator.__class__.__name__,
                 "opt": "hyperopt"
             })
             mlflow.log_params(hyper_parameters)
-            model = self.estimator(
-                **hyper_parameters
-            )
+            model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
             rmse = metrics.mean_squared_error(self.y_test, preds, squared=False)

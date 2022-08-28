@@ -48,7 +48,7 @@ class GridsearchRunner(BaseRunner):
         try:
 
             grid_search = GridSearchCV(
-                estimator=self.estimator(),
+                estimator=self.estimator,
                 param_grid=self.grid_params,
                 **kwargs
             )
