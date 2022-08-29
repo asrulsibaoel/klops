@@ -14,12 +14,14 @@ import numpy as np
 from mlflow.tracking import MlflowClient
 
 from klops.config import LOGGER
+from klops.experiment.exception import UnknownExperimentTunerTypeException
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
 
 warnings.filterwarnings(action="ignore")
+
 
 class Experiment:
     """_summary_
@@ -30,10 +32,9 @@ class Experiment:
                  tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-        
-        self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run() # prevent duplicate MLflow current if exist.
+        self.mlflow_client = MlflowClient()
+
         mlflow.set_experiment(name)
 
     def start(self,
@@ -45,8 +46,6 @@ class Experiment:
               metrices: Dict = {
                   "mean_squared_error": {},
                   "root_mean_squared_error": {"squared": True}},
-            #   log_artifact: bool = True,
-            #   log_model: bool = False,
               **kwargs: Any) -> Experiment:
         """_summary_
 
@@ -65,30 +64,41 @@ class Experiment:
         Returns:
             Experiment: _description_
         """
+        try:
 
-        if "tags" in kwargs:
-            if isinstance(kwargs["tags"], Dict):
-                mlflow.set_tags(kwargs["tags"])
-                del kwargs["tags"]
+            if "tags" in kwargs:
+                if isinstance(kwargs["tags"], Dict):
+                    mlflow.set_tags(kwargs["tags"])
+                    del kwargs["tags"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+
+            if tuner in ["basic", None, "default"]:
+                runner = BasicRunner(estimator=classifier,
+                                     x_train=x_train_data,
+                                     y_train=y_train_data,
+                                     hyparams=tuner_args)
+            elif tuner == "hyperopt":
+                runner = HyperOptRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        experiment_name=self.name,
+                                        search_spaces=tuner_args)
+            elif tuner == "gridsearch":
+                runner = GridsearchRunner(estimator=classifier,
+                                          x_train=x_train_data,
+                                          y_train=y_train_data,
+                                          grid_params=tuner_args)
             else:
-                raise ValueError("Tags should be a dictionary with key-value pair.")
-        if tuner in ["basic", None, "default"]:
-            runner = BasicRunner(estimator=classifier,
-                                 x_train=x_train_data,
-                                 y_train=y_train_data,
-                                 hyparams=tuner_args)
-        elif tuner == "hyperopt":
-            runner = HyperOptRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    search_spaces=tuner_args)
-        elif tuner == "gridsearch":
-            runner = GridsearchRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    grid_params=tuner_args)
-        mlflow.end_run()
-        runner.run(metrices, **tuner_args)
+                raise ValueError(
+                    message="Unknown Experiment tuner type exception. \
+                        It should be on of: 'default'|'gridsearch'|'hyperopt'.")
+        except ValueError as value_error:
+            raise UnknownExperimentTunerTypeException(
+                message=str(value_error)) from value_error
+
+        runner.run(metrices, **kwargs)
 
         return self
 
