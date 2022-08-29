@@ -125,7 +125,7 @@ class SeldonDeployment:
             deployment_names.append(item["metadata"]["name"])
         return deployment_name in deployment_names
 
-    def delete(self, deployment_config: Dict) -> bool:
+    def delete_by_deployment_config(self, deployment_config: Dict) -> bool:
         """_summary_
         Deploy the ML Model
         Args:
@@ -136,16 +136,28 @@ class SeldonDeployment:
         Raises:
             SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
+        return self.delete(deployment_config["metadata"]["name"])
+    
+    def delete(self, deployment_name: str) -> bool:
+        """_summary_
+        Deploy the ML Model
+        Args:
+            deployment_name (Union[object, Dict]): _description_ Deployment name.
+        Returns:
+            bool: _description_ Boolean result of deployment deletion.
+        Raises:
+            SeldonDeploymentException: _description_ Raised when the deployment failed.
+        """
         try:
             deployment_existence = self.check_deployment_exist(
-                deployment_name=deployment_config["metadata"]["name"])
+                deployment_name=deployment_name)
             if not deployment_existence:
                 return False
             else:
                 deletion_result = self.api.delete_namespaced_custom_object(
                     group="machinelearning.seldon.io",
                     version="v1alpha2",
-                    name=deployment_config["metadata"]["name"],
+                    name=deployment_name,
                     plural="seldondeployments",
                     namespace=self.namespace)
                 if deletion_result:
