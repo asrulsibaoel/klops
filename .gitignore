@@ -131,3 +131,12 @@ dmypy.json
 
 # templates
 .github/templates/*
+
+# notebooks
+*.ipynb
+*/**/*.ipynb
+/notebooks
+
+# ignore dvc
+*.dvc
+*/**/*.dvc

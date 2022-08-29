@@ -18,6 +18,13 @@ class Versioning:
     Versioning control for klops. Based on DVC.
     """
 
+    def init(self) -> None:
+        """_summary_ Initiate DVC
+
+        Initiate the DVC when it's not found.
+        """
+        shell_executor("dvc init")
+
     def add_remote(self, name: str, remote_url: str) -> None:
         """_summary_
         Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3.
