@@ -5,6 +5,7 @@ Main module for Klops MLflow Experiment.
 from __future__ import annotations
 from typing import Any, Dict, List, Union
 import os
+import warnings
 
 import joblib
 import pandas as pd
@@ -20,18 +21,21 @@ from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 
 klops_path = klops.__path__
 
+warnings.filterwarnings(action="ignore")
+
 class Experiment:
     """_summary_
     Main class for MLflow Experiment
     """
 
-    def __init__(self, name: str, tracking_uri: str) -> None:
+    def __init__(self, name: str,
+                 tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-
+        
         self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run()  # prevent duplicate MLflow current if exist.
+        mlflow.end_run() # prevent duplicate MLflow current if exist.
         mlflow.set_experiment(name)
 
     def start(self,

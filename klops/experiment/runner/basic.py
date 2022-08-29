@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from klops.experiment.runner.base import BaseRunner
+from klops.experiment.exception import ExperimentFailedException
 
 
 class BasicRunner(BaseRunner):
@@ -27,7 +28,7 @@ class BasicRunner(BaseRunner):
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
         mlflow.set_tags({
             "opt": "basic",
-            "model": self.estimator.__class__.__name__
+            "estimator_name": self.estimator.__class__.__name__
         })
         super(BasicRunner, self).__init__(x_train=x_train, y_train=y_train)
 
@@ -43,13 +44,14 @@ class BasicRunner(BaseRunner):
         Returns:
             Any: _description_
         """
-        with mlflow.start_run(run_name="test run"):
+        try:
             mlflow.log_params(kwargs)
-            model = self.estimator(
-                **kwargs
-            )
+            model = self.estimator
 
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
+            mlflow.end_run()
+        except Exception as exception:
+            raise ExperimentFailedException(message=str(exception)) from exception
