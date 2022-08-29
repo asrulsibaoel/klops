@@ -11,7 +11,7 @@ Main module for Klops MLflow Experiment.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L177"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L192"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `start_experiment`
 
@@ -35,19 +35,21 @@ _summary_ The function that wrap all the basic Experiment class do. This make th
 **Args:**
  
  - <b>`name`</b> (str):  _description_ The experiment name. Example: "my-classification-experiment" 
- - <b>`tracking_uri`</b> (str):  _description_ The MLflow experiment tracking uri. 
- - <b>`Its our MLflow Tracking server URI. Example`</b>:  "http://<your-mlflow-host>:<port>" 
- - <b>`classifier`</b> (Any):  _description_ The classifier pointer class. 
- - <b>`Example`</b>:  sklearn.naive_bayes.GaussianNB x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ The input features with 2 Dimensional Array like. y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ The output mapping. 
- - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).  Defaults to None. 
- - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.  A Dictionary contains key-value pairs set of hyper parameters. 
- - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to 
- - <b>`{ "mean_squared_error"`</b>:  {}, "root_mean_squared_error": {"squared": True}}. The sklearn metrices. All metrices method name could be seen here: 
- - <b>`https`</b>: //scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
+ - <b>`tracking_uri`</b> (str):  _description_ The MLflow experiment tracking uri.             Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>" 
+ - <b>`classifier`</b> (Any):  _description_ The classifier pointer class.             Example: sklearn.naive_bayes.GaussianNB 
+ - <b>`x_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):              _description_ The input features with 2 Dimensional Array like. 
+ - <b>`y_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):              _description_ The output mapping. 
+ - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).             Defaults to None. 
+ - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.             A Dictionary contains key-value pairs set of hyper parameters. 
+ - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to             { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.             The sklearn metrices. All metrices method name could be seen here:             https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
+
+
 
 **Raises:**
  
  - <b>`ValueError`</b>:  _description_ Raised when the `tags` arguments has invalid value. 
+
+
 
 **Returns:**
  
@@ -56,33 +58,32 @@ _summary_ The function that wrap all the basic Experiment class do. This make th
 
 ---
 
-<a href="../klops/experiment/experiment.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Experiment`
-_summary_ Main class for MLflow Experiment. This class would wrap the MLFlow client and it's experiments features. 
+_summary_ Main class for MLflow Experiment. This class would wrap the MLFlow client and     it's experiments features. 
 
-<a href="../klops/experiment/experiment.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
 ```python
-__init__(name: 'str', tracking_uri: 'str') → None
+__init__(name: 'str', tracking_uri: 'str' = None) → None
 ```
 
-_summary_ The Experiment class constructor. Every arguments sets here, would be implemented to all experiments with the same name. 
+_summary_ The Experiment class constructor. Every arguments sets here,         would be implemented to all experiments with the same name. 
 
 **Args:**
  
  - <b>`name`</b> (str):  _description_ The experiment name. Example: "my-classification-experiment" 
- - <b>`tracking_uri`</b> (str):  _description_ The MLflow experiment tracking uri. 
- - <b>`Its our MLflow Tracking server URI. Example`</b>:  "http://<your-mlflow-host>:<port>" 
+ - <b>`tracking_uri`</b> (str):  _description_ The MLflow experiment tracking uri.                 Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>" 
 
 
 
 
 ---
 
-<a href="../klops/experiment/experiment.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L146"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `deploy`
 
@@ -94,23 +95,29 @@ deploy(
     authentication: 'AbstractKubernetesAuth',
     namespace: 'str' = 'default',
     deployment_template: 'str' = None
-) → None
+) → Dict
 ```
 
 _summary_ Deploy experiment to Seldon Environment. 
 
+This method would invoke the Deployment class and its dependencies to deploy the experiment using default / user defined template. 
+
+
+
 **Args:**
  
- - <b>`artifact_uri`</b> (str):  _description_ The artifact URI.  We could see it in the MLflow Tracking Server UI. 
+ - <b>`artifact_uri`</b> (str):  _description_ The artifact URI.                 We could see it in the MLflow Tracking Server UI. 
+
+
  - <b>`deployment_name`</b> (str):  _description_ The Kubernetes deployment name. 
  - <b>`model_name`</b> (str):  _description_ The model name. 
- - <b>`authentication`</b> (AbstractKubernetesAuth):  _description_ The authentication object.  Currently supports for GCP and default / minikube Auth. 
- - <b>`namespace`</b> (str, optional):  _description_. Defaults to 'default'.  The Kubernetes target namespace. 
- - <b>`deployment_template`</b> (str, optional):  _description_. Defaults to None.  Kubernetes JSON template file path. Recommended using default template. 
+ - <b>`authentication`</b> (AbstractKubernetesAuth):  _description_ The authentication object.                 Currently supports for GCP and default / minikube Auth. 
+ - <b>`namespace`</b> (str, optional):  _description_. Defaults to 'default'.                 The Kubernetes target namespace. 
+ - <b>`deployment_template`</b> (str, optional):  _description_. Defaults to None.                 Kubernetes JSON template file path. Recommended using default template. 
 
 ---
 
-<a href="../klops/experiment/experiment.py#L132"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_metric`
 
@@ -127,7 +134,7 @@ _summary_ Log the metric into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L128"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_param`
 
@@ -144,7 +151,7 @@ _summary_ Log the parameters into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `start`
 
@@ -164,13 +171,12 @@ _summary_ Start the experiment given the arguments.
 
 **Args:**
  
- - <b>`classifier`</b> (Any):  _description_ The classifier pointer class. 
- - <b>`Example`</b>:  sklearn.naive_bayes.GaussianNB x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ The input features with 2 Dimensional Array like. y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ The output mapping. 
- - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).  Defaults to None. 
- - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.  A Dictionary contains key-value pairs set of hyper parameters. 
- - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to 
- - <b>`{ "mean_squared_error"`</b>:  {}, "root_mean_squared_error": {"squared": True}}. The sklearn metrices. All metrices method name could be seen here: 
- - <b>`https`</b>: //scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
+ - <b>`classifier`</b> (Any):  _description_ The classifier pointer class.                 Example: sklearn.naive_bayes.GaussianNB 
+ - <b>`x_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The input features with 2 Dimensional Array like. 
+ - <b>`y_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The output mapping. 
+ - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).                 Defaults to None. 
+ - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.                 A Dictionary contains key-value pairs set of hyper parameters. 
+ - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to                 { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.                 The sklearn metrices. All metrices method name could be seen here:                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
 
 
 
@@ -186,7 +192,7 @@ _summary_ Start the experiment given the arguments.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L110"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `store_artifact`
 

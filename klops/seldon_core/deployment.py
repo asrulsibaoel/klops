@@ -49,11 +49,14 @@ class SeldonDeployment:
     def load_deployment_configuration(self, file_name: str):
         """_summary_
         Load the deployment configuration file into a Python dictionary.
+
         Args:
             file_name (str): _description_ The deployment file name.
                 It can be Yaml file (.yml or .yaml) or JSON file.
+
         Returns:
             deployment_config (dict): _description_ Seldon Deployment configuration dictionary.
+
         Raises:
             ValueError: _description_ When the file type are not yaml or json.
             JSONDecodeError: _description_ When the JSON file contains wrong format.
@@ -74,11 +77,14 @@ class SeldonDeployment:
     def deploy(self, deployment_config: Dict) -> Dict:
         """_description_
         Deploy the ML Model
+
         Args:
             deployment_config (Union[object, Dict]): _description_
                 Deployment Configuration Object.
+
         Returns:
             deployment_result (Dict): _description_ The deployment result metadata in a dictionary.
+
         Raises:
             SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
@@ -107,10 +113,13 @@ class SeldonDeployment:
     def check_deployment_exist(self, deployment_name: str) -> bool:
         """ _summary_
         Check the deployment already exists.
+
         Args:
             deployment_name (str): _description_ The deployment name, Example: iris-model
+
         Returns:
             bool: _description_ The deployment existence.
+
         Raises:
             AttributeError: _description_ Raised when the key doesn't exists.
             NoneTypeException: _description_ Raised when wrong compared with None Object.
@@ -127,12 +136,15 @@ class SeldonDeployment:
 
     def delete_by_deployment_config(self, deployment_config: Dict) -> bool:
         """_summary_
-        Deploy the ML Model
+        Deploy the ML Model.
+
         Args:
-            deployment_config (Union[object, Dict]): _description_
+            deployment_config (Union[object, Dict]): _description_ \
                 Deployment Configuration Object.
+
         Returns:
             bool: _description_ Boolean result of deployment deletion.
+
         Raises:
             SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
@@ -141,10 +153,13 @@ class SeldonDeployment:
     def delete(self, deployment_name: str) -> bool:
         """_summary_
         Deploy the ML Model
+
         Args:
             deployment_name (Union[object, Dict]): _description_ Deployment name.
+
         Returns:
             bool: _description_ Boolean result of deployment deletion.
+
         Raises:
             SeldonDeploymentException: _description_ Raised when the deployment failed.
         """

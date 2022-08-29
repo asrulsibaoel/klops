@@ -28,18 +28,18 @@ warnings.filterwarnings(action="ignore")
 
 class Experiment:
     """_summary_
-    Main class for MLflow Experiment. This class would wrap the MLFlow client and
+    Main class for MLflow Experiment. This class would wrap the MLFlow client and \
     it's experiments features.
     """
 
     def __init__(self, name: str,
                  tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         """_summary_
-        The Experiment class constructor. Every arguments sets here,
+        The Experiment class constructor. Every arguments sets here, \
         would be implemented to all experiments with the same name.
         Args:
             name (str): _description_ The experiment name. Example: "my-classification-experiment"
-            tracking_uri (str): _description_ The MLflow experiment tracking uri.
+            tracking_uri (str): _description_ The MLflow experiment tracking uri. \
                 Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>"
         """
         self.name = name
@@ -61,20 +61,21 @@ class Experiment:
               **kwargs: Any) -> Experiment:
         """_summary_
         Start the experiment given the arguments.
+
         Args:
-            classifier (Any): _description_ The classifier pointer class.
+            classifier (Any): _description_ The classifier pointer class. \
                 Example: sklearn.naive_bayes.GaussianNB
-            x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]):
+            x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 _description_ The input features with 2 Dimensional Array like.
-            y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]):
+            y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 _description_ The output mapping.
-            tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch).
+            tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
                 Defaults to None.
-            tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments.
+            tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
                 A Dictionary contains key-value pairs set of hyper parameters.
-            metrices (_type_, optional): _description_. Defaults to
-                { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.
-                The sklearn metrices. All metrices method name could be seen here:
+            metrices (_type_, optional): _description_. Defaults to \
+                { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}. \
+                The sklearn metrices. All metrices method name could be seen here: \
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 
         Raises:
@@ -152,13 +153,12 @@ class Experiment:
                deployment_template: str = None) -> Dict:
         """_summary_ Deploy experiment to Seldon Environment.
 
-        This method would invoke the Deployment class and its dependencies to deploy
+        This method would invoke the Deployment class and its dependencies to deploy \
         the experiment using default / user defined template.
 
         Args:
             artifact_uri (str): _description_ The artifact URI. \
                 We could see it in the MLflow Tracking Server UI.
-
             deployment_name (str): _description_ The Kubernetes deployment name.
             model_name (str): _description_ The model name.
             authentication (AbstractKubernetesAuth): _description_ The authentication object. \
@@ -206,24 +206,26 @@ def start_experiment(
 
     Args:
         name (str): _description_ The experiment name. Example: "my-classification-experiment"
-        tracking_uri (str): _description_ The MLflow experiment tracking uri.
+        tracking_uri (str): _description_ The MLflow experiment tracking uri. \
             Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>"
-        classifier (Any): _description_ The classifier pointer class.
+        classifier (Any): _description_ The classifier pointer class. \
             Example: sklearn.naive_bayes.GaussianNB
-        x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]):
+        x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
             _description_ The input features with 2 Dimensional Array like.
-        y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]):
+        y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
             _description_ The output mapping.
-        tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch).
+        tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
             Defaults to None.
-        tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments.
+        tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
             A Dictionary contains key-value pairs set of hyper parameters.
-        metrices (_type_, optional): _description_. Defaults to
-            { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.
-            The sklearn metrices. All metrices method name could be seen here:
+        metrices (_type_, optional): _description_. Defaults to \
+            { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}. \
+            The sklearn metrices. All metrices method name could be seen here: \
             https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
+
     Raises:
         ValueError: _description_ Raised when the `tags` arguments has invalid value.
+
     Returns:
         Experiment: _description_ The itself class.
     """

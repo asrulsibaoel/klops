@@ -51,6 +51,18 @@ _summary_ Add remote repository. Could be local, or remote storage such as GCP b
 
 ---
 
+<a href="../klops/versioning/versioning.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `pull`
+
+```python
+pull() → None
+```
+
+_summary_ Pull the commited data. 
+
+---
+
 <a href="../klops/versioning/versioning.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `push`
@@ -63,7 +75,7 @@ _summary_ Push every tracked changes into dvc.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_binary`
 
@@ -85,12 +97,12 @@ _summary_ Read the binary file such as .pkl, .joblib, etc. stored in the DVC sto
 
 ---
 
-<a href="../klops/versioning/versioning.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L96"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_dataset`
 
 ```python
-read_dataset(file_name: str) → Union[List, Dict, DataFrame, ndarray]
+read_dataset(file_name: str) → Any
 ```
 
 _summary_ Read dataset from DVC artifact storage. 
@@ -103,11 +115,23 @@ _summary_ Read dataset from DVC artifact storage.
 
 **Returns:**
  
- - <b>`Union[List, Dict, pd.DataFrame, np.ndarray]`</b>:  _description_ The dataset values. 
+ - <b>`Any`</b>:  _description_ The dataset buffer. Need to parse. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `repro`
+
+```python
+repro() → None
+```
+
+_summary_ Reproduce the DVC pipeline. 
+
+---
+
+<a href="../klops/versioning/versioning.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

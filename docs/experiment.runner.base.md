@@ -14,7 +14,7 @@ _summary_ Base runner module
 ## <kbd>class</kbd> `BaseRunner`
 _summary_ Abstract class as Base runner implementation. 
 
-<a href="../klops/experiment/runner/base.py#L22"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -34,12 +34,12 @@ __init__(
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `call_metrices`
 
 ```python
-call_metrices(metric_name: str, *args, **kwargs: Any) → None
+call_metrices(metric_name: str, *args: Any, **kwargs: Any) → None
 ```
 
 _summary_ Call the measurement metrices (inherited from sklearn metrices), log as mlflow metric. 
@@ -51,7 +51,7 @@ _summary_ Call the measurement metrices (inherited from sklearn metrices), log a
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L26"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 
@@ -72,7 +72,7 @@ _summary_ The abstract method for base implementation to execute the experiment.
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `split_train_test`
 

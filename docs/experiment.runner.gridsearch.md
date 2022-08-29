@@ -9,7 +9,7 @@ _summary_
 
 ---
 
-<a href="../klops/experiment/runner/gridsearch.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/gridsearch.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `GridsearchRunner`
 _summary_ 
@@ -20,13 +20,13 @@ _summary_
  
  - <b>`BaseRunner`</b> (_type_):  _description_ 
 
-<a href="../klops/experiment/runner/gridsearch.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/gridsearch.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
 ```python
 __init__(
-    estimator: Any,
+    estimator: Type[Any],
     x_train: Union[DataFrame, ndarray, List, Dict],
     y_train: Union[DataFrame, ndarray, List, Dict],
     grid_params: Dict = {},
@@ -43,7 +43,7 @@ __init__(
 
 ---
 
-<a href="../klops/experiment/runner/gridsearch.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/gridsearch.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 
