@@ -9,16 +9,20 @@ import warnings
 
 import joblib
 import pandas as pd
+from kubernetes.client import ApiException
 import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
-from klops.config import LOGGER
-from klops.experiment.exception import UnknownExperimentTunerTypeException
+import klops
+from klops.experiment.exception import ExperimentFailedException, \
+    UnknownExperimentTunerTypeException
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
+from klops.seldon_core.exception import SeldonDeploymentException
 
+klops_path = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
 
@@ -91,8 +95,7 @@ class Experiment:
                                           y_train=y_train_data,
                                           grid_params=tuner_args)
             else:
-                raise ValueError(
-                    message="Unknown Experiment tuner type exception. \
+                raise ValueError("Unknown Experiment tuner type exception. \
                         It should be on of: 'default'|'gridsearch'|'hyperopt'.")
         except ValueError as value_error:
             raise UnknownExperimentTunerTypeException(
@@ -151,14 +154,24 @@ class Experiment:
         try:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
-            config = deployment.load_deployment_configuration(
-                "../templates/deployment_template.json")
+            if deployment_template is None:
+                print("Klops path:", klops_path)
+                deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
+
+            config = deployment.load_deployment_configuration(deployment_template)
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
-            deployment.deploy(config)
-        except Exception:
-            LOGGER.error("Deployment Failed.")
+
+            return deployment.deploy(config)
+        except ApiException as api_exception:
+            raise SeldonDeploymentException(
+                status=api_exception.status,
+                reason=api_exception.reason,
+                http_resp="Failed to deploy.") from api_exception
+        except Exception as exception:
+            raise ExperimentFailedException(message=str(exception)) from exception
+
 
 
 def start_experiment(
@@ -190,7 +203,7 @@ def start_experiment(
         Experiment: _description_
     """
     experiment = Experiment(name=name, tracking_uri=tracking_uri)
-    experiment.start(classifier=classifier, x_train_data=x_train_data,
+    experiment = experiment.start(classifier=classifier, x_train_data=x_train_data,
                      y_train_data=y_train_data, tuner=tuner,
                      tuner_args=tuner_args, metrices=metrices)
 
