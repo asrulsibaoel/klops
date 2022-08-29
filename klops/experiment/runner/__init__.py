@@ -2,7 +2,7 @@
 Main module tobe called for experiment runner.
 """
 
-from .base_runner import BaseRunner
-from .basic_runner import BasicRunner
-from .gridsearch_runner import GridsearchRunner
-from .hyperopt_runner import HyperOptRunner
+from .base import BaseRunner
+from .basic import BasicRunner
+from .gridsearch import GridsearchRunner
+from .hyperopt import HyperOptRunner

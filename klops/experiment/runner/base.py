@@ -12,7 +12,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 
-from klops.config import LOGGER
+from klops.experiment.exception import InvalidArgumentsException, LogMetricException
 
 
 class BaseRunner(ABC):
@@ -21,6 +21,9 @@ class BaseRunner(ABC):
     Args:
         ABC (_type_): _description_
     """
+
+    metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}}
+
     def __init__(self, x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                          y_train: Union[pd.DataFrame, np.ndarray, List, Dict]) -> None:
         self.split_train_test(x_train=x_train, y_train=y_train)
@@ -49,7 +52,7 @@ class BaseRunner(ABC):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             x_train, y_train, test_size=test_size, random_state=random_state)
 
-    def call_metrices(self, metric_name: str, *args, **kwargs: Any) -> None:
+    def call_metrices(self, metric_name: str, *args: Any, **kwargs: Any) -> None:
         """_summary_
         Call the measurement metrices (inherited from sklearn metrices), log as mlflow metric.
         Args:
@@ -64,6 +67,6 @@ class BaseRunner(ABC):
                 score = metrics.mean_squared_error(*args, **kwargs)
             mlflow.log_metric(metric_name, score)
         except ValueError as value_error:
-            LOGGER.error(str(value_error))
+            raise InvalidArgumentsException(message=str(value_error)) from value_error
         except Exception as exception:
-            LOGGER.error(str(exception))
+            raise LogMetricException(message=str(exception)) from exception
