@@ -38,7 +38,7 @@ class HyperOptRunner(BaseRunner):
             Dict: _description_
         """
         with mlflow.start_run():
-            
+
             mlflow.set_tags({
                 "estimator_name": self.estimator.__class__.__name__,
                 "opt": "hyperopt"
@@ -47,13 +47,15 @@ class HyperOptRunner(BaseRunner):
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = metrics.mean_squared_error(self.y_test, preds, squared=False)
+            rmse = metrics.mean_squared_error(
+                self.y_test, preds, squared=False)
             for metric, arguments in self.metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             return {"loss": rmse, "status": STATUS_OK}
 
     def run(self,
-            metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
+            metrices: Dict = {"mean_squared_error": {},
+                              "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
 
@@ -74,4 +76,5 @@ class HyperOptRunner(BaseRunner):
                 **kwargs
             )
         except Exception as exception:
-            raise ExperimentFailedException(message=str(exception)) from exception
+            raise ExperimentFailedException(
+                message=str(exception)) from exception

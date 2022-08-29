@@ -18,6 +18,13 @@ class Versioning:
     Versioning control for klops. Based on DVC.
     """
 
+    def init(self) -> None:
+        """_summary_ Initiate DVC
+
+        Initiate the DVC when it's not found.
+        """
+        shell_executor("dvc init")
+
     def add_remote(self, name: str, remote_url: str) -> None:
         """_summary_
         Add remote repository.
@@ -91,8 +98,8 @@ class Versioning:
             Union[List, Dict, pd.DataFrame, np.ndarray]: _description_
         """
         try:
-            data = dvc.api.read(file_name, mode="r")
-            return data
+            with dvc.api.open(file_name) as file_buffer:
+                return file_buffer
         except dvc.exceptions.FileMissingError as file_missing:
             LOGGER.error(str(file_missing))
         except dvc.exceptions.PathMissingError as path_missing:
