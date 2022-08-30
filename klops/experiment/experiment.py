@@ -9,12 +9,14 @@ import warnings
 
 import joblib
 import pandas as pd
+from kubernetes.client import ApiException
 import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
 import klops
-from klops.experiment.exception import ExperimentFailedException
+from klops.experiment.exception import ExperimentFailedException, \
+    UnknownExperimentTunerTypeException
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
@@ -34,10 +36,9 @@ class Experiment:
                  tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
         self.name = name
         self.tracking_uri = tracking_uri
-        
-        self.mlflow_client = MlflowClient()
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        mlflow.end_run() # prevent duplicate MLflow current if exist.
+        self.mlflow_client = MlflowClient()
+
         mlflow.set_experiment(name)
 
     def start(self,
@@ -67,29 +68,38 @@ class Experiment:
         Returns:
             Experiment: _description_
         """
-        if "tags" in kwargs:
-            if isinstance(kwargs["tags"], Dict):
-                mlflow.set_tags(kwargs["tags"])
-                del kwargs["tags"]
-            else:
-                raise ValueError(
-                    "Tags should be a dictionary with key-value pair.")
+        try:
 
-        if tuner in ["basic", None, "default"]:
-            runner = BasicRunner(estimator=classifier,
-                                 x_train=x_train_data,
-                                 y_train=y_train_data,
-                                 hyparams=tuner_args)
-        elif tuner == "hyperopt":
-            runner = HyperOptRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    search_spaces=tuner_args)
-        elif tuner == "gridsearch":
-            runner = GridsearchRunner(estimator=classifier,
-                                      x_train=x_train_data,
-                                      y_train=y_train_data,
-                                      grid_params=tuner_args)
+            if "tags" in kwargs:
+                if isinstance(kwargs["tags"], Dict):
+                    mlflow.set_tags(kwargs["tags"])
+                    del kwargs["tags"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+
+            if tuner in ["basic", None, "default"]:
+                runner = BasicRunner(estimator=classifier,
+                                     x_train=x_train_data,
+                                     y_train=y_train_data,
+                                     hyparams=tuner_args)
+            elif tuner == "hyperopt":
+                runner = HyperOptRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        experiment_name=self.name,
+                                        search_spaces=tuner_args)
+            elif tuner == "gridsearch":
+                runner = GridsearchRunner(estimator=classifier,
+                                          x_train=x_train_data,
+                                          y_train=y_train_data,
+                                          grid_params=tuner_args)
+            else:
+                raise ValueError("Unknown Experiment tuner type exception. \
+                        It should be on of: 'default'|'gridsearch'|'hyperopt'.")
+        except ValueError as value_error:
+            raise UnknownExperimentTunerTypeException(
+                message=str(value_error)) from value_error
 
         runner.run(metrices, **kwargs)
 
@@ -154,6 +164,7 @@ class Experiment:
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
+
             return deployment.deploy(config)
         except ApiException as api_exception:
             raise SeldonDeploymentException(
