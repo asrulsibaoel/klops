@@ -9,14 +9,23 @@ import warnings
 
 import joblib
 import pandas as pd
+from kubernetes.client import ApiException
 import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
+import klops
+from klops.experiment.exception import ExperimentFailedException, \
+    UnknownExperimentTunerTypeException
+from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
+from klops.seldon_core.auth.schema import AbstractKubernetesAuth
+from klops.seldon_core.exception import SeldonDeploymentException
 
+klops_path = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
+
 
 class Experiment:
     """_summary_
@@ -59,30 +68,38 @@ class Experiment:
         Returns:
             Experiment: _description_
         """
+        try:
 
-        if "tags" in kwargs:
-            if isinstance(kwargs["tags"], Dict):
-                mlflow.set_tags(kwargs["tags"])
-                del kwargs["tags"]
+            if "tags" in kwargs:
+                if isinstance(kwargs["tags"], Dict):
+                    mlflow.set_tags(kwargs["tags"])
+                    del kwargs["tags"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+
+            if tuner in ["basic", None, "default"]:
+                runner = BasicRunner(estimator=classifier,
+                                     x_train=x_train_data,
+                                     y_train=y_train_data,
+                                     hyparams=tuner_args)
+            elif tuner == "hyperopt":
+                runner = HyperOptRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        experiment_name=self.name,
+                                        search_spaces=tuner_args)
+            elif tuner == "gridsearch":
+                runner = GridsearchRunner(estimator=classifier,
+                                          x_train=x_train_data,
+                                          y_train=y_train_data,
+                                          grid_params=tuner_args)
             else:
-                raise ValueError(
-                    "Tags should be a dictionary with key-value pair.")
-
-        if tuner in ["basic", None, "default"]:
-            runner = BasicRunner(estimator=classifier,
-                                 x_train=x_train_data,
-                                 y_train=y_train_data,
-                                 hyparams=tuner_args)
-        elif tuner == "hyperopt":
-            runner = HyperOptRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    search_spaces=tuner_args)
-        elif tuner == "gridsearch":
-            runner = GridsearchRunner(estimator=classifier,
-                                      x_train=x_train_data,
-                                      y_train=y_train_data,
-                                      grid_params=tuner_args)
+                raise ValueError("Unknown Experiment tuner type exception. \
+                        It should be on of: 'default'|'gridsearch'|'hyperopt'.")
+        except ValueError as value_error:
+            raise UnknownExperimentTunerTypeException(
+                message=str(value_error)) from value_error
 
         runner.run(metrices, **kwargs)
 
@@ -119,6 +136,43 @@ class Experiment:
         """
         mlflow.log_metric(key=key, value=value)
 
+    def deploy(self,
+               artifact_uri: str,
+               deployment_name: str,
+               model_name: str,
+               authentication: AbstractKubernetesAuth,
+               namespace: str = 'default') -> None:
+        """_summary_
+
+        Args:
+            artifact_uri (str): _description_
+            deployment_name (str): _description_
+            model_name (str): _description_
+            authentication (AbstractKubernetesAuth): _description_
+            namespace (str, optional): _description_. Defaults to 'default'.
+        """
+        try:
+            deployment = SeldonDeployment(
+                authentication=authentication, namespace=namespace)
+            if deployment_template is None:
+                print("Klops path:", klops_path)
+                deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
+
+            config = deployment.load_deployment_configuration(deployment_template)
+            config["metadata"]["name"] = deployment_name
+            config["spec"]["name"] = model_name
+            config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
+
+            return deployment.deploy(config)
+        except ApiException as api_exception:
+            raise SeldonDeploymentException(
+                status=api_exception.status,
+                reason=api_exception.reason,
+                http_resp="Failed to deploy.") from api_exception
+        except Exception as exception:
+            raise ExperimentFailedException(message=str(exception)) from exception
+
+
 
 def start_experiment(
         name: str,
@@ -149,7 +203,7 @@ def start_experiment(
         Experiment: _description_
     """
     experiment = Experiment(name=name, tracking_uri=tracking_uri)
-    experiment.start(classifier=classifier, x_train_data=x_train_data,
+    experiment = experiment.start(classifier=classifier, x_train_data=x_train_data,
                      y_train_data=y_train_data, tuner=tuner,
                      tuner_args=tuner_args, metrices=metrices)
 
