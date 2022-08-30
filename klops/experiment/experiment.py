@@ -49,7 +49,7 @@ class Experiment:
               tuner_args: Dict = {},
               metrices: Dict = {
                   "mean_squared_error": {},
-                  "root_mean_squared_error": {"squared": True}},
+                  "root_mean_squared_error": {"squared": False}},
               **kwargs: Any) -> Experiment:
         """_summary_
 
@@ -141,15 +141,17 @@ class Experiment:
                deployment_name: str,
                model_name: str,
                authentication: AbstractKubernetesAuth,
-               namespace: str = 'default') -> None:
+               namespace: str = 'default',
+               deployment_template: str = None) -> None:
         """_summary_
-
+        Deploy experiment to Seldon Environment.
         Args:
             artifact_uri (str): _description_
             deployment_name (str): _description_
             model_name (str): _description_
             authentication (AbstractKubernetesAuth): _description_
             namespace (str, optional): _description_. Defaults to 'default'.
+            deployment_template (str, optional): _description_. Defaults to None.
         """
         try:
             deployment = SeldonDeployment(
