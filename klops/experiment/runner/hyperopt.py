@@ -40,7 +40,7 @@ class HyperOptRunner(BaseRunner):
         Returns:
             Dict: _description_
         """
-        run_name = self.experiment_name + "_" + datetime.now.strftime("%Y%m%d:%H%M%S")
+        run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
         with mlflow.start_run(run_name=run_name):
 
             mlflow.set_tags({
