@@ -19,7 +19,7 @@ _summary_ Versioning control for klops. Based on DVC.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `add`
 
@@ -35,7 +35,7 @@ _summary_ Track the file / path into DVC.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `add_remote`
 
@@ -51,7 +51,21 @@ _summary_ Add remote repository. Could be local, or remote storage such as GCP b
 
 ---
 
-<a href="../klops/versioning/versioning.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `init`
+
+```python
+init() → None
+```
+
+_summary_ Initiate DVC 
+
+Initiate the DVC when it's not found. 
+
+---
+
+<a href="../klops/versioning/versioning.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `pull`
 
@@ -63,7 +77,7 @@ _summary_ Pull the commited data.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `push`
 
@@ -75,7 +89,7 @@ _summary_ Push every tracked changes into dvc.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L86"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_binary`
 
@@ -97,7 +111,7 @@ _summary_ Read the binary file such as .pkl, .joblib, etc. stored in the DVC sto
 
 ---
 
-<a href="../klops/versioning/versioning.py#L96"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L103"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_dataset`
 
@@ -119,7 +133,7 @@ _summary_ Read dataset from DVC artifact storage.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `repro`
 
@@ -131,7 +145,7 @@ _summary_ Reproduce the DVC pipeline.
 
 ---
 
-<a href="../klops/versioning/versioning.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L62"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

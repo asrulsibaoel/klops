@@ -12,7 +12,7 @@ _summary_
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L16"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HyperOptRunner`
 _summary_ 
@@ -23,7 +23,7 @@ _summary_
  
  - <b>`BaseRunner`</b> (_type_):  _description_ 
 
-<a href="../klops/experiment/runner/hyperopt.py#L22"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -33,6 +33,7 @@ __init__(
     x_train: Union[DataFrame, ndarray, List, Dict],
     y_train: Union[DataFrame, ndarray, List, Dict],
     search_spaces: Dict,
+    experiment_name: str,
     max_evals: int = 20
 ) → None
 ```
@@ -46,7 +47,7 @@ __init__(
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `objective`
 
@@ -64,7 +65,7 @@ _summary_
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

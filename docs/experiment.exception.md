@@ -96,6 +96,35 @@ Message would store the root causes.
 
 
 
+---
+
+<a href="../klops/experiment/exception.py#L65"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `UnknownExperimentTunerTypeException`
+_summary_ Unknown Experiment Tunner Exception 
+
+Raised when the tuner is not one of `default` | `gridsearch` | `hyperopt`. 
+
+<a href="../klops/experiment/exception.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(message, *args: object) → None
+```
+
+_summary_ The Exception Constructor. 
+
+
+
+**Args:**
+ 
+ - <b>`message`</b> (_type_):  _description_ The Exception message would be displayed. 
+
+
+
+
+
 
 
 ---
