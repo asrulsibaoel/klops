@@ -136,7 +136,7 @@ class SeldonDeployment:
 
     def delete_by_deployment_config(self, deployment_config: Dict) -> bool:
         """_summary_
-        Deploy the ML Model.
+        Delete the deployment by its configuration.
 
         Args:
             deployment_config (Union[object, Dict]): _description_ \
@@ -149,7 +149,7 @@ class SeldonDeployment:
             SeldonDeploymentException: _description_ Raised when the deployment failed.
         """
         return self.delete(deployment_config["metadata"]["name"])
-    
+
     def delete(self, deployment_name: str) -> bool:
         """_summary_
         Deploy the ML Model
@@ -178,5 +178,5 @@ class SeldonDeployment:
                 if deletion_result:
                     return True
         except SeldonDeploymentException as deployment_exception:
-            print("Deployment failed,", str(deployment_exception))
+            print("Deployment deletion failed,", str(deployment_exception))
             return False

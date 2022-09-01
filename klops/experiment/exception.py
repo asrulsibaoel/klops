@@ -60,3 +60,22 @@ class LogMetricException(Exception):
 
     def __str__(self):
         return self.message
+
+
+class UnknownExperimentTunerTypeException(ValueError):
+    """_summary_ Unknown Experiment Tunner Exception
+
+    Raised when the tuner is not one of `default` | `gridsearch` | `hyperopt`.
+    """
+
+    def __init__(self, message, *args: object) -> None:
+        """_summary_ The Exception Constructor.
+
+        Args:
+            message (_type_): _description_ The Exception message would be displayed.
+        """
+        self.message = message
+        super(UnknownExperimentTunerTypeException, self).__init__(*args)
+
+    def __str__(self) -> str:
+        return self.message

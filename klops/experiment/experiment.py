@@ -14,9 +14,9 @@ import mlflow
 import numpy as np
 from mlflow.tracking import MlflowClient
 
-
 import klops
-from klops.experiment.exception import ExperimentFailedException
+from klops.experiment.exception import ExperimentFailedException, \
+    UnknownExperimentTunerTypeException
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
@@ -25,6 +25,7 @@ from klops.seldon_core.exception import SeldonDeploymentException
 klops_path = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
+
 
 class Experiment:
     """_summary_
@@ -84,30 +85,38 @@ class Experiment:
         Returns:
             Experiment: _description_ The itself class.
         """
+        try:
 
-        if "tags" in kwargs:
-            if isinstance(kwargs["tags"], Dict):
-                mlflow.set_tags(kwargs["tags"])
-                del kwargs["tags"]
+            if "tags" in kwargs:
+                if isinstance(kwargs["tags"], Dict):
+                    mlflow.set_tags(kwargs["tags"])
+                    del kwargs["tags"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+
+            if tuner in ["basic", None, "default"]:
+                runner = BasicRunner(estimator=classifier,
+                                     x_train=x_train_data,
+                                     y_train=y_train_data,
+                                     hyparams=tuner_args)
+            elif tuner == "hyperopt":
+                runner = HyperOptRunner(estimator=classifier,
+                                        x_train=x_train_data,
+                                        y_train=y_train_data,
+                                        experiment_name=self.name,
+                                        search_spaces=tuner_args)
+            elif tuner == "gridsearch":
+                runner = GridsearchRunner(estimator=classifier,
+                                          x_train=x_train_data,
+                                          y_train=y_train_data,
+                                          grid_params=tuner_args)
             else:
-                raise ValueError(
-                    "Tags should be a dictionary with key-value pair.")
-
-        if tuner in ["basic", None, "default"]:
-            runner = BasicRunner(estimator=classifier,
-                                 x_train=x_train_data,
-                                 y_train=y_train_data,
-                                 hyparams=tuner_args)
-        elif tuner == "hyperopt":
-            runner = HyperOptRunner(estimator=classifier,
-                                    x_train=x_train_data,
-                                    y_train=y_train_data,
-                                    search_spaces=tuner_args)
-        elif tuner == "gridsearch":
-            runner = GridsearchRunner(estimator=classifier,
-                                      x_train=x_train_data,
-                                      y_train=y_train_data,
-                                      grid_params=tuner_args)
+                raise ValueError("Unknown Experiment tuner type exception. \
+                        It should be on of: 'default'|'gridsearch'|'hyperopt'.")
+        except ValueError as value_error:
+            raise UnknownExperimentTunerTypeException(
+                message=str(value_error)) from value_error
 
         runner.run(metrices, **kwargs)
 
@@ -179,6 +188,7 @@ class Experiment:
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
+
             return deployment.deploy(config)
         except ApiException as api_exception:
             raise SeldonDeploymentException(
@@ -187,6 +197,7 @@ class Experiment:
                 http_resp="Failed to deploy.") from api_exception
         except Exception as exception:
             raise ExperimentFailedException(message=str(exception)) from exception
+
 
 
 def start_experiment(

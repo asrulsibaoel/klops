@@ -1,6 +1,7 @@
 """_summary_
 """
 from typing import Any, Dict, List, Union
+from datetime import datetime
 
 from hyperopt import STATUS_OK, fmin
 import mlflow
@@ -24,10 +25,12 @@ class HyperOptRunner(BaseRunner):
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  search_spaces: Dict,
+                 experiment_name: str,
                  max_evals: int = 20) -> None:
         self.estimator = estimator
         self.search_spaces = search_spaces
         self.max_evals = max_evals
+        self.experiment_name = experiment_name
 
         super(HyperOptRunner, self).__init__(x_train=x_train, y_train=y_train)
 
@@ -37,8 +40,9 @@ class HyperOptRunner(BaseRunner):
         Returns:
             Dict: _description_
         """
-        with mlflow.start_run():
-            
+        run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
+        with mlflow.start_run(run_name=run_name):
+
             mlflow.set_tags({
                 "estimator_name": self.estimator.__class__.__name__,
                 "opt": "hyperopt"
@@ -47,13 +51,15 @@ class HyperOptRunner(BaseRunner):
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = metrics.mean_squared_error(self.y_test, preds, squared=False)
+            rmse = metrics.mean_squared_error(
+                self.y_test, preds, squared=False)
             for metric, arguments in self.metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             return {"loss": rmse, "status": STATUS_OK}
 
     def run(self,
-            metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
+            metrices: Dict = {"mean_squared_error": {},
+                              "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
         Run the experiment using hyperopt.fmin function.
@@ -73,4 +79,5 @@ class HyperOptRunner(BaseRunner):
                 **kwargs
             )
         except Exception as exception:
-            raise ExperimentFailedException(message=str(exception)) from exception
+            raise ExperimentFailedException(
+                message=str(exception)) from exception

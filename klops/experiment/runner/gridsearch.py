@@ -34,7 +34,8 @@ class GridsearchRunner(BaseRunner):
             x_train=x_train, y_train=y_train)
 
     def run(self,
-            metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
+            metrices: Dict = {"mean_squared_error": {},
+                              "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
         Run the experiment using sklearn.model_selection.GridsearchCV tuner.
@@ -57,4 +58,5 @@ class GridsearchRunner(BaseRunner):
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             mlflow.end_run()
         except Exception as exception:
-            raise ExperimentFailedException(message=str(exception)) from exception
+            raise ExperimentFailedException(
+                message=str(exception)) from exception
