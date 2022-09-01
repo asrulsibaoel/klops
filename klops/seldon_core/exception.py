@@ -11,6 +11,7 @@ class SeldonDeploymentException(ApiException):
 
     def __init__(self, *, status=None, reason=None, http_resp=None):
         """_summary_
+        The constructor for the exception class handler.
 
         Args:
             status (_type_, optional): _description_. Defaults to None. The exception status code.

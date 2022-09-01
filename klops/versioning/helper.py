@@ -7,9 +7,12 @@ from klops.config import LOGGER
 
 def shell_executor(command: str) -> subprocess.CompletedProcess:
     """_summary_
-    Command line executor.
+    Command line executor wrapper.
     Args:
-        command (str): _description_ The command tobe executed.
+        command (str): _description_ The shell command string.
+
+    Returns:
+        subprocess.CompletedProcess: _description_
     """
     try:
         return subprocess.run(command, check=True, shell=True)

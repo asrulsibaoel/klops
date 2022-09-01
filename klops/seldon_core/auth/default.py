@@ -28,6 +28,7 @@ class DefaultAuthentication(AbstractKubernetesAuth):
     def get_custer_endpoint(self) -> str:
         """_summary_
         Get Default Cluster Host URI endpoint.
+
         Returns:
             str: _description_ A string of Basic Cluster Host URI endpoint.
         """
