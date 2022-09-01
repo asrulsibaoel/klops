@@ -1,15 +1,17 @@
 <!-- markdownlint-disable -->
+
 # Tutorials and API Overview  
 
 ## Tutorials  
 - [`Klops Experiment`](/docs/tutorial.experiment.md): The complete tutorials on how to deal with machine learning experiments using Klops.
 - [`Klops Deployment`](/docs/tutorial.deployment.md): The complete tutorials on how to deploy our machine learning projects.
-- [`Klops Versioning`](/docs/tutorial.versioning.md): The complete tutorials on how to deal with data versioning. 
+- [`Klops Versioning`](/docs/tutorial.versioning.md): The complete tutorials on how to deal with data versioning.  
 
-## Modules
 
-- [`config`](./config.md#module-config): _summary_ Settings for klops
-- [`experiment`](./experiment.md#module-experiment): _summary_ Main module file for experiment.
+## Modules  
+
+- [`config`](./config.md#module-config): _summary_
+- [`experiment`](./experiment.md#module-experiment): _summary_
 - [`experiment.exception`](./experiment.exception.md#module-experimentexception): _summary_ Experiment exception module.
 - [`experiment.experiment`](./experiment.experiment.md#module-experimentexperiment): Main module for Klops MLflow Experiment.
 - [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_
@@ -33,6 +35,7 @@
 - [`exception.ExperimentFailedException`](./experiment.exception.md#class-experimentfailedexception): Experiment Failed Exception
 - [`exception.InvalidArgumentsException`](./experiment.exception.md#class-invalidargumentsexception): _summary_ Invalid Arguments Passed
 - [`exception.LogMetricException`](./experiment.exception.md#class-logmetricexception): Log Metric Exception
+- [`exception.UnknownExperimentTunerTypeException`](./experiment.exception.md#class-unknownexperimenttunertypeexception): _summary_ Unknown Experiment Tunner Exception
 - [`experiment.Experiment`](./experiment.experiment.md#class-experiment): _summary_
 - [`base.BaseRunner`](./experiment.runner.base.md#class-baserunner): _summary_
 - [`basic.BasicRunner`](./experiment.runner.basic.md#class-basicrunner): _summary_

@@ -115,7 +115,7 @@ _summary_ Deploy the ML Model
 delete_by_deployment_config(deployment_config: Dict) → bool
 ```
 
-_summary_ Deploy the ML Model. 
+_summary_ Delete the deployment by its configuration. 
 
 
 

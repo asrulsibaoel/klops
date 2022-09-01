@@ -22,7 +22,7 @@ Seldon Deployment Exception Class Handler.
 __init__(status=None, reason=None, http_resp=None)
 ```
 
-_summary_ 
+_summary_ The constructor for the exception class handler. 
 
 
 

@@ -48,13 +48,15 @@ get_custer_endpoint() → str
 
 _summary_ Get Default Cluster Host URI endpoint. 
 
+
+
 **Returns:**
  
  - <b>`str`</b>:  _description_ A string of Basic Cluster Host URI endpoint. 
 
 ---
 
-<a href="../klops/seldon_core/auth/default.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/seldon_core/auth/default.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_token`
 

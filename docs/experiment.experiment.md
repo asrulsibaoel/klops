@@ -11,7 +11,7 @@ Main module for Klops MLflow Experiment.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L192"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L203"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `start_experiment`
 
@@ -58,12 +58,12 @@ _summary_ The function that wrap all the basic Experiment class do. This make th
 
 ---
 
-<a href="../klops/experiment/experiment.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Experiment`
 _summary_ Main class for MLflow Experiment. This class would wrap the MLFlow client and     it's experiments features. 
 
-<a href="../klops/experiment/experiment.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -83,7 +83,7 @@ _summary_ The Experiment class constructor. Every arguments sets here,         w
 
 ---
 
-<a href="../klops/experiment/experiment.py#L146"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `deploy`
 
@@ -100,15 +100,13 @@ deploy(
 
 _summary_ Deploy experiment to Seldon Environment. 
 
-This method would invoke the Deployment class and its dependencies to deploy the experiment using default / user defined template. 
+This method would invoke the Deployment class and its dependencies to deploy         the experiment using default / user defined template. 
 
 
 
 **Args:**
  
  - <b>`artifact_uri`</b> (str):  _description_ The artifact URI.                 We could see it in the MLflow Tracking Server UI. 
-
-
  - <b>`deployment_name`</b> (str):  _description_ The Kubernetes deployment name. 
  - <b>`model_name`</b> (str):  _description_ The model name. 
  - <b>`authentication`</b> (AbstractKubernetesAuth):  _description_ The authentication object.                 Currently supports for GCP and default / minikube Auth. 
@@ -117,7 +115,7 @@ This method would invoke the Deployment class and its dependencies to deploy the
 
 ---
 
-<a href="../klops/experiment/experiment.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L147"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_metric`
 
@@ -134,7 +132,7 @@ _summary_ Log the metric into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L128"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_param`
 
@@ -151,7 +149,7 @@ _summary_ Log the parameters into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L53"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `start`
 
@@ -168,6 +166,8 @@ start(
 ```
 
 _summary_ Start the experiment given the arguments. 
+
+
 
 **Args:**
  
@@ -192,7 +192,7 @@ _summary_ Start the experiment given the arguments.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L125"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `store_artifact`
 
