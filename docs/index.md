@@ -11,11 +11,11 @@
 
 - [`experiment.exception`](./experiment.exception.md#module-experimentexception): _summary_ Experiment exception module.
 - [`experiment.experiment`](./experiment.experiment.md#module-experimentexperiment): Main module for Klops MLflow Experiment.
-- [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_
-- [`experiment.runner.base`](./experiment.runner.base.md#module-experimentrunnerbase): _summary_
-- [`experiment.runner.basic`](./experiment.runner.basic.md#module-experimentrunnerbasic): _summary_
-- [`experiment.runner.gridsearch`](./experiment.runner.gridsearch.md#module-experimentrunnergridsearch): _summary_
-- [`experiment.runner.hyperopt`](./experiment.runner.hyperopt.md#module-experimentrunnerhyperopt): _summary_
+- [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_ The Experiment Runner Module.
+- [`experiment.runner.base`](./experiment.runner.base.md#module-experimentrunnerbase): _summary_ The Base Abstract Class Runner Module.
+- [`experiment.runner.basic`](./experiment.runner.basic.md#module-experimentrunnerbasic): _summary_ The Basic Implementation for Runner Module.
+- [`experiment.runner.gridsearch`](./experiment.runner.gridsearch.md#module-experimentrunnergridsearch): _summary_ The Gridsearch Runner implementation for Runner Module.
+- [`experiment.runner.hyperopt`](./experiment.runner.hyperopt.md#module-experimentrunnerhyperopt): _summary_ The HyperOpt Runner implementation for Runner Module.
 - [`seldon_core`](./seldon_core.md#module-seldon_core): The Deployment init module.
 - [`seldon_core.auth`](./seldon_core.auth.md#module-seldon_coreauth): Initial modules for Auhtentication method.
 - [`seldon_core.auth.default`](./seldon_core.auth.default.md#module-seldon_coreauthdefault): Default Module for Authentication Implementation
