@@ -17,10 +17,13 @@ class BasicRunner(BaseRunner):
     Inherited:
         BaseRunner (_type_): _description_
     """
+
     def __init__(self,
                  estimator: Any,
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  hyparams: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
         self.hyparams = hyparams
@@ -30,10 +33,12 @@ class BasicRunner(BaseRunner):
             "opt": "basic",
             "estimator_name": self.estimator.__class__.__name__
         })
-        super(BasicRunner, self).__init__(x_train=x_train, y_train=y_train)
+        super(BasicRunner, self).__init__(
+            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
     def run(self,
-            metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}},
+            metrices: Dict = {"mean_squared_error": {},
+                              "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
         """_summary_
         Run the experiment without any tuner.
@@ -53,4 +58,5 @@ class BasicRunner(BaseRunner):
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             mlflow.end_run()
         except Exception as exception:
-            raise ExperimentFailedException(message=str(exception)) from exception
+            raise ExperimentFailedException(
+                message=str(exception)) from exception

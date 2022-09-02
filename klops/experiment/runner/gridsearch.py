@@ -21,6 +21,8 @@ class GridsearchRunner(BaseRunner):
                  estimator: Type[Any],
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  grid_params: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
         self.grid_params = grid_params
@@ -31,7 +33,7 @@ class GridsearchRunner(BaseRunner):
             "estimator_name": self.estimator.__class__.__name__
         })
         super(GridsearchRunner, self).__init__(
-            x_train=x_train, y_train=y_train)
+            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},

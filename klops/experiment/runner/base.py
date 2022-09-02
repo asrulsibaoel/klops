@@ -22,9 +22,17 @@ class BaseRunner(ABC):
 
     metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}}
 
-    def __init__(self, x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
-                         y_train: Union[pd.DataFrame, np.ndarray, List, Dict]) -> None:
-        self.split_train_test(x_train=x_train, y_train=y_train)
+    def __init__(self,
+                estimator: Any,
+                x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                y_test: Union[np.ndarray, pd.DataFrame, List],) -> None:
+        self.estimator = estimator
+        self.x_test = x_test
+        self.y_test = y_test
+        self.x_train = x_train
+        self.y_train = y_train
 
     @abstractmethod
     def run(self, metrices: Dict, **kwargs: Any) -> Any:

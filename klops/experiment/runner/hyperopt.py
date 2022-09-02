@@ -24,6 +24,8 @@ class HyperOptRunner(BaseRunner):
                  estimator: Any,
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  search_spaces: Dict,
                  experiment_name: str,
                  max_evals: int = 20) -> None:
@@ -32,7 +34,8 @@ class HyperOptRunner(BaseRunner):
         self.max_evals = max_evals
         self.experiment_name = experiment_name
 
-        super(HyperOptRunner, self).__init__(x_train=x_train, y_train=y_train)
+        super(HyperOptRunner, self).__init__(
+            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
     def objective(self, hyper_parameters: Dict) -> Dict:
         """_summary_
