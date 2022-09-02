@@ -24,7 +24,7 @@ from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunne
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 from klops.seldon_core.exception import SeldonDeploymentException
 
-klops_path = klops.__path__[0]
+KLOPS_PATH = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
 
@@ -46,6 +46,8 @@ class Experiment:
                 Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>"
         """
         self.name = name
+        if tracking_uri in ["", None]:
+            raise ValueError("Tracking uri must be specified in the configuration.")
         self.tracking_uri = tracking_uri
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
         self.mlflow_client = MlflowClient()
@@ -68,7 +70,7 @@ class Experiment:
                   "root_mean_squared_error": {"squared": False}},
               **kwargs: Any) -> Experiment:
         """_summary_
-        Start the experiment given the arguments.
+        Start the experiment with given arguments.
 
         Args:
             classifier (Any): _description_ The classifier pointer class. \
@@ -77,6 +79,13 @@ class Experiment:
                 _description_ The input features with 2 Dimensional Array like.
             y_train (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 _description_ The output mapping.
+            dataset_auto_split (bool):  Whether to automatically split the dataset into train-test pairs.
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+                The input test value. Only usable when the dataset_auto_split flag is False.
+            y_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+                The output test value. Only usable when the dataset_auto_split flag is False.
+            test_size (float): The split size of the test data.
+            random_state (int): The number of random state.
             tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
                 Defaults to None.
             tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
@@ -87,10 +96,10 @@ class Experiment:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 
         Raises:
-            ValueError: _description_ Raised when the `tags` arguments has invalid value.
+            ValueError: _description_ Raised when conditions are not met.
 
         Returns:
-            Experiment: _description_ The itself class.
+            Experiment: _description_ The Experiment instance class.
         """
         try:
 
@@ -105,6 +114,10 @@ class Experiment:
             if dataset_auto_split is True:
                 x_train, x_test, y_train, y_test = self.split_train_test(
                     x_train, y_train, test_size=test_size, random_state=random_state)
+            else:
+                if x_test in [None, []] or y_test in [None, []]:
+                    raise ValueError("X_test and y_test must be passed since you have \
+                        been defined the `dataset_auto_split` to False.")
 
             if tuner in ["basic", None, "default"]:
                 runner = BasicRunner(
@@ -219,9 +232,9 @@ class Experiment:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
             if deployment_template is None:
-                print("Klops path:", klops_path)
+                print("Klops path:", KLOPS_PATH)
                 deployment_template = os.path.join(
-                    klops_path, 'templates/deployment_template.json')
+                    KLOPS_PATH, 'templates/deployment_template.json')
 
             config = deployment.load_deployment_configuration(
                 deployment_template)
@@ -270,6 +283,13 @@ def start_experiment(
             _description_ The input features with 2 Dimensional Array like.
         y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
             _description_ The output mapping.
+        dataset_auto_split (bool):  Whether to automatically split the dataset into train-test pairs.
+        x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+            The input test value. Only usable when the dataset_auto_split flag is False.
+        y_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+            The output test value. Only usable when the dataset_auto_split flag is False.
+        test_size (float): The split size of the test data.
+        random_state (int): The number of random state.
         tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
             Defaults to None.
         tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
@@ -280,10 +300,10 @@ def start_experiment(
             https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 
     Raises:
-        ValueError: _description_ Raised when the `tags` arguments has invalid value.
+        ValueError: _description_ Raised when the input arguments has invalid value.
 
     Returns:
-        Experiment: _description_ The itself class.
+        Experiment: _description_ The Experiment class instance.
     """
     experiment = Experiment(name=name, tracking_uri=tracking_uri)
     experiment = experiment.start(

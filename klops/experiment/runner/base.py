@@ -28,6 +28,15 @@ class BaseRunner(ABC):
                 y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
                 y_test: Union[np.ndarray, pd.DataFrame, List],) -> None:
+        """_summary_
+
+        Args:
+            estimator (Any): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+        """
         self.estimator = estimator
         self.x_test = x_test
         self.y_test = y_test
@@ -80,3 +89,6 @@ class BaseRunner(ABC):
             raise InvalidArgumentsException(message=str(value_error)) from value_error
         except Exception as exception:
             raise LogMetricException(message=str(exception)) from exception
+
+
+__all__ = ["BaseRunner"]

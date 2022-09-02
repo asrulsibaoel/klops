@@ -14,8 +14,6 @@ from klops.experiment.exception import ExperimentFailedException
 class BasicRunner(BaseRunner):
     """_summary_
     Experiment Runner Implementation Class without tuner.
-    Inherited:
-        BaseRunner (_type_): _description_
     """
 
     def __init__(self,
@@ -26,8 +24,18 @@ class BasicRunner(BaseRunner):
                  y_test: Union[np.ndarray, pd.DataFrame, List],
                  hyparams: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
+        """_summary_
+
+        Args:
+            estimator (Any): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            hyparams (Dict, optional): _description_. Defaults to {}.
+            autolog_max_tunning_runs (int, optional): _description_. Defaults to None.
+        """
         self.hyparams = hyparams
-        self.estimator = estimator
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
         mlflow.set_tags({
             "opt": "basic",
@@ -60,3 +68,6 @@ class BasicRunner(BaseRunner):
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception
+
+
+__all__ = ["BasicRunner"]
