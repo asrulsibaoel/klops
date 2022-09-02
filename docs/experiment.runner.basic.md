@@ -12,9 +12,9 @@ _summary_ Experiment Runner Module without tuner.
 <a href="../klops/experiment/runner/basic.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `BasicRunner`
-_summary_ Experiment Runner Implementation Class without tuner. Inherited:  BaseRunner (_type_): _description_ 
+_summary_ Experiment Runner Implementation Class without tuner. 
 
-<a href="../klops/experiment/runner/basic.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/basic.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -23,21 +23,33 @@ __init__(
     estimator: Any,
     x_train: Union[DataFrame, ndarray, List, Dict],
     y_train: Union[DataFrame, ndarray, List, Dict],
+    x_test: Union[ndarray, DataFrame, List[Dict]],
+    y_test: Union[ndarray, DataFrame, List],
     hyparams: Dict = {},
     autolog_max_tunning_runs: int = None
 ) → None
 ```
 
+_summary_ 
 
 
 
+**Args:**
+ 
+ - <b>`estimator`</b> (Any):  _description_ 
+ - <b>`x_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_ 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
+ - <b>`hyparams`</b> (Dict, optional):  _description_. Defaults to {}. 
+ - <b>`autolog_max_tunning_runs`</b> (int, optional):  _description_. Defaults to None. 
 
 
 
 
 ---
 
-<a href="../klops/experiment/runner/basic.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/basic.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

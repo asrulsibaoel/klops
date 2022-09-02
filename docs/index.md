@@ -7,11 +7,8 @@
 - [`Klops Deployment`](/docs/tutorial.deployment.md): The complete tutorials on how to deploy our machine learning projects.
 - [`Klops Versioning`](/docs/tutorial.versioning.md): The complete tutorials on how to deal with data versioning.  
 
+## Modules
 
-## Modules  
-
-- [`config`](./config.md#module-config): _summary_
-- [`experiment`](./experiment.md#module-experiment): _summary_
 - [`experiment.exception`](./experiment.exception.md#module-experimentexception): _summary_ Experiment exception module.
 - [`experiment.experiment`](./experiment.experiment.md#module-experimentexperiment): Main module for Klops MLflow Experiment.
 - [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_
@@ -39,8 +36,8 @@
 - [`experiment.Experiment`](./experiment.experiment.md#class-experiment): _summary_
 - [`base.BaseRunner`](./experiment.runner.base.md#class-baserunner): _summary_
 - [`basic.BasicRunner`](./experiment.runner.basic.md#class-basicrunner): _summary_
-- [`gridsearch.GridsearchRunner`](./experiment.runner.gridsearch.md#class-gridsearchrunner): _summary_
-- [`hyperopt.HyperOptRunner`](./experiment.runner.hyperopt.md#class-hyperoptrunner): _summary_
+- [`gridsearch.GridsearchRunner`](./experiment.runner.gridsearch.md#class-gridsearchrunner): _summary_ GridSearchCV Runner Implementation.
+- [`hyperopt.HyperOptRunner`](./experiment.runner.hyperopt.md#class-hyperoptrunner): _summary_ The HyperOptRunner Implementation.
 - [`default.DefaultAuthentication`](./seldon_core.auth.default.md#class-defaultauthentication): Default Class Implementation for Kubernetes authentication.
 - [`gke.GKEAuthentication`](./seldon_core.auth.gke.md#class-gkeauthentication): Google Kubernetes Engine (GKE) Class Implementation for Kubernetes authentication.
 - [`schema.AbstractKubernetesAuth`](./seldon_core.auth.schema.md#class-abstractkubernetesauth): Abstract Class for Kubernetes get authentication

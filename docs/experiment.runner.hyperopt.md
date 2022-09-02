@@ -15,15 +15,11 @@ _summary_
 <a href="../klops/experiment/runner/hyperopt.py#L16"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HyperOptRunner`
-_summary_ 
+_summary_ The HyperOptRunner Implementation.  
 
 
 
-**Args:**
- 
- - <b>`BaseRunner`</b> (_type_):  _description_ 
-
-<a href="../klops/experiment/runner/hyperopt.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -32,22 +28,35 @@ __init__(
     estimator: Any,
     x_train: Union[DataFrame, ndarray, List, Dict],
     y_train: Union[DataFrame, ndarray, List, Dict],
+    x_test: Union[ndarray, DataFrame, List[Dict]],
+    y_test: Union[ndarray, DataFrame, List],
     search_spaces: Dict,
     experiment_name: str,
     max_evals: int = 20
 ) → None
 ```
 
+_summary_ 
 
 
 
+**Args:**
+ 
+ - <b>`estimator`</b> (Any):  _description_ 
+ - <b>`x_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_ 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
+ - <b>`search_spaces`</b> (Dict):  _description_ 
+ - <b>`experiment_name`</b> (str):  _description_ 
+ - <b>`max_evals`</b> (int, optional):  _description_. Defaults to 20. 
 
 
 
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `objective`
 
@@ -65,7 +74,7 @@ _summary_
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

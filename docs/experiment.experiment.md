@@ -7,11 +7,11 @@ Main module for Klops MLflow Experiment.
 
 **Global Variables**
 ---------------
-- **klops_path**
+- **KLOPS_PATH**
 
 ---
 
-<a href="../klops/experiment/experiment.py#L203"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L256"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `start_experiment`
 
@@ -20,8 +20,13 @@ start_experiment(
     name: 'str',
     tracking_uri: 'str',
     classifier: 'Any',
-    x_train_data: 'Union[ndarray, DataFrame, List[Dict]]',
-    y_train_data: 'Union[ndarray, DataFrame, List[Dict]]',
+    x_train: 'Union[ndarray, DataFrame, List[Dict]]',
+    y_train: 'Union[ndarray, DataFrame, List[Dict]]',
+    dataset_auto_split: 'bool' = True,
+    x_test: 'Union[ndarray, DataFrame, List[Dict]]' = [],
+    y_test: 'Union[ndarray, DataFrame, List]' = [],
+    test_size: 'float' = 0.2,
+    random_state: 'int' = 11,
     tuner: 'str' = None,
     tuner_args: 'Dict' = {},
     metrices: 'Dict' = {'mean_squared_error': {}, 'root_mean_squared_error': {'squared': True}}
@@ -39,6 +44,11 @@ _summary_ The function that wrap all the basic Experiment class do. This make th
  - <b>`classifier`</b> (Any):  _description_ The classifier pointer class.             Example: sklearn.naive_bayes.GaussianNB 
  - <b>`x_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):              _description_ The input features with 2 Dimensional Array like. 
  - <b>`y_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):              _description_ The output mapping. 
+ - <b>`dataset_auto_split`</b> (bool):   Whether to automatically split the dataset into train-test pairs. 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_             The input test value. Only usable when the dataset_auto_split flag is False. 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_             The output test value. Only usable when the dataset_auto_split flag is False. 
+ - <b>`test_size`</b> (float):  The split size of the test data. 
+ - <b>`random_state`</b> (int):  The number of random state. 
  - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).             Defaults to None. 
  - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.             A Dictionary contains key-value pairs set of hyper parameters. 
  - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to             { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.             The sklearn metrices. All metrices method name could be seen here:             https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
@@ -47,23 +57,23 @@ _summary_ The function that wrap all the basic Experiment class do. This make th
 
 **Raises:**
  
- - <b>`ValueError`</b>:  _description_ Raised when the `tags` arguments has invalid value. 
+ - <b>`ValueError`</b>:  _description_ Raised when the input arguments has invalid value. 
 
 
 
 **Returns:**
  
- - <b>`Experiment`</b>:  _description_ The itself class. 
+ - <b>`Experiment`</b>:  _description_ The Experiment class instance. 
 
 
 ---
 
-<a href="../klops/experiment/experiment.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Experiment`
 _summary_ Main class for MLflow Experiment. This class would wrap the MLFlow client and     it's experiments features. 
 
-<a href="../klops/experiment/experiment.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -83,7 +93,7 @@ _summary_ The Experiment class constructor. Every arguments sets here,         w
 
 ---
 
-<a href="../klops/experiment/experiment.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L207"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `deploy`
 
@@ -115,7 +125,7 @@ This method would invoke the Deployment class and its dependencies to deploy    
 
 ---
 
-<a href="../klops/experiment/experiment.py#L147"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_metric`
 
@@ -132,7 +142,7 @@ _summary_ Log the metric into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L189"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `log_param`
 
@@ -149,15 +159,52 @@ _summary_ Log the parameters into the MLflow Experiment logs.
 
 ---
 
-<a href="../klops/experiment/experiment.py#L53"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L158"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `split_train_test`
+
+```python
+split_train_test(
+    x_train: 'Union[DataFrame, ndarray, List, Dict]',
+    y_train: 'Union[DataFrame, ndarray, List, Dict]',
+    test_size: 'float' = 0.2,
+    random_state: 'int' = 11
+) → Tuple
+```
+
+_summary_ Split Data Into Train - Test Pair. 
+
+
+
+**Args:**
+ 
+ - <b>`x_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ The features of the training sets. 
+ - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ The target class. 
+ - <b>`test_size`</b> (float, optional):  _description_. Defaults to .2. The test size in float. 
+ - <b>`random_state`</b> (int, optional):  _description_. Defaults to 11. The randomize state. 
+
+
+
+**Returns:**
+ 
+ - <b>`Tuple`</b>:  _description_ x_train, x_test, y_train, y_test pair. 
+
+---
+
+<a href="../klops/experiment/experiment.py#L57"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `start`
 
 ```python
 start(
     classifier: 'Any',
-    x_train_data: 'Union[ndarray, DataFrame, List[Dict]]',
-    y_train_data: 'Union[ndarray, DataFrame, List]',
+    x_train: 'Union[ndarray, DataFrame, List[Dict]]',
+    y_train: 'Union[ndarray, DataFrame, List]',
+    dataset_auto_split: 'bool' = True,
+    x_test: 'Union[ndarray, DataFrame, List[Dict]]' = [],
+    y_test: 'Union[ndarray, DataFrame, List]' = [],
+    test_size: 'float' = 0.2,
+    random_state: 'int' = 11,
     tuner: 'str' = None,
     tuner_args: 'Dict' = {},
     metrices: 'Dict' = {'mean_squared_error': {}, 'root_mean_squared_error': {'squared': False}},
@@ -165,15 +212,20 @@ start(
 ) → Experiment
 ```
 
-_summary_ Start the experiment given the arguments. 
+_summary_ Start the experiment with given arguments. 
 
 
 
 **Args:**
  
  - <b>`classifier`</b> (Any):  _description_ The classifier pointer class.                 Example: sklearn.naive_bayes.GaussianNB 
- - <b>`x_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The input features with 2 Dimensional Array like. 
- - <b>`y_train_data`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The output mapping. 
+ - <b>`x_train`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The input features with 2 Dimensional Array like. 
+ - <b>`y_train`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):                  _description_ The output mapping. 
+ - <b>`dataset_auto_split`</b> (bool):   Whether to automatically split the dataset into train-test pairs. 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_                 The input test value. Only usable when the dataset_auto_split flag is False. 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_                 The output test value. Only usable when the dataset_auto_split flag is False. 
+ - <b>`test_size`</b> (float):  The split size of the test data. 
+ - <b>`random_state`</b> (int):  The number of random state. 
  - <b>`tuner`</b> (str):  _description_ The tuner could be one of (default | hyperopt | gridsearch).                 Defaults to None. 
  - <b>`tuner_args`</b> (Dict, optional):  _description_. Defaults to {}. Tunner keyworded arguments.                 A Dictionary contains key-value pairs set of hyper parameters. 
  - <b>`metrices`</b> (_type_, optional):  _description_. Defaults to                 { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}.                 The sklearn metrices. All metrices method name could be seen here:                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
@@ -182,17 +234,17 @@ _summary_ Start the experiment given the arguments.
 
 **Raises:**
  
- - <b>`ValueError`</b>:  _description_ Raised when the `tags` arguments has invalid value. 
+ - <b>`ValueError`</b>:  _description_ Raised when conditions are not met. 
 
 
 
 **Returns:**
  
- - <b>`Experiment`</b>:  _description_ The itself class. 
+ - <b>`Experiment`</b>:  _description_ The Experiment instance class. 
 
 ---
 
-<a href="../klops/experiment/experiment.py#L125"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/experiment.py#L176"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `store_artifact`
 
