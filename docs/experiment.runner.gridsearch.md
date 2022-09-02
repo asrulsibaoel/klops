@@ -12,15 +12,11 @@ _summary_
 <a href="../klops/experiment/runner/gridsearch.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `GridsearchRunner`
-_summary_ 
+_summary_ GridSearchCV Runner Implementation.  
 
 
 
-**Args:**
- 
- - <b>`BaseRunner`</b> (_type_):  _description_ 
-
-<a href="../klops/experiment/runner/gridsearch.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/gridsearch.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -29,21 +25,33 @@ __init__(
     estimator: Type[Any],
     x_train: Union[DataFrame, ndarray, List, Dict],
     y_train: Union[DataFrame, ndarray, List, Dict],
+    x_test: Union[ndarray, DataFrame, List[Dict]],
+    y_test: Union[ndarray, DataFrame, List],
     grid_params: Dict = {},
     autolog_max_tunning_runs: int = None
 ) → None
 ```
 
+_summary_ 
 
 
 
+**Args:**
+ 
+ - <b>`estimator`</b> (Type[Any]):  _description_ 
+ - <b>`x_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_ 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
+ - <b>`grid_params`</b> (Dict, optional):  _description_. Defaults to {}. 
+ - <b>`autolog_max_tunning_runs`</b> (int, optional):  _description_. Defaults to None. 
 
 
 
 
 ---
 
-<a href="../klops/experiment/runner/gridsearch.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/gridsearch.py#L45"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 

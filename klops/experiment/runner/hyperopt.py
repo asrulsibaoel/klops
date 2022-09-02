@@ -14,25 +14,36 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class HyperOptRunner(BaseRunner):
-    """_summary_
-
-    Args:
-        BaseRunner (_type_): _description_
+    """_summary_ The HyperOptRunner Implementation.
     """
 
     def __init__(self,
                  estimator: Any,
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  search_spaces: Dict,
                  experiment_name: str,
                  max_evals: int = 20) -> None:
-        self.estimator = estimator
+        """_summary_
+
+        Args:
+            estimator (Any): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            search_spaces (Dict): _description_
+            experiment_name (str): _description_
+            max_evals (int, optional): _description_. Defaults to 20.
+        """
         self.search_spaces = search_spaces
         self.max_evals = max_evals
         self.experiment_name = experiment_name
 
-        super(HyperOptRunner, self).__init__(x_train=x_train, y_train=y_train)
+        super(HyperOptRunner, self).__init__(
+            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
     def objective(self, hyper_parameters: Dict) -> Dict:
         """_summary_
@@ -81,3 +92,6 @@ class HyperOptRunner(BaseRunner):
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception
+
+
+__all__ = ["HyperOptRunner"]

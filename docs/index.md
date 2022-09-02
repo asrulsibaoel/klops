@@ -7,18 +7,15 @@
 - [`Klops Deployment`](/docs/tutorial.deployment.md): The complete tutorials on how to deploy our machine learning projects.
 - [`Klops Versioning`](/docs/tutorial.versioning.md): The complete tutorials on how to deal with data versioning.  
 
+## Modules
 
-## Modules  
-
-- [`config`](./config.md#module-config): _summary_
-- [`experiment`](./experiment.md#module-experiment): _summary_
 - [`experiment.exception`](./experiment.exception.md#module-experimentexception): _summary_ Experiment exception module.
 - [`experiment.experiment`](./experiment.experiment.md#module-experimentexperiment): Main module for Klops MLflow Experiment.
-- [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_
-- [`experiment.runner.base`](./experiment.runner.base.md#module-experimentrunnerbase): _summary_
-- [`experiment.runner.basic`](./experiment.runner.basic.md#module-experimentrunnerbasic): _summary_
-- [`experiment.runner.gridsearch`](./experiment.runner.gridsearch.md#module-experimentrunnergridsearch): _summary_
-- [`experiment.runner.hyperopt`](./experiment.runner.hyperopt.md#module-experimentrunnerhyperopt): _summary_
+- [`experiment.runner`](./experiment.runner.md#module-experimentrunner): _summary_ The Experiment Runner Module.
+- [`experiment.runner.base`](./experiment.runner.base.md#module-experimentrunnerbase): _summary_ The Base Abstract Class Runner Module.
+- [`experiment.runner.basic`](./experiment.runner.basic.md#module-experimentrunnerbasic): _summary_ The Basic Implementation for Runner Module.
+- [`experiment.runner.gridsearch`](./experiment.runner.gridsearch.md#module-experimentrunnergridsearch): _summary_ The Gridsearch Runner implementation for Runner Module.
+- [`experiment.runner.hyperopt`](./experiment.runner.hyperopt.md#module-experimentrunnerhyperopt): _summary_ The HyperOpt Runner implementation for Runner Module.
 - [`seldon_core`](./seldon_core.md#module-seldon_core): The Deployment init module.
 - [`seldon_core.auth`](./seldon_core.auth.md#module-seldon_coreauth): Initial modules for Auhtentication method.
 - [`seldon_core.auth.default`](./seldon_core.auth.default.md#module-seldon_coreauthdefault): Default Module for Authentication Implementation
@@ -39,8 +36,8 @@
 - [`experiment.Experiment`](./experiment.experiment.md#class-experiment): _summary_
 - [`base.BaseRunner`](./experiment.runner.base.md#class-baserunner): _summary_
 - [`basic.BasicRunner`](./experiment.runner.basic.md#class-basicrunner): _summary_
-- [`gridsearch.GridsearchRunner`](./experiment.runner.gridsearch.md#class-gridsearchrunner): _summary_
-- [`hyperopt.HyperOptRunner`](./experiment.runner.hyperopt.md#class-hyperoptrunner): _summary_
+- [`gridsearch.GridsearchRunner`](./experiment.runner.gridsearch.md#class-gridsearchrunner): _summary_ GridSearchCV Runner Implementation.
+- [`hyperopt.HyperOptRunner`](./experiment.runner.hyperopt.md#class-hyperoptrunner): _summary_ The HyperOptRunner Implementation.
 - [`default.DefaultAuthentication`](./seldon_core.auth.default.md#class-defaultauthentication): Default Class Implementation for Kubernetes authentication.
 - [`gke.GKEAuthentication`](./seldon_core.auth.gke.md#class-gkeauthentication): Google Kubernetes Engine (GKE) Class Implementation for Kubernetes authentication.
 - [`schema.AbstractKubernetesAuth`](./seldon_core.auth.schema.md#class-abstractkubernetesauth): Abstract Class for Kubernetes get authentication

@@ -11,27 +11,36 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class GridsearchRunner(BaseRunner):
-    """_summary_
-
-    Args:
-        BaseRunner (_type_): _description_
+    """_summary_ GridSearchCV Runner Implementation.
     """
 
     def __init__(self,
                  estimator: Type[Any],
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  grid_params: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
+        """_summary_
+
+        Args:
+            estimator (Type[Any]): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            grid_params (Dict, optional): _description_. Defaults to {}.
+            autolog_max_tunning_runs (int, optional): _description_. Defaults to None.
+        """
         self.grid_params = grid_params
-        self.estimator = estimator
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
         mlflow.set_tags({
             "opt": "gridsearch",
             "estimator_name": self.estimator.__class__.__name__
         })
         super(GridsearchRunner, self).__init__(
-            x_train=x_train, y_train=y_train)
+            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
@@ -60,3 +69,6 @@ class GridsearchRunner(BaseRunner):
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception
+
+
+__all__ = ["GridsearchRunner"]
