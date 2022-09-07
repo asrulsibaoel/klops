@@ -4,7 +4,7 @@ Base runner module.
 
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -69,7 +69,7 @@ class BaseRunner(ABC):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             x_train, y_train, test_size=test_size, random_state=random_state)
 
-    def call_metrices(self, metric_name: str, *args: Any, **kwargs: Any) -> None:
+    def call_metrices(self, metric_name: str, *args: Any, **kwargs: Any) -> Tuple:
         """_summary_
         Call the measurement metrices (inherited from sklearn metrices), log as mlflow metric.
         Args:
@@ -85,6 +85,8 @@ class BaseRunner(ABC):
             else:
                 score = metrics.mean_squared_error(*args, **kwargs)
             mlflow.log_metric(metric_name, score)
+            
+            return metric_name, score
         except ValueError as value_error:
             raise InvalidArgumentsException(message=str(value_error)) from value_error
         except Exception as exception:

@@ -53,7 +53,7 @@ class HyperOptRunner(BaseRunner):
         """
         run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
         with mlflow.start_run(run_name=run_name):
-
+            result = {"status": STATUS_OK}
             mlflow.set_tags({
                 "estimator_name": self.estimator.__class__.__name__,
                 "opt": "hyperopt"
@@ -62,11 +62,12 @@ class HyperOptRunner(BaseRunner):
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = metrics.mean_squared_error(
-                self.y_test, preds, squared=False)
+            # rmse = metrics.mean_squared_error(
+            #     self.y_test, preds, squared=False)
             for metric, arguments in self.metrices.items():
-                self.call_metrices(metric, self.y_test, preds, **arguments)
-            return {"loss": rmse, "status": STATUS_OK}
+                metric_name, score = self.call_metrices(metric, self.y_test, preds, **arguments)
+                result[metric_name] = score
+            return result
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},

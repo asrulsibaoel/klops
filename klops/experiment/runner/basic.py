@@ -37,10 +37,7 @@ class BasicRunner(BaseRunner):
         """
         self.hyparams = hyparams
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
-        mlflow.set_tags({
-            "opt": "basic",
-            "estimator_name": self.estimator.__class__.__name__
-        })
+        mlflow.set_tag("opt","basic")
         super(BasicRunner, self).__init__(
             estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
 
