@@ -20,21 +20,32 @@ _summary_ Abstract class as Base runner implementation.
 
 ```python
 __init__(
+    estimator: Any,
     x_train: Union[DataFrame, ndarray, List, Dict],
-    y_train: Union[DataFrame, ndarray, List, Dict]
+    y_train: Union[DataFrame, ndarray, List, Dict],
+    x_test: Union[ndarray, DataFrame, List[Dict]],
+    y_test: Union[ndarray, DataFrame, List]
 ) → None
 ```
 
+_summary_ 
 
 
 
+**Args:**
+ 
+ - <b>`estimator`</b> (Any):  _description_ 
+ - <b>`x_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
+ - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_ 
+ - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
 
 
 
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `call_metrices`
 
@@ -51,7 +62,7 @@ _summary_ Call the measurement metrices (inherited from sklearn metrices), log a
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 
@@ -72,7 +83,7 @@ _summary_ The abstract method for base implementation to execute the experiment.
 
 ---
 
-<a href="../klops/experiment/runner/base.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/base.py#L57"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `split_train_test`
 

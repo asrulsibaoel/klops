@@ -14,25 +14,38 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class HyperOptRunner(BaseRunner):
-    """_summary_
-
-    Args:
-        BaseRunner (_type_): _description_
+    """_summary_ The HyperOptRunner Implementation.
     """
 
     def __init__(self,
                  estimator: Any,
                  x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                  y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                 y_test: Union[np.ndarray, pd.DataFrame, List],
                  search_spaces: Dict,
                  experiment_name: str,
+                 tags: Dict = {},
                  max_evals: int = 20) -> None:
-        self.estimator = estimator
+        """_summary_
+
+        Args:
+            estimator (Any): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            search_spaces (Dict): _description_
+            experiment_name (str): _description_
+            max_evals (int, optional): _description_. Defaults to 20.
+        """
         self.search_spaces = search_spaces
         self.max_evals = max_evals
         self.experiment_name = experiment_name
 
-        super(HyperOptRunner, self).__init__(x_train=x_train, y_train=y_train)
+        super(HyperOptRunner, self).__init__(
+            estimator=estimator, x_train=x_train, y_train=y_train,
+            x_test=x_test, y_test=y_test, tags=tags)
 
     def objective(self, hyper_parameters: Dict) -> Dict:
         """_summary_
@@ -42,20 +55,21 @@ class HyperOptRunner(BaseRunner):
         """
         run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
         with mlflow.start_run(run_name=run_name):
+            result = {"status": STATUS_OK}
+            
+            mlflow.set_tags({**self.tags, "opt":"hyperopt"})
+            mlflow.log_params({
+                **hyper_parameters,
+                "estimator": self.estimator.__class__.__name__})
 
-            mlflow.set_tags({
-                "estimator_name": self.estimator.__class__.__name__,
-                "opt": "hyperopt"
-            })
-            mlflow.log_params(hyper_parameters)
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = metrics.mean_squared_error(
-                self.y_test, preds, squared=False)
+            rmse = self.call_metrices("rmse", self.y_test, preds)
             for metric, arguments in self.metrices.items():
-                self.call_metrices(metric, self.y_test, preds, **arguments)
-            return {"loss": rmse, "status": STATUS_OK}
+                metric_name, score = self.call_metrices(metric, self.y_test, preds, **arguments)
+                result[metric_name] = score
+            return {**result, "loss": rmse}
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
@@ -81,3 +95,6 @@ class HyperOptRunner(BaseRunner):
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception
+
+
+__all__ = ["HyperOptRunner"]

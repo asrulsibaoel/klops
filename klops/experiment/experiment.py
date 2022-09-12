@@ -3,16 +3,18 @@ Main module for Klops MLflow Experiment.
 """
 
 from __future__ import annotations
-from typing import Any, Dict, List, Union
 import os
+from typing import Any, Dict, List, Tuple, Union
 import warnings
 
 import joblib
-import pandas as pd
+
 from kubernetes.client import ApiException
 import mlflow
-import numpy as np
 from mlflow.tracking import MlflowClient
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
 import klops
 from klops.experiment.exception import ExperimentFailedException, \
@@ -22,7 +24,7 @@ from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunne
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
 from klops.seldon_core.exception import SeldonDeploymentException
 
-klops_path = klops.__path__[0]
+KLOPS_PATH = klops.__path__[0]
 
 warnings.filterwarnings(action="ignore")
 
@@ -44,6 +46,8 @@ class Experiment:
                 Its our MLflow Tracking server URI. Example: "http://<your-mlflow-host>:<port>"
         """
         self.name = name
+        if tracking_uri in ["", None]:
+            raise ValueError("Tracking uri must be specified in the configuration.")
         self.tracking_uri = tracking_uri
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
         self.mlflow_client = MlflowClient()
@@ -52,8 +56,13 @@ class Experiment:
 
     def start(self,
               classifier: Any,
-              x_train_data: Union[np.ndarray, pd.DataFrame, List[Dict]],
-              y_train_data: Union[np.ndarray, pd.DataFrame, List],
+              x_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
+              y_train: Union[np.ndarray, pd.DataFrame, List],
+              dataset_auto_split: bool = True,
+              x_test: Union[np.ndarray, pd.DataFrame, List[Dict]] = [],
+              y_test: Union[np.ndarray, pd.DataFrame, List] = [],
+              test_size: float = .2,
+              random_state: int = 11,
               tuner: str = None,
               tuner_args: Dict = {},
               metrices: Dict = {
@@ -61,15 +70,22 @@ class Experiment:
                   "root_mean_squared_error": {"squared": False}},
               **kwargs: Any) -> Experiment:
         """_summary_
-        Start the experiment given the arguments.
+        Start the experiment with given arguments.
 
         Args:
             classifier (Any): _description_ The classifier pointer class. \
                 Example: sklearn.naive_bayes.GaussianNB
-            x_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
+            x_train (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 _description_ The input features with 2 Dimensional Array like.
-            y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
+            y_train (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 _description_ The output mapping.
+            dataset_auto_split (bool):  Whether to automatically split the dataset into train-test pairs.
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+                The input test value. Only usable when the dataset_auto_split flag is False.
+            y_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+                The output test value. Only usable when the dataset_auto_split flag is False.
+            test_size (float): The split size of the test data.
+            random_state (int): The number of random state.
             tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
                 Defaults to None.
             tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
@@ -80,37 +96,67 @@ class Experiment:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 
         Raises:
-            ValueError: _description_ Raised when the `tags` arguments has invalid value.
+            ValueError: _description_ Raised when conditions are not met.
 
         Returns:
-            Experiment: _description_ The itself class.
+            Experiment: _description_ The Experiment instance class.
         """
         try:
 
+            tags = {}
             if "tags" in kwargs:
                 if isinstance(kwargs["tags"], Dict):
-                    mlflow.set_tags(kwargs["tags"])
+                    tags = kwargs["tags"]
                     del kwargs["tags"]
                 else:
                     raise ValueError(
                         "Tags should be a dictionary with key-value pair.")
+            max_evals = 20
+            if "max_evals" in kwargs:
+                if isinstance(kwargs["max_evals"], Dict):
+                    max_evals = kwargs["max_evals"]
+                    del kwargs["max_evals"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+
+            if dataset_auto_split is True:
+                x_train, x_test, y_train, y_test = self.split_train_test(
+                    x_train, y_train, test_size=test_size, random_state=random_state)
+            else:
+                if x_test in [None, []] or y_test in [None, []]:
+                    raise ValueError("X_test and y_test must be passed since you have \
+                        been defined the `dataset_auto_split` to False.")
 
             if tuner in ["basic", None, "default"]:
-                runner = BasicRunner(estimator=classifier,
-                                     x_train=x_train_data,
-                                     y_train=y_train_data,
-                                     hyparams=tuner_args)
+                runner = BasicRunner(
+                    estimator=classifier,
+                    x_train=x_train,
+                    y_train=y_train,
+                    x_test=x_test,
+                    y_test=y_test,
+                    tags=tags,
+                    hyparams=tuner_args)
             elif tuner == "hyperopt":
-                runner = HyperOptRunner(estimator=classifier,
-                                        x_train=x_train_data,
-                                        y_train=y_train_data,
-                                        experiment_name=self.name,
-                                        search_spaces=tuner_args)
+                runner = HyperOptRunner(
+                    estimator=classifier,
+                    x_train=x_train,
+                    y_train=y_train,
+                    x_test=x_test,
+                    y_test=y_test,
+                    experiment_name=self.name,
+                    tags=tags,
+                    search_spaces=tuner_args,
+                    max_evals=max_evals)
             elif tuner == "gridsearch":
-                runner = GridsearchRunner(estimator=classifier,
-                                          x_train=x_train_data,
-                                          y_train=y_train_data,
-                                          grid_params=tuner_args)
+                runner = GridsearchRunner(
+                    estimator=classifier,
+                    x_train=x_train,
+                    y_train=y_train,
+                    x_test=x_test,
+                    y_test=y_test,
+                    tags=tags,
+                    grid_params=tuner_args)
             else:
                 raise ValueError("Unknown Experiment tuner type exception. \
                         It should be on of: 'default'|'gridsearch'|'hyperopt'.")
@@ -121,6 +167,24 @@ class Experiment:
         runner.run(metrices, **kwargs)
 
         return self
+
+    def split_train_test(self,
+                         x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                         y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                         test_size: float = .2, random_state: int = 11) -> Tuple:
+        """_summary_ Split Data Into Train - Test Pair.
+
+        Args:
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_ The features of the training sets.
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_ The target class.
+            test_size (float, optional): _description_. Defaults to .2. The test size in float.
+            random_state (int, optional): _description_. Defaults to 11. The randomize state.
+
+        Returns:
+            Tuple: _description_ x_train, x_test, y_train, y_test pair.
+        """
+        return train_test_split(
+            x_train, y_train, test_size=test_size, random_state=random_state)
 
     def store_artifact(self, model: Any, local_path: str, artifact_path: str) -> None:
         """_summary_
@@ -181,10 +245,12 @@ class Experiment:
             deployment = SeldonDeployment(
                 authentication=authentication, namespace=namespace)
             if deployment_template is None:
-                print("Klops path:", klops_path)
-                deployment_template = os.path.join(klops_path, 'templates/deployment_template.json')
+                print("Klops path:", KLOPS_PATH)
+                deployment_template = os.path.join(
+                    KLOPS_PATH, 'templates/deployment_template.json')
 
-            config = deployment.load_deployment_configuration(deployment_template)
+            config = deployment.load_deployment_configuration(
+                deployment_template)
             config["metadata"]["name"] = deployment_name
             config["spec"]["name"] = model_name
             config["spec"]["predictors"][0]["graph"]["modelUri"] = artifact_uri
@@ -196,16 +262,21 @@ class Experiment:
                 reason=api_exception.reason,
                 http_resp="Failed to deploy.") from api_exception
         except Exception as exception:
-            raise ExperimentFailedException(message=str(exception)) from exception
-
+            raise ExperimentFailedException(
+                message=str(exception)) from exception
 
 
 def start_experiment(
         name: str,
         tracking_uri: str,
         classifier: Any,
-        x_train_data: Union[np.ndarray, pd.DataFrame, List[Dict]],
-        y_train_data: Union[np.ndarray, pd.DataFrame, List[Dict]],
+        x_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
+        y_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
+        dataset_auto_split: bool = True,
+        x_test: Union[np.ndarray, pd.DataFrame, List[Dict]] = [],
+        y_test: Union[np.ndarray, pd.DataFrame, List] = [],
+        test_size: float = .2,
+        random_state: int = 11,
         tuner: str = None,
         tuner_args: Dict = {},
         metrices: Dict = {
@@ -225,6 +296,13 @@ def start_experiment(
             _description_ The input features with 2 Dimensional Array like.
         y_train_data (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
             _description_ The output mapping.
+        dataset_auto_split (bool):  Whether to automatically split the dataset into train-test pairs.
+        x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+            The input test value. Only usable when the dataset_auto_split flag is False.
+        y_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_ \
+            The output test value. Only usable when the dataset_auto_split flag is False.
+        test_size (float): The split size of the test data.
+        random_state (int): The number of random state.
         tuner (str): _description_ The tuner could be one of (default | hyperopt | gridsearch). \
             Defaults to None.
         tuner_args (Dict, optional): _description_. Defaults to {}. Tunner keyworded arguments. \
@@ -235,14 +313,18 @@ def start_experiment(
             https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 
     Raises:
-        ValueError: _description_ Raised when the `tags` arguments has invalid value.
+        ValueError: _description_ Raised when the input arguments has invalid value.
 
     Returns:
-        Experiment: _description_ The itself class.
+        Experiment: _description_ The Experiment class instance.
     """
     experiment = Experiment(name=name, tracking_uri=tracking_uri)
-    experiment = experiment.start(classifier=classifier, x_train_data=x_train_data,
-                     y_train_data=y_train_data, tuner=tuner,
-                     tuner_args=tuner_args, metrices=metrices)
+    experiment = experiment.start(
+        classifier=classifier, x_train=x_train,
+        y_train=y_train, tuner=tuner,
+        dataset_auto_split=dataset_auto_split,
+        x_test=x_test, y_test=y_test,
+        test_size=test_size, random_state=random_state,
+        tuner_args=tuner_args, metrices=metrices)
 
     return experiment

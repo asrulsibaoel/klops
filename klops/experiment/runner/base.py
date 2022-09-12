@@ -1,10 +1,10 @@
 """_summary_
-Base runner module
+Base runner module.
 """
 
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import mlflow
 import numpy as np
@@ -22,9 +22,29 @@ class BaseRunner(ABC):
 
     metrices: Dict = {"mean_squared_error": {}, "root_mean_squared_error": {}}
 
-    def __init__(self, x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
-                         y_train: Union[pd.DataFrame, np.ndarray, List, Dict]) -> None:
-        self.split_train_test(x_train=x_train, y_train=y_train)
+    def __init__(self,
+                estimator: Any,
+                x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
+                x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
+                y_test: Union[np.ndarray, pd.DataFrame, List],
+                tags: Dict = {}) -> None:
+        """_summary_
+
+        Args:
+            estimator (Any): _description_
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
+            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            tags (Dict): _description_ Defaults to {}. Additional tags for logging in Experiment.
+        """
+        self.estimator = estimator
+        self.x_test = x_test
+        self.y_test = y_test
+        self.x_train = x_train
+        self.y_train = y_train
+        self.tags = tags
 
     @abstractmethod
     def run(self, metrices: Dict, **kwargs: Any) -> Any:
@@ -52,7 +72,7 @@ class BaseRunner(ABC):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             x_train, y_train, test_size=test_size, random_state=random_state)
 
-    def call_metrices(self, metric_name: str, *args: Any, **kwargs: Any) -> None:
+    def call_metrices(self, metric_name: str, *args: Any, **kwargs: Any) -> Tuple:
         """_summary_
         Call the measurement metrices (inherited from sklearn metrices), log as mlflow metric.
         Args:
@@ -68,7 +88,12 @@ class BaseRunner(ABC):
             else:
                 score = metrics.mean_squared_error(*args, **kwargs)
             mlflow.log_metric(metric_name, score)
+            
+            return metric_name, score
         except ValueError as value_error:
             raise InvalidArgumentsException(message=str(value_error)) from value_error
         except Exception as exception:
             raise LogMetricException(message=str(exception)) from exception
+
+
+__all__ = ["BaseRunner"]
