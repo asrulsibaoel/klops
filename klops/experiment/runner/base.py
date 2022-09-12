@@ -27,7 +27,8 @@ class BaseRunner(ABC):
                 x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                 y_train: Union[pd.DataFrame, np.ndarray, List, Dict],
                 x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
-                y_test: Union[np.ndarray, pd.DataFrame, List],) -> None:
+                y_test: Union[np.ndarray, pd.DataFrame, List],
+                tags: Dict = {}) -> None:
         """_summary_
 
         Args:
@@ -36,12 +37,14 @@ class BaseRunner(ABC):
             y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
             x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
             y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
+            tags (Dict): _description_ Defaults to {}. Additional tags for logging in Experiment.
         """
         self.estimator = estimator
         self.x_test = x_test
         self.y_test = y_test
         self.x_train = x_train
         self.y_train = y_train
+        self.tags = tags
 
     @abstractmethod
     def run(self, metrices: Dict, **kwargs: Any) -> Any:

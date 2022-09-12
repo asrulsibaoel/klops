@@ -25,6 +25,7 @@ class HyperOptRunner(BaseRunner):
                  y_test: Union[np.ndarray, pd.DataFrame, List],
                  search_spaces: Dict,
                  experiment_name: str,
+                 tags: Dict = {},
                  max_evals: int = 20) -> None:
         """_summary_
 
@@ -43,7 +44,8 @@ class HyperOptRunner(BaseRunner):
         self.experiment_name = experiment_name
 
         super(HyperOptRunner, self).__init__(
-            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+            estimator=estimator, x_train=x_train, y_train=y_train,
+            x_test=x_test, y_test=y_test, tags=tags)
 
     def objective(self, hyper_parameters: Dict) -> Dict:
         """_summary_
@@ -54,20 +56,20 @@ class HyperOptRunner(BaseRunner):
         run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
         with mlflow.start_run(run_name=run_name):
             result = {"status": STATUS_OK}
-            mlflow.set_tags({
-                "estimator_name": self.estimator.__class__.__name__,
-                "opt": "hyperopt"
-            })
-            mlflow.log_params(hyper_parameters)
+            
+            mlflow.set_tags({**self.tags, "opt":"hyperopt"})
+            mlflow.log_params({
+                **hyper_parameters,
+                "estimator": self.estimator.__class__.__name__})
+
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            # rmse = metrics.mean_squared_error(
-            #     self.y_test, preds, squared=False)
+            rmse = self.call_metrices("rmse", self.y_test, preds)
             for metric, arguments in self.metrices.items():
                 metric_name, score = self.call_metrices(metric, self.y_test, preds, **arguments)
                 result[metric_name] = score
-            return result
+            return {**result, "loss": rmse}
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},

@@ -23,6 +23,7 @@ class BasicRunner(BaseRunner):
                  x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
                  y_test: Union[np.ndarray, pd.DataFrame, List],
                  hyparams: Dict = {},
+                 tags: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
         """_summary_
 
@@ -37,9 +38,9 @@ class BasicRunner(BaseRunner):
         """
         self.hyparams = hyparams
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
-        mlflow.set_tag("opt","basic")
         super(BasicRunner, self).__init__(
-            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+            estimator=estimator, x_train=x_train, y_train=y_train,
+            x_test=x_test, y_test=y_test, tags=tags)
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
@@ -54,6 +55,7 @@ class BasicRunner(BaseRunner):
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
         try:
+            mlflow.set_tags({**self.tags, "opt":"hyperopt"})
             mlflow.log_params(kwargs)
             model = self.estimator
 
