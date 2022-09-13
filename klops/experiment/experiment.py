@@ -103,10 +103,19 @@ class Experiment:
         """
         try:
 
+            tags = {}
             if "tags" in kwargs:
                 if isinstance(kwargs["tags"], Dict):
-                    mlflow.set_tags(kwargs["tags"])
+                    tags = kwargs["tags"]
                     del kwargs["tags"]
+                else:
+                    raise ValueError(
+                        "Tags should be a dictionary with key-value pair.")
+            max_evals = 20
+            if "max_evals" in kwargs:
+                if isinstance(kwargs["max_evals"], Dict):
+                    max_evals = kwargs["max_evals"]
+                    del kwargs["max_evals"]
                 else:
                     raise ValueError(
                         "Tags should be a dictionary with key-value pair.")
@@ -126,6 +135,7 @@ class Experiment:
                     y_train=y_train,
                     x_test=x_test,
                     y_test=y_test,
+                    tags=tags,
                     hyparams=tuner_args)
             elif tuner == "hyperopt":
                 runner = HyperOptRunner(
@@ -135,7 +145,9 @@ class Experiment:
                     x_test=x_test,
                     y_test=y_test,
                     experiment_name=self.name,
-                    search_spaces=tuner_args)
+                    tags=tags,
+                    search_spaces=tuner_args,
+                    max_evals=max_evals)
             elif tuner == "gridsearch":
                 runner = GridsearchRunner(
                     estimator=classifier,
@@ -143,6 +155,7 @@ class Experiment:
                     y_train=y_train,
                     x_test=x_test,
                     y_test=y_test,
+                    tags=tags,
                     grid_params=tuner_args)
             else:
                 raise ValueError("Unknown Experiment tuner type exception. \

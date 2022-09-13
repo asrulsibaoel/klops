@@ -21,6 +21,7 @@ class GridsearchRunner(BaseRunner):
                  x_test: Union[np.ndarray, pd.DataFrame, List[Dict]],
                  y_test: Union[np.ndarray, pd.DataFrame, List],
                  grid_params: Dict = {},
+                 tags: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
         """_summary_
 
@@ -35,12 +36,11 @@ class GridsearchRunner(BaseRunner):
         """
         self.grid_params = grid_params
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
-        mlflow.set_tags({
-            "opt": "gridsearch",
-            "estimator_name": self.estimator.__class__.__name__
-        })
+        
         super(GridsearchRunner, self).__init__(
-            estimator=estimator, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+            estimator=estimator, x_train=x_train, 
+            y_train=y_train, x_test=x_test, y_test=y_test,
+            tags=tags)
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
@@ -55,12 +55,14 @@ class GridsearchRunner(BaseRunner):
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
         """
         try:
+            mlflow.set_tags({**self.tags, "opt": "gridsearch"})
 
             grid_search = GridSearchCV(
                 estimator=self.estimator,
                 param_grid=self.grid_params,
                 **kwargs
             )
+            
             best_fit = grid_search.fit(self.x_train, self.y_train)
             preds = best_fit.predict(self.x_test)
             for metric, arguments in metrices.items():
