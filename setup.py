@@ -28,6 +28,8 @@ requirements = [
     "google-cloud-storage",
     "google-auth",
     "hyperopt",
+    "kubernetes",
+    "joblib",
     "matplotlib",
     "mlflow",
     "scikit-learn",
