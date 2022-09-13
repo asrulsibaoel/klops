@@ -9,7 +9,7 @@
 
 <p align="center">
     <a href="#" title="PyPi Version"><img src="https://img.shields.io/badge/PyPi-v.0.4.8-blue"></a>
-    <a href="#" title="Python Version"><img src="https://img.shields.io/badge/Python-3.6%2B-green"></a>
+    <a href="#" title="Python Version"><img src="https://img.shields.io/badge/Python-3.8%2B-green"></a>
     <!-- <a href="https://www.codacy.com/gh/ml-tooling/lazydocs/dashboard" title="Codacy Analysis"><img src="https://app.codacy.com/project/badge/Grade/1c8ad486ce9547b6b713cce7ca1d1ec3"></a> -->
     <!-- <a href="" title="Build status"><img src="https://img.shields.io/github/workflow/status/ml-tooling/lazydocs/build-pipeline?style=flat"></a> -->
     <a href="#" title="Project License"><img src="https://img.shields.io/badge/License-Koinworks-red"></a>
