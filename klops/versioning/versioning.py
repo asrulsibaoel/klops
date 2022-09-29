@@ -124,13 +124,15 @@ class Versioning:
             with dvc.api.open(file_name, rev=rev, remote=remote) as file_buffer:
                 name, extension = splitext(file_name)
                 LOGGER.info("Reading file %s with extension %s", name, extension)
-                if extension in [".csv", ".json", ".yaml", ".yml"]:
+                if extension in [".csv", ".json", ".yaml", ".yml", ".txt"]:
                     if extension == ".csv":
                         return csv.reader(file_buffer)
                     elif extension == ".json":
                         return json.load(file_buffer)
                     elif extension in [".yml", ".yaml"]:
                         return yaml.safe_load(file_buffer)
+                    elif extension == ".txt":
+                        return [line.rstrip() for line in file_buffer.readlines()]
                 else:
                     LOGGER.warning("Unsupported file extension: %s, \
                                    this would be return as a buffer.", extension)
