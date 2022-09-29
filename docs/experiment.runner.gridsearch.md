@@ -3,7 +3,9 @@
 <a href="../klops/experiment/runner/gridsearch.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `experiment.runner.gridsearch`
-_summary_ 
+
+
+
 
 
 
@@ -12,7 +14,7 @@ _summary_
 <a href="../klops/experiment/runner/gridsearch.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `GridsearchRunner`
-_summary_ GridSearchCV Runner Implementation.  
+GridSearchCV Runner Implementation.  
 
 
 
@@ -28,11 +30,10 @@ __init__(
     x_test: Union[ndarray, DataFrame, List[Dict]],
     y_test: Union[ndarray, DataFrame, List],
     grid_params: Dict = {},
+    tags: Dict = {},
     autolog_max_tunning_runs: int = None
 ) → None
 ```
-
-_summary_ 
 
 
 
@@ -43,8 +44,8 @@ _summary_
  - <b>`y_train`</b> (Union[pd.DataFrame, np.ndarray, List, Dict]):  _description_ 
  - <b>`x_test`</b> (Union[np.ndarray, pd.DataFrame, List[Dict]]):  _description_ 
  - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
- - <b>`grid_params`</b> (Dict, optional):  _description_. Defaults to {}. 
- - <b>`autolog_max_tunning_runs`</b> (int, optional):  _description_. Defaults to None. 
+ - <b>`grid_params`</b> (Dict, optional):   Defaults to {}. 
+ - <b>`autolog_max_tunning_runs`</b> (int, optional):   Defaults to None. 
 
 
 
@@ -62,11 +63,10 @@ run(
 ) → Any
 ```
 
-_summary_ Run the experiment using sklearn.model_selection.GridsearchCV tuner. 
+Run the experiment using sklearn.model_selection.GridsearchCV tuner. 
 
 **Args:**
- 
- - <b>`metrices`</b> (_type_, optional):  _description_. 
+  metrices (_type_, optional):  
  - <b>`Defaults to {"mean_squared_error"`</b>:  {}, "root_mean_squared_error": {}}. The sklearn metrices. All metrices method name could be seen here: 
  - <b>`https`</b>: //scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
 

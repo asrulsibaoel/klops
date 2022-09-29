@@ -3,23 +3,23 @@
 <a href="../klops/versioning/versioning.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `versioning.versioning`
-_summary_ Main module for versioning Control. 
+Main module for versioning Control. 
 
 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L16"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Versioning`
-_summary_ Versioning control for klops. Based on DVC. 
+Versioning control for klops. Based on DVC. 
 
 
 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `add`
 
@@ -27,15 +27,15 @@ _summary_ Versioning control for klops. Based on DVC.
 add(file_or_path: str) → None
 ```
 
-_summary_ Track the file / path into DVC. 
+Track the file / path into DVC. 
 
 **Args:**
  
- - <b>`file_or_path`</b> (str):  _description_ File or path tobe added. 
+ - <b>`file_or_path`</b> (str):   File or path tobe added. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L26"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `add_remote`
 
@@ -43,15 +43,41 @@ _summary_ Track the file / path into DVC.
 add_remote(name: str, remote_url: str) → None
 ```
 
-_summary_ Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3. 
+Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3. 
 
 **Args:**
  
- - <b>`remote_url`</b> (str):  _description_ 
+ - <b>`remote_url`</b> (str):  The remove URL for the DVC remote repository. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `get_url`
+
+```python
+get_url(path: str, repo: str = None, rev: str = None, remote: str = None) → Any
+```
+
+Get the URL to the storage location of a data file or             directory tracked in a DVC project. 
+
+
+
+**Args:**
+  path (str):  
+ - <b>`repo`</b> (str, optional):  . Defaults to None. 
+ - <b>`rev`</b> (str, optional):  . Defaults to None. 
+ - <b>`remote`</b> (str, optional):  . Defaults to None. 
+
+
+
+**Returns:**
+ 
+ - <b>`Any`</b>:  Returns the URL string of the storage location (in a DVC remote)                 where a target file or directory, specified by its path in a repo                     (DVC project), is stored. 
+
+---
+
+<a href="../klops/versioning/versioning.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `init`
 
@@ -59,13 +85,13 @@ _summary_ Add remote repository. Could be local, or remote storage such as GCP b
 init() → None
 ```
 
-_summary_ Initiate DVC 
+Initiate DVC 
 
 Initiate the DVC when it's not found. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `pull`
 
@@ -73,11 +99,11 @@ Initiate the DVC when it's not found.
 pull() → None
 ```
 
-_summary_ Pull the commited data. 
+Pull the commited data. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L42"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `push`
 
@@ -85,11 +111,11 @@ _summary_ Pull the commited data.
 push() → None
 ```
 
-_summary_ Push every tracked changes into dvc. 
+Push every tracked changes into dvc. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L86"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_binary`
 
@@ -97,43 +123,43 @@ _summary_ Push every tracked changes into dvc.
 read_binary(file_name: str) → Any
 ```
 
-_summary_ Read the binary file such as .pkl, .joblib, etc. stored in the DVC storage / repository. 
+Read the binary file such as .pkl, .joblib, etc. stored in the DVC storage / repository. 
 
 **Args:**
  
- - <b>`file_name`</b> (str):  _description_ The file name. Including its path. 
+ - <b>`file_name`</b> (str):   The file name. Including its path. 
 
 
 
 **Returns:**
  
- - <b>`Any`</b>:  _description_ Object pointer instances. 
+ - <b>`Any`</b>:   Object pointer instances. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L103"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `read_dataset`
 
 ```python
-read_dataset(file_name: str) → Any
+read_dataset(file_name: str, revision: str = None) → Any
 ```
 
-_summary_ Read dataset from DVC artifact storage. 
+Read dataset from DVC artifact storage. 
 
 **Args:**
  
- - <b>`file_name`</b> (str):  _description_ The file name. Including it's path. 
+ - <b>`file_name`</b> (str):   The file name. Including it's path. 
 
 
 
 **Returns:**
  
- - <b>`Any`</b>:  _description_ The dataset buffer. Need to parse. 
+ - <b>`Any`</b>:   The dataset buffer. Need to parse. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `repro`
 
@@ -141,11 +167,11 @@ _summary_ Read dataset from DVC artifact storage.
 repro() → None
 ```
 
-_summary_ Reproduce the DVC pipeline. 
+Reproduce the DVC pipeline. 
 
 ---
 
-<a href="../klops/versioning/versioning.py#L62"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/versioning/versioning.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 
@@ -158,14 +184,14 @@ run(
 ) → None
 ```
 
-_summary_ Run the defined DVC pipeline. 
+Run the defined DVC pipeline. 
 
 **Args:**
  
- - <b>`entry_point`</b> (str):  _description_ The main program to be executed. 
- - <b>`name`</b> (str, optional):  _description_. Defaults to None. The Pipeline name. 
- - <b>`dependencies`</b> (List, optional):  _description_. Defaults to []. List of dependencies. The same as `-d` options in dvc command. 
- - <b>`outputs`</b> (List, optional):  _description_. Defaults to []. List of the outputs, The same as `-o` options in dvc command. 
+ - <b>`entry_point`</b> (str):   The main program to be executed. 
+ - <b>`name`</b> (str, optional):  . Defaults to None. The Pipeline name. 
+ - <b>`dependencies`</b> (List, optional):  . Defaults to []. List of dependencies. The same as `-d` options in dvc command. 
+ - <b>`outputs`</b> (List, optional):  . Defaults to []. List of the outputs, The same as `-o` options in dvc command. 
 
 
 

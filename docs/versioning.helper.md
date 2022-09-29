@@ -3,7 +3,9 @@
 <a href="../klops/versioning/helper.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `versioning.helper`
-_summary_ 
+
+
+
 
 
 ---
@@ -16,11 +18,11 @@ _summary_
 shell_executor(command: str) → CompletedProcess
 ```
 
-_summary_ Command line executor wrapper. 
+Command line executor wrapper. 
 
 **Args:**
  
- - <b>`command`</b> (str):  _description_ The shell command string. 
+ - <b>`command`</b> (str):  The shell command string. 
 
 
 

@@ -3,7 +3,7 @@
 <a href="../klops/experiment/exception.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `experiment.exception`
-_summary_ Experiment exception module. 
+Experiment exception module. 
 
 Put all the exception handlers here. 
 
@@ -26,7 +26,7 @@ Raised when the experiment got failed.
 __init__(message: str, *args: object) → None
 ```
 
-_summary_ The Experiment Failed Constructor 
+The Experiment Failed Constructor 
 
 Message would store the root causes. 
 
@@ -43,7 +43,7 @@ Message would store the root causes.
 <a href="../klops/experiment/exception.py#L26"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `InvalidArgumentsException`
-_summary_ Invalid Arguments Passed 
+Invalid Arguments Passed 
 
 Raised when the given arguments are invalid. 
 
@@ -55,13 +55,13 @@ Raised when the given arguments are invalid.
 __init__(message: str, *args: object) → None
 ```
 
-_summary_ The Exception Constructor 
+The Exception Constructor 
 
 
 
 **Args:**
  
- - <b>`message`</b> (str):  _description_ message that would be displayed to the user. 
+ - <b>`message`</b> (str):  message that would be displayed to the user. 
 
 
 
@@ -84,7 +84,7 @@ Raised when the Logging the metrics are failed.
 __init__(message: str, *args: object) → None
 ```
 
-_summary_ The Log Metric Exception Constructor 
+The Log Metric Exception Constructor 
 
 Message would store the root causes. 
 
@@ -101,7 +101,7 @@ Message would store the root causes.
 <a href="../klops/experiment/exception.py#L65"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UnknownExperimentTunerTypeException`
-_summary_ Unknown Experiment Tunner Exception 
+Unknown Experiment Tunner Exception 
 
 Raised when the tuner is not one of `default` | `gridsearch` | `hyperopt`. 
 
@@ -113,13 +113,13 @@ Raised when the tuner is not one of `default` | `gridsearch` | `hyperopt`.
 __init__(message, *args: object) → None
 ```
 
-_summary_ The Exception Constructor. 
+The Exception Constructor. 
 
 
 
 **Args:**
  
- - <b>`message`</b> (_type_):  _description_ The Exception message would be displayed. 
+ - <b>`message`</b> (_type_):  The Exception message would be displayed. 
 
 
 
