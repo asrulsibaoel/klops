@@ -1,9 +1,15 @@
 """
 Main module for versioning Control.
 """
+import csv
+import json
 
+from os.path import splitext
 import pickle
 from typing import Any, List
+
+import yaml
+
 
 import dvc
 
@@ -66,9 +72,11 @@ class Versioning:
         Run the defined DVC pipeline.
         Args:
             entry_point (str):  The main program to be executed.
-            name (str, optional): . Defaults to None. The Pipeline name.
-            dependencies (List, optional): . Defaults to []. List of dependencies. The same as `-d` options in dvc command.
-            outputs (List, optional): . Defaults to []. List of the outputs, The same as `-o` options in dvc command.
+            name (str, optional): Defaults to None. The Pipeline name.
+            dependencies (List, optional): Defaults to []. List of dependencies. \
+                The same as `-d` options in dvc command.
+            outputs (List, optional): Defaults to []. List of the outputs, The same as `-o` \
+                options in dvc command.
         """
         deps = ""
         outs = ""
@@ -98,18 +106,34 @@ class Versioning:
         except dvc.exceptions.PathMissingError as path_missing:
             LOGGER.error(str(path_missing))
 
-    def read_dataset(self, file_name: str, revision: str = None) -> Any:
+    def read_dataset(self,
+                     file_name: str,
+                     rev: str = None,
+                     remote: str = None) -> Any:
         """
         Read dataset from DVC artifact storage.
         Args:
-            file_name (str):  The file name. Including it's path.
-
+            file_name (str): The file name. Including it's path.
+            rev (str, optional): Revision or tags that already defined in git. Defaults to None.
+            remote (str, optional): Remote repository URL. Defaults to None.
         Returns:
-            Any:  The dataset buffer. Need to parse.
+            Any:  The dataset file buffer. Need to parse.
         """
         try:
-            with dvc.api.open(file_name, rev=revision) as file_buffer:
-                return file_buffer
+            with dvc.api.open(file_name, rev=rev, remote=remote) as file_buffer:
+                name, extension = splitext(file_name)
+                LOGGER.info("Reading file %s with extension %s", name, extension)
+                if extension in [".csv", ".json", ".yaml", ".yml"]:
+                    if extension == ".csv":
+                        return csv.reader(file_buffer)
+                    elif extension == ".json":
+                        return json.load(file_buffer)
+                    elif extension in [".yml", ".yaml"]:
+                        return yaml.safe_load(file_buffer)
+                else:
+                    LOGGER.warning("Unsupported file extension: %s, \
+                                   this would be return as a buffer.", extension)
+                    return file_buffer
         except dvc.exceptions.FileMissingError as file_missing:
             LOGGER.error(str(file_missing))
         except dvc.exceptions.PathMissingError as path_missing:
@@ -124,10 +148,10 @@ class Versioning:
             directory tracked in a DVC project.
 
         Args:
-            path (str): 
-            repo (str, optional): . Defaults to None.
-            rev (str, optional): . Defaults to None.
-            remote (str, optional): . Defaults to None.
+            path (str): Path to the data file or directory.
+            repo (str, optional): Repository URL. Defaults to None.
+            rev (str, optional): Revision or tags that already defined in git. Defaults to None.
+            remote (str, optional): Remote URL for the repository. Defaults to None.
 
         Returns:
             Any: Returns the URL string of the storage location (in a DVC remote) \
