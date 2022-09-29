@@ -1,4 +1,4 @@
-"""_summary_
+"""
 Config Module for generic purposes.
 """
 import logging

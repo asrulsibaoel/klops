@@ -1,4 +1,4 @@
-"""_summary_ Experiment exception module.
+"""Experiment exception module.
 
 Put all the exception handlers here.
 """
@@ -10,7 +10,7 @@ class ExperimentFailedException(Exception):
     """
 
     def __init__(self, message: str, *args: object) -> None:
-        """_summary_ The Experiment Failed Constructor
+        """The Experiment Failed Constructor
 
         Message would store the root causes.
         Args:
@@ -24,16 +24,16 @@ class ExperimentFailedException(Exception):
 
 
 class InvalidArgumentsException(ValueError):
-    """_summary_ Invalid Arguments Passed
+    """Invalid Arguments Passed
 
     Raised when the given arguments are invalid.
     """
 
     def __init__(self, message: str,*args: object) -> None:
-        """_summary_ The Exception Constructor
+        """The Exception Constructor
 
         Args:
-            message (str): _description_ message that would be displayed to the user.
+            message (str): message that would be displayed to the user.
         """
         self.message = message
         super(InvalidArgumentsException, self).__init__(*args)
@@ -49,7 +49,7 @@ class LogMetricException(Exception):
     """
 
     def __init__(self, message: str, *args: object) -> None:
-        """_summary_ The Log Metric Exception Constructor
+        """The Log Metric Exception Constructor
 
         Message would store the root causes.
         Args:
@@ -63,16 +63,16 @@ class LogMetricException(Exception):
 
 
 class UnknownExperimentTunerTypeException(ValueError):
-    """_summary_ Unknown Experiment Tunner Exception
+    """Unknown Experiment Tunner Exception
 
     Raised when the tuner is not one of `default` | `gridsearch` | `hyperopt`.
     """
 
     def __init__(self, message, *args: object) -> None:
-        """_summary_ The Exception Constructor.
+        """The Exception Constructor.
 
         Args:
-            message (_type_): _description_ The Exception message would be displayed.
+            message (_type_): The Exception message would be displayed.
         """
         self.message = message
         super(UnknownExperimentTunerTypeException, self).__init__(*args)

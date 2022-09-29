@@ -14,16 +14,16 @@ class AbstractKubernetesAuth(ABC):
 
     @abstractmethod
     def get_token(self) -> str:
-        """_summary_
+        """
         Get token string from platforms.
         Returns:
-            str: _description_ A string of Authorization token.
+            str: A string of Authorization token.
         """
 
     @abstractmethod
     def get_custer_endpoint(self) -> str:
-        """_summary_
+        """
         Get cluster host URI endpoint from platfroms.
         Returns:
-            str: _description_ A string of host URI endpoint.
+            str: A string of host URI endpoint.
         """

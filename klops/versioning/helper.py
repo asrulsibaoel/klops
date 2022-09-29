@@ -1,4 +1,4 @@
-"""_summary_
+"""
 """
 import subprocess
 
@@ -6,10 +6,10 @@ from klops.config import LOGGER
 
 
 def shell_executor(command: str) -> subprocess.CompletedProcess:
-    """_summary_
+    """
     Command line executor wrapper.
     Args:
-        command (str): _description_ The shell command string.
+        command (str): The shell command string.
 
     Returns:
         subprocess.CompletedProcess: _description_

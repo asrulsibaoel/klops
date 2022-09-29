@@ -1,4 +1,4 @@
-"""_summary_
+"""
 Main module for versioning Control.
 """
 
@@ -12,19 +12,19 @@ from klops.versioning.helper import shell_executor
 
 
 class Versioning:
-    """_summary_
+    """
     Versioning control for klops. Based on DVC.
     """
 
     def init(self) -> None:
-        """_summary_ Initiate DVC
+        """Initiate DVC
 
         Initiate the DVC when it's not found.
         """
         shell_executor("dvc init")
 
     def add_remote(self, name: str, remote_url: str) -> None:
-        """_summary_
+        """
         Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3.
         Args:
             remote_url (str): 
@@ -32,7 +32,7 @@ class Versioning:
         shell_executor(f"dvc remote add -d {name} {remote_url}")
 
     def add(self, file_or_path: str) -> None:
-        """_summary_
+        """
         Track the file / path into DVC.
         Args:
             file_or_path (str):  File or path tobe added.
@@ -40,19 +40,19 @@ class Versioning:
         shell_executor(f"dvc add {file_or_path}")
 
     def push(self) -> None:
-        """_summary_
+        """
         Push every tracked changes into dvc.
         """
         shell_executor("dvc push")
 
     def pull(self) -> None:
-        """_summary_
+        """
         Pull the commited data.
         """
         shell_executor("dvc pull")
 
     def repro(self) -> None:
-        """_summary_
+        """
         Reproduce the DVC pipeline.
         """
         shell_executor("dvc repro")
@@ -62,7 +62,7 @@ class Versioning:
             name: str = None,
             dependencies: List = [],
             outputs: List = []) -> None:
-        """_summary_
+        """
         Run the defined DVC pipeline.
         Args:
             entry_point (str):  The main program to be executed.
@@ -82,7 +82,7 @@ class Versioning:
         shell_executor(f"dvc run{name} {deps} {outs} {entry_point}")
 
     def read_binary(self, file_name: str) -> Any:
-        """_summary_
+        """
         Read the binary file such as .pkl, .joblib, etc. stored in the DVC storage / repository.
         Args:
             file_name (str):  The file name. Including its path.
@@ -99,7 +99,7 @@ class Versioning:
             LOGGER.error(str(path_missing))
 
     def read_dataset(self, file_name: str, revision: str = None) -> Any:
-        """_summary_
+        """
         Read dataset from DVC artifact storage.
         Args:
             file_name (str):  The file name. Including it's path.

@@ -1,4 +1,4 @@
-"""_summary_
+"""
 """
 from typing import Any, Dict, List, Union
 from datetime import datetime
@@ -14,7 +14,7 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class HyperOptRunner(BaseRunner):
-    """_summary_ The HyperOptRunner Implementation.
+    """The HyperOptRunner Implementation.
     """
 
     def __init__(self,
@@ -27,7 +27,7 @@ class HyperOptRunner(BaseRunner):
                  experiment_name: str,
                  tags: Dict = {},
                  max_evals: int = 20) -> None:
-        """_summary_
+        """
 
         Args:
             estimator (Any): _description_
@@ -37,7 +37,7 @@ class HyperOptRunner(BaseRunner):
             y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
             search_spaces (Dict): _description_
             experiment_name (str): _description_
-            max_evals (int, optional): _description_. Defaults to 20.
+            max_evals (int, optional):  Defaults to 20.
         """
         self.search_spaces = search_spaces
         self.max_evals = max_evals
@@ -48,7 +48,7 @@ class HyperOptRunner(BaseRunner):
             x_test=x_test, y_test=y_test, tags=tags)
 
     def objective(self, hyper_parameters: Dict) -> Dict:
-        """_summary_
+        """
 
         Returns:
             Dict: _description_
@@ -75,10 +75,10 @@ class HyperOptRunner(BaseRunner):
             metrices: Dict = {"mean_squared_error": {},
                               "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
-        """_summary_
+        """
         Run the experiment using hyperopt.fmin function.
         Args:
-            metrices (_type_, optional): _description_.
+            metrices (_type_, optional): 
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics

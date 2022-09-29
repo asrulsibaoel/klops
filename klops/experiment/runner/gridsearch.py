@@ -1,4 +1,4 @@
-"""_summary_
+"""
 """
 from typing import Any, Type, Union, List, Dict
 import mlflow
@@ -11,7 +11,7 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class GridsearchRunner(BaseRunner):
-    """_summary_ GridSearchCV Runner Implementation.
+    """GridSearchCV Runner Implementation.
     """
 
     def __init__(self,
@@ -23,7 +23,7 @@ class GridsearchRunner(BaseRunner):
                  grid_params: Dict = {},
                  tags: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
-        """_summary_
+        """
 
         Args:
             estimator (Type[Any]): _description_
@@ -31,8 +31,8 @@ class GridsearchRunner(BaseRunner):
             y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
             x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
             y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
-            grid_params (Dict, optional): _description_. Defaults to {}.
-            autolog_max_tunning_runs (int, optional): _description_. Defaults to None.
+            grid_params (Dict, optional):  Defaults to {}.
+            autolog_max_tunning_runs (int, optional):  Defaults to None.
         """
         self.grid_params = grid_params
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
@@ -46,10 +46,10 @@ class GridsearchRunner(BaseRunner):
             metrices: Dict = {"mean_squared_error": {},
                               "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
-        """_summary_
+        """
         Run the experiment using sklearn.model_selection.GridsearchCV tuner.
         Args:
-            metrices (_type_, optional): _description_.
+            metrices (_type_, optional): 
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
