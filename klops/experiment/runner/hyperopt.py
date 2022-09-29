@@ -49,14 +49,19 @@ class HyperOptRunner(BaseRunner):
 
     def objective(self, hyper_parameters: Dict) -> Dict:
         """
+        Run the experiment using hyperopt. Each experiment would generate exactly one \
+            artifact regitry in repository.
+
+        Args:
+            hyper_parameters (Dict): The hyper parameters for each experiment.
 
         Returns:
-            Dict: _description_
+            Dict: Dictionary contains error function result.
         """
         run_name = self.experiment_name + "_" + datetime.now().strftime("%Y%m%d:%H%M%S")
         with mlflow.start_run(run_name=run_name):
             result = {"status": STATUS_OK}
-            
+
             mlflow.set_tags({**self.tags, "opt":"hyperopt"})
             mlflow.log_params({
                 **hyper_parameters,
@@ -77,8 +82,9 @@ class HyperOptRunner(BaseRunner):
             **kwargs: Any) -> Any:
         """
         Run the experiment using hyperopt.fmin function.
+
         Args:
-            metrices (_type_, optional): 
+            metrices (_type_, optional):
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
