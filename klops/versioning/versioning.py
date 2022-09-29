@@ -27,7 +27,7 @@ class Versioning:
         """
         Add remote repository. Could be local, or remote storage such as GCP bucket or AWS s3.
         Args:
-            remote_url (str): 
+            remote_url (str): The remove URL for the DVC remote repository.
         """
         shell_executor(f"dvc remote add -d {name} {remote_url}")
 
