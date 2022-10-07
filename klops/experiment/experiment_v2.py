@@ -4,7 +4,7 @@ Main module for Klops MLflow Experiment.
 
 from __future__ import annotations
 import os
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 import warnings
 
 import joblib
@@ -50,7 +50,7 @@ class ExperimentV2(MlflowClient):
             raise ValueError("Tracking uri must be specified in the configuration.")
         self.tracking_uri = tracking_uri
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-        # self.mlflow_client = MlflowClient()
+
 
         mlflow.set_experiment(name)
 
@@ -59,8 +59,8 @@ class ExperimentV2(MlflowClient):
               x_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
               y_train: Union[np.ndarray, pd.DataFrame, List],
               dataset_auto_split: bool = True,
-              x_test: Union[np.ndarray, pd.DataFrame, List[Dict]] = [],
-              y_test: Union[np.ndarray, pd.DataFrame, List] = [],
+              x_test: Union[np.ndarray, pd.DataFrame, List[Dict], None] = None,
+              y_test: Union[np.ndarray, pd.DataFrame, List, None] = None,
               test_size: float = .2,
               random_state: int = 11,
               tuner: str = None,
@@ -79,7 +79,7 @@ class ExperimentV2(MlflowClient):
                 The input features with 2 Dimensional Array like.
             y_train (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 The output mapping.
-            dataset_auto_split (bool):  Whether to automatically split the dataset into train-test pairs.
+            dataset_auto_split (bool): Whether to automatically split the dataset into train-test pairs.
             x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
                 The input test value. Only usable when the dataset_auto_split flag is False.
             y_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): \
@@ -88,9 +88,9 @@ class ExperimentV2(MlflowClient):
             random_state (int): The number of random state.
             tuner (str): The tuner could be one of (default | hyperopt | gridsearch). \
                 Defaults to None.
-            tuner_args (Dict, optional):  Defaults to {}. Tunner keyworded arguments. \
+            tuner_args (Dict, optional): Defaults to {}. Tunner keyworded arguments. \
                 A Dictionary contains key-value pairs set of hyper parameters.
-            metrices (_type_, optional):  Defaults to \
+            metrices (_type_, optional): Defaults to \
                 { "mean_squared_error": {}, "root_mean_squared_error": {"squared": True}}. \
                 The sklearn metrices. All metrices method name could be seen here: \
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
@@ -199,24 +199,6 @@ class ExperimentV2(MlflowClient):
 
         mlflow.log_artifact(local_path=local_path, artifact_path=artifact_path)
 
-    def log_param(self, key: str, value: str) -> None:
-        """
-        Log the parameters into the MLflow Experiment logs.
-        Args:
-            key (str): The param key.
-            value (str): The param value.
-        """
-        mlflow.log_param(key=key, value=value)
-
-    def log_metric(self, key: str, value: float) -> None:
-        """
-        Log the metric into the MLflow Experiment logs.
-        Args:
-            key (str): The metric key.
-            value (Any): The metric value.
-        """
-        mlflow.log_metric(key=key, value=value)
-
     def deploy(self,
                artifact_uri: str,
                deployment_name: str,
@@ -273,8 +255,8 @@ def start_experiment(
         x_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
         y_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
         dataset_auto_split: bool = True,
-        x_test: Union[np.ndarray, pd.DataFrame, List[Dict]] = [],
-        y_test: Union[np.ndarray, pd.DataFrame, List] = [],
+        x_test: Union[np.ndarray, pd.DataFrame, List[Dict], None] = None,
+        y_test: Union[np.ndarray, pd.DataFrame, List, None] = None,
         test_size: float = .2,
         random_state: int = 11,
         tuner: str = None,

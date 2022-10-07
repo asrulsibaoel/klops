@@ -30,14 +30,15 @@ class HyperOptRunner(BaseRunner):
         """
 
         Args:
-            estimator (Any): _description_
-            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
-            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
-            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
-            y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
-            search_spaces (Dict): _description_
-            experiment_name (str): _description_
-            max_evals (int, optional):  Defaults to 20.
+            estimator (Any): The model class instance. Can be sklearn model or any of supported \
+                models by mlflow.
+            x_train (Union[pd.DataFrame, np.ndarray, List, Dict]): The features set for training.
+            y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): The target set for training.
+            x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): The test features.
+            y_test (Union[np.ndarray, pd.DataFrame, List]): The test expected target.
+            search_spaces (Dict): Hyperparameter search space for training.
+            experiment_name (str): The experiment name. Example: "my-experiment-name".
+            max_evals (int, optional):  Defaults to 20. Maximum number of training trials.
         """
         self.search_spaces = search_spaces
         self.max_evals = max_evals
