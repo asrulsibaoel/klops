@@ -93,12 +93,14 @@ class HyperOptRunner(BaseRunner):
         try:
 
             self.metrices = metrices
-            fmin(
+            best_fit = fmin(
                 fn=self.objective,
                 space=self.search_spaces,
                 max_evals=self.max_evals,
                 **kwargs
             )
+
+            return best_fit
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

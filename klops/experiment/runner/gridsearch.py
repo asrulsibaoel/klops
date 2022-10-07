@@ -68,6 +68,7 @@ class GridsearchRunner(BaseRunner):
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             mlflow.end_run()
+            return best_fit.best_params_
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

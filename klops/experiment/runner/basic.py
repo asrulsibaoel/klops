@@ -64,6 +64,8 @@ class BasicRunner(BaseRunner):
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             mlflow.end_run()
+            
+            return self.hyparams
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

@@ -19,6 +19,7 @@ from sklearn.model_selection import train_test_split
 import klops
 from klops.experiment.exception import ExperimentFailedException, \
     UnknownExperimentTunerTypeException
+from klops.experiment.runner.base import BaseRunner
 from klops.seldon_core import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
 from klops.seldon_core.auth.schema import AbstractKubernetesAuth
@@ -34,6 +35,8 @@ class ExperimentV2(MlflowClient):
     Main class for MLflow Experiment. This class would wrap the MLFlow client and \
     it's experiments features.
     """
+
+    best: Dict = {}
 
     def __init__(self, name: str,
                  tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
@@ -101,6 +104,9 @@ class ExperimentV2(MlflowClient):
         Returns:
             Experiment: The Experiment instance class.
         """
+
+        runner: BaseRunner = None
+
         try:
 
             tags = {}
@@ -164,9 +170,19 @@ class ExperimentV2(MlflowClient):
             raise UnknownExperimentTunerTypeException(
                 message=str(value_error)) from value_error
 
-        runner.run(metrices, **kwargs)
+        best_param = runner.run(metrices, **kwargs)
+        self.best = best_param
 
         return self
+    
+    def get_best_model_param(self) -> Dict:
+        """Get the best model parameter from last run.
+
+        Returns:
+            Dict: _description_
+        """
+        return self.best
+
 
     def split_train_test(self,
                          x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
