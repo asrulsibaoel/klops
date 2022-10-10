@@ -47,7 +47,7 @@ class BaseRunner(ABC):
         self.tags = tags
 
     @abstractmethod
-    def run(self, metrices: Dict, **kwargs: Any) -> Any:
+    def run(self, metrices: Dict, **kwargs: Any) -> Dict[str, Any]:
         """
         The abstract method for base implementation to execute the experiment.
 

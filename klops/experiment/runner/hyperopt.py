@@ -80,7 +80,7 @@ class HyperOptRunner(BaseRunner):
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
                               "root_mean_squared_error": {}},
-            **kwargs: Any) -> Any:
+            **kwargs: Any) -> Dict[str, Any]:
         """
         Run the experiment using hyperopt.fmin function.
 

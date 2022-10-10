@@ -45,7 +45,7 @@ class GridsearchRunner(BaseRunner):
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
                               "root_mean_squared_error": {}},
-            **kwargs: Any) -> Any:
+            **kwargs: Any) -> Dict[str, Any]:
         """
         Run the experiment using sklearn.model_selection.GridsearchCV tuner.
 

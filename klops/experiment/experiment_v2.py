@@ -3,6 +3,7 @@ Main module for Klops MLflow Experiment.
 """
 
 from __future__ import annotations
+from datetime import datetime
 import os
 from typing import Any, Dict, List, Optional, Tuple, Union
 import warnings
@@ -175,14 +176,16 @@ class ExperimentV2(MlflowClient):
         self.best = best_result
 
         if save_best_fit:
-            self.store_best_fit()
+            self.store_best_fit(classifier.__class__.__name__, best_result.get("model"))
 
         return self
 
-    def store_best_fit(self):
+    def store_best_fit(self, estimator_name: str, model: Any):
         """Save the best fit model from training phase.
         """
-        model = self.best.get("model")
+        best_running_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+        self.store_artifact(
+            model, f"./{self.name}_{estimator_name}_{best_running_time}.pkl", "models/")
 
     def split_train_test(self,
                          x_train: Union[pd.DataFrame, np.ndarray, List, Dict],
