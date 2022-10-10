@@ -3,7 +3,7 @@
 from typing import Any, Dict, List, Union
 from datetime import datetime
 
-from hyperopt import STATUS_OK, fmin
+from hyperopt import STATUS_OK, fmin, Trials
 import mlflow
 import numpy as np
 import pandas as pd
@@ -75,7 +75,7 @@ class HyperOptRunner(BaseRunner):
             for metric, arguments in self.metrices.items():
                 metric_name, score = self.call_metrices(metric, self.y_test, preds, **arguments)
                 result[metric_name] = score
-            return {**result, "loss": rmse}
+            return {**result, "loss": rmse, "model": model}
 
     def run(self,
             metrices: Dict = {"mean_squared_error": {},
@@ -85,22 +85,30 @@ class HyperOptRunner(BaseRunner):
         Run the experiment using hyperopt.fmin function.
 
         Args:
-            metrices (_type_, optional):
-                Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
-                The sklearn metrices. All metrices method name could be seen here:
+            metrices (Dict, optional):
+                Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}. \
+                The sklearn metrices. All metrices method name could be seen here: \
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
+
+        Returns:
+            Dict: The best fit hyperparams configuration and its model.
         """
         try:
 
             self.metrices = metrices
+            trials = Trials()
+
             best_fit = fmin(
                 fn=self.objective,
                 space=self.search_spaces,
                 max_evals=self.max_evals,
+                trials=trials,
                 **kwargs
             )
 
-            return best_fit
+            best = trials.results[np.argmin([r['loss'] for r in trials.results])]
+
+            return {"best_param": {**best_fit}, "model": best.model, "score": 1 - best.loss}
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

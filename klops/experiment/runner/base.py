@@ -50,11 +50,12 @@ class BaseRunner(ABC):
     def run(self, metrices: Dict, **kwargs: Any) -> Any:
         """
         The abstract method for base implementation to execute the experiment.
+
         Args:
             metrices (Dict): The metrices that would be invoked as measurements.
-            **kwargs (Any): The key-word arguments hyper-parameters for the given class Model.
+
         Returns:
-            Any: _description_
+            Dict: The best fit hyperparams configuration and its model.
         """
 
     def split_train_test(self,

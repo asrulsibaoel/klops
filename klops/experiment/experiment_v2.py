@@ -61,6 +61,7 @@ class ExperimentV2(MlflowClient):
               classifier: Any,
               x_train: Union[np.ndarray, pd.DataFrame, List[Dict]],
               y_train: Union[np.ndarray, pd.DataFrame, List],
+              save_best_fit: bool = False,
               dataset_auto_split: bool = True,
               x_test: Union[np.ndarray, pd.DataFrame, List[Dict], None] = None,
               y_test: Union[np.ndarray, pd.DataFrame, List, None] = None,
@@ -170,19 +171,18 @@ class ExperimentV2(MlflowClient):
             raise UnknownExperimentTunerTypeException(
                 message=str(value_error)) from value_error
 
-        best_param = runner.run(metrices, **kwargs)
-        self.best = best_param
+        best_result = runner.run(metrices, **kwargs)
+        self.best = best_result
+
+        if save_best_fit:
+            self.store_best_fit()
 
         return self
-    
-    def get_best_model_param(self) -> Dict:
-        """Get the best model parameter from last run.
 
-        Returns:
-            Dict: _description_
+    def store_best_fit(self):
+        """Save the best fit model from training phase.
         """
-        return self.best
-
+        model = self.best.get("model")
 
     def split_train_test(self,
                          x_train: Union[pd.DataFrame, np.ndarray, List, Dict],

@@ -48,11 +48,15 @@ class GridsearchRunner(BaseRunner):
             **kwargs: Any) -> Any:
         """
         Run the experiment using sklearn.model_selection.GridsearchCV tuner.
+
         Args:
-            metrices (_type_, optional): 
+            metrices (Dict, optional):
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
+
+        Returns:
+            Dict: The best fit hyperparams configuration and its model.
         """
         try:
             mlflow.set_tags({**self.tags, "opt": "gridsearch"})
@@ -62,13 +66,16 @@ class GridsearchRunner(BaseRunner):
                 param_grid=self.grid_params,
                 **kwargs
             )
-            
+
             best_fit = grid_search.fit(self.x_train, self.y_train)
             preds = best_fit.predict(self.x_test)
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
             mlflow.end_run()
-            return best_fit.best_params_
+            return {
+                "best_param": best_fit.best_params_,
+                "model": best_fit,
+                "score": best_fit.best_score_}
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

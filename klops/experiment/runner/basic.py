@@ -48,11 +48,15 @@ class BasicRunner(BaseRunner):
             **kwargs: Any) -> Any:
         """
         Run the experiment without any tuner.
+
         Args:
-            metrices (_type_, optional): 
+            metrices (Dict, optional):
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
+
+        Returns:
+            Dict: The best fit hyperparams configuration and its model.
         """
         try:
             mlflow.set_tags({**self.tags, "opt":"hyperopt"})
@@ -61,11 +65,13 @@ class BasicRunner(BaseRunner):
 
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
+            rmse = self.call_metrices("rmse", self.y_test, preds)
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
+
             mlflow.end_run()
-            
-            return self.hyparams
+
+            return {"best_param": {**self.hyparams}, "model": model, "score":  1 - rmse}
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception
