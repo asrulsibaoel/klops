@@ -26,12 +26,12 @@ __init__(
 ) → None
 ```
 
-_summary_ Default Class Implementation for Kubernetes authentication. 
+Default Class Implementation for Kubernetes authentication. 
 
 **Args:**
  
- - <b>`cluster_host`</b> (str, optional):  _description_. Defaults to "localhost". 
- - <b>`token`</b> (str, optional):  _description_. Defaults to "TokenString123". 
+ - <b>`cluster_host`</b> (str, optional):   Defaults to "localhost". 
+ - <b>`token`</b> (str, optional):   Defaults to "TokenString123". 
 
 
 
@@ -46,13 +46,13 @@ _summary_ Default Class Implementation for Kubernetes authentication.
 get_custer_endpoint() → str
 ```
 
-_summary_ Get Default Cluster Host URI endpoint. 
+Get Default Cluster Host URI endpoint. 
 
 
 
 **Returns:**
  
- - <b>`str`</b>:  _description_ A string of Basic Cluster Host URI endpoint. 
+ - <b>`str`</b>:  A string of Basic Cluster Host URI endpoint. 
 
 ---
 
@@ -64,11 +64,11 @@ _summary_ Get Default Cluster Host URI endpoint.
 get_token() → str
 ```
 
-_summary_ Get Default Bearer Token String. 
+Get Default Bearer Token String. 
 
 **Returns:**
  
- - <b>`str`</b>:  _description_ A string of Bearer Token. 
+ - <b>`str`</b>:  A string of Bearer Token. 
 
 
 

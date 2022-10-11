@@ -39,11 +39,11 @@ __init__(**kwargs) → None
 get_custer_endpoint() → str
 ```
 
-_summary_ Get cluster host URI endpoint from platfroms. 
+Get cluster host URI endpoint from platfroms. 
 
 **Returns:**
  
- - <b>`str`</b>:  _description_ A string of host URI endpoint. 
+ - <b>`str`</b>:  A string of host URI endpoint. 
 
 ---
 
@@ -55,11 +55,11 @@ _summary_ Get cluster host URI endpoint from platfroms.
 get_token() → str
 ```
 
-_summary_ Get token string from platforms. 
+Get token string from platforms. 
 
 **Returns:**
  
- - <b>`str`</b>:  _description_ A string of Authorization token. 
+ - <b>`str`</b>:  A string of Authorization token. 
 
 
 

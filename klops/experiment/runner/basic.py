@@ -1,4 +1,4 @@
-"""_summary_
+"""
 Experiment Runner Module without tuner.
 """
 
@@ -12,7 +12,7 @@ from klops.experiment.exception import ExperimentFailedException
 
 
 class BasicRunner(BaseRunner):
-    """_summary_
+    """
     Experiment Runner Implementation Class without tuner.
     """
 
@@ -25,7 +25,7 @@ class BasicRunner(BaseRunner):
                  hyparams: Dict = {},
                  tags: Dict = {},
                  autolog_max_tunning_runs: int = None) -> None:
-        """_summary_
+        """
 
         Args:
             estimator (Any): _description_
@@ -33,8 +33,8 @@ class BasicRunner(BaseRunner):
             y_train (Union[pd.DataFrame, np.ndarray, List, Dict]): _description_
             x_test (Union[np.ndarray, pd.DataFrame, List[Dict]]): _description_
             y_test (Union[np.ndarray, pd.DataFrame, List]): _description_
-            hyparams (Dict, optional): _description_. Defaults to {}.
-            autolog_max_tunning_runs (int, optional): _description_. Defaults to None.
+            hyparams (Dict, optional):  Defaults to {}.
+            autolog_max_tunning_runs (int, optional):  Defaults to None.
         """
         self.hyparams = hyparams
         mlflow.sklearn.autolog(max_tuning_runs=autolog_max_tunning_runs)
@@ -46,10 +46,10 @@ class BasicRunner(BaseRunner):
             metrices: Dict = {"mean_squared_error": {},
                               "root_mean_squared_error": {}},
             **kwargs: Any) -> Any:
-        """_summary_
+        """
         Run the experiment without any tuner.
         Args:
-            metrices (_type_, optional): _description_.
+            metrices (_type_, optional): 
                 Defaults to {"mean_squared_error": {}, "root_mean_squared_error": {}}.
                 The sklearn metrices. All metrices method name could be seen here:
                 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics

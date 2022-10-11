@@ -3,7 +3,9 @@
 <a href="../klops/experiment/runner/hyperopt.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `experiment.runner.hyperopt`
-_summary_ 
+
+
+
 
 **Global Variables**
 ---------------
@@ -15,7 +17,7 @@ _summary_
 <a href="../klops/experiment/runner/hyperopt.py#L16"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HyperOptRunner`
-_summary_ The HyperOptRunner Implementation.  
+The HyperOptRunner Implementation.  
 
 
 
@@ -32,11 +34,10 @@ __init__(
     y_test: Union[ndarray, DataFrame, List],
     search_spaces: Dict,
     experiment_name: str,
+    tags: Dict = {},
     max_evals: int = 20
 ) → None
 ```
-
-_summary_ 
 
 
 
@@ -49,22 +50,20 @@ _summary_
  - <b>`y_test`</b> (Union[np.ndarray, pd.DataFrame, List]):  _description_ 
  - <b>`search_spaces`</b> (Dict):  _description_ 
  - <b>`experiment_name`</b> (str):  _description_ 
- - <b>`max_evals`</b> (int, optional):  _description_. Defaults to 20. 
+ - <b>`max_evals`</b> (int, optional):   Defaults to 20. 
 
 
 
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `objective`
 
 ```python
 objective(hyper_parameters: Dict) → Dict
 ```
-
-_summary_ 
 
 
 
@@ -74,7 +73,7 @@ _summary_
 
 ---
 
-<a href="../klops/experiment/runner/hyperopt.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../klops/experiment/runner/hyperopt.py#L74"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `run`
 
@@ -85,11 +84,10 @@ run(
 ) → Any
 ```
 
-_summary_ Run the experiment using hyperopt.fmin function. 
+Run the experiment using hyperopt.fmin function. 
 
 **Args:**
- 
- - <b>`metrices`</b> (_type_, optional):  _description_. 
+  metrices (_type_, optional):  
  - <b>`Defaults to {"mean_squared_error"`</b>:  {}, "root_mean_squared_error": {}}. The sklearn metrices. All metrices method name could be seen here: 
  - <b>`https`</b>: //scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics 
 

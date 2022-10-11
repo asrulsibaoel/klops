@@ -22,15 +22,15 @@ Seldon Deployment Exception Class Handler.
 __init__(status=None, reason=None, http_resp=None)
 ```
 
-_summary_ The constructor for the exception class handler. 
+The constructor for the exception class handler. 
 
 
 
 **Args:**
  
- - <b>`status`</b> (_type_, optional):  _description_. Defaults to None. The exception status code. 
- - <b>`reason`</b> (_type_, optional):  _description_. Defaults to None. The exception elaborated reason. 
- - <b>`http_resp`</b> (_type_, optional):  _description_. Defaults to None. The HTTP response. 
+ - <b>`status`</b> (_type_, optional):   Defaults to None. The exception status code. 
+ - <b>`reason`</b> (_type_, optional):   Defaults to None. The exception elaborated reason. 
+ - <b>`http_resp`</b> (_type_, optional):   Defaults to None. The HTTP response. 
 
 
 
