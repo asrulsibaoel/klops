@@ -1,13 +1,10 @@
 """
 Main module for versioning Control.
 """
-import csv
-import json
-
 from os.path import splitext
-import pickle
 from typing import Any, Dict, Iterable, List, Optional, Union
 
+import joblib
 import yaml
 
 
@@ -101,7 +98,12 @@ class Versioning:
             Any:  Object pointer instances.
         """
         try:
-            model = pickle.loads(dvc.api.read(file_name, mode='rb'))
+            with dvc.api.open(
+                    file_name,
+                    mode='rb'
+                ) as buffer:
+                model = joblib.load(buffer)
+
             return model
         except dvc.exceptions.FileMissingError as file_missing:
             LOGGER.error(str(file_missing))
