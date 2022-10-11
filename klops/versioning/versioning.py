@@ -13,6 +13,7 @@ import yaml
 
 import dvc
 import dvc.api
+import pandas as pd
 
 from klops.config import LOGGER
 from klops.versioning.helper import shell_executor
@@ -110,7 +111,8 @@ class Versioning:
     def read_dataset(self,
                      file_name: str,
                      rev: str = None,
-                     remote: str = None) -> Any:
+                     remote: str = None,
+                     **args: Any) -> Any:
         """
         Read dataset from DVC artifact storage.
         Args:
@@ -126,9 +128,9 @@ class Versioning:
                 LOGGER.info("Reading file %s with extension %s", name, extension)
                 if extension in [".csv", ".json", ".yaml", ".yml", ".txt"]:
                     if extension == ".csv":
-                        return csv.reader(file_buffer)
+                        return pd.read_csv(file_buffer)
                     elif extension == ".json":
-                        return json.load(file_buffer)
+                        return pd.read_json(file_buffer)
                     elif extension in [".yml", ".yaml"]:
                         return yaml.safe_load(file_buffer)
                     elif extension == ".txt":
