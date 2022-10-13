@@ -5,7 +5,7 @@ Google Kubernetes Engine (GKE) Module for Authentication Implementation
 from google.auth import compute_engine, transport
 from google.cloud.container_v1 import ClusterManagerClient
 
-from klops.seldon_core.auth.schema import AbstractKubernetesAuth
+from klops.deployment.auth.schema import AbstractKubernetesAuth
 
 
 class GKEAuthentication(AbstractKubernetesAuth):

@@ -2,6 +2,6 @@
 The Deployment init module.
 """
 
-from .deployment import SeldonDeployment
+from .deployment import Deployment
 
-__all__ = ["SeldonDeployment"]
+__all__ = ["Deployment"]

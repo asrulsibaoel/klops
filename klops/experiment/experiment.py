@@ -21,10 +21,10 @@ import klops
 from klops.experiment.exception import ExperimentFailedException, \
     UnknownExperimentTunerTypeException
 from klops.experiment.runner.base import BaseRunner
-from klops.seldon_core import SeldonDeployment
+from klops.deployment import SeldonDeployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
-from klops.seldon_core.auth.schema import AbstractKubernetesAuth
-from klops.seldon_core.exception import SeldonDeploymentException
+from klops.deployment.auth.schema import AbstractKubernetesAuth
+from klops.deployment.exception import SeldonDeploymentException
 
 KLOPS_PATH = klops.__path__[0]
 

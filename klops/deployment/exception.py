@@ -4,7 +4,7 @@ Seldon deployment exception handler module.
 from kubernetes.client import ApiException
 
 
-class SeldonDeploymentException(ApiException):
+class DeploymentException(ApiException):
     """
     Seldon Deployment Exception Class Handler.
     """
@@ -23,5 +23,5 @@ class SeldonDeploymentException(ApiException):
         self.http_resp = http_resp
         self.body = http_resp.data
         self.headers = http_resp.getheaders()
-        super(SeldonDeploymentException, self).__init__(
+        super(DeploymentException, self).__init__(
             status, reason, http_resp)

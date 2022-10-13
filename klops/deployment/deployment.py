@@ -8,11 +8,11 @@ import yaml
 
 from kubernetes import client
 
-from klops.seldon_core.auth.schema import AbstractKubernetesAuth
-from klops.seldon_core.exception import SeldonDeploymentException
+from klops.deployment.auth.schema import AbstractKubernetesAuth
+from klops.deployment.exception import DeploymentException
 
 
-class SeldonDeployment:
+class Deployment:
     """
     CRUD Kubernetes operation class implementation for Seldon ML Deployment.
     """
@@ -23,9 +23,9 @@ class SeldonDeployment:
                  authentication: AbstractKubernetesAuth,
                  namespace: str) -> None:
         """
-        The contructor for SeldonDeployment class.
+        The contructor for Deployment class.
         Args:
-            authentication (AbstractKubernetesAuth): 
+            authentication (AbstractKubernetesAuth): \
                 The authentication instances. Currently only supports for local cluster or GKE.
             namespace (str): The kubernetes namespace deployment target.
         """
@@ -51,7 +51,7 @@ class SeldonDeployment:
         Load the deployment configuration file into a Python dictionary.
 
         Args:
-            file_name (str): The deployment file name.
+            file_name (str): The deployment file name. \
                 It can be Yaml file (.yml or .yaml) or JSON file.
 
         Returns:
@@ -79,14 +79,14 @@ class SeldonDeployment:
         Deploy the ML Model
 
         Args:
-            deployment_config (Union[object, Dict]):
+            deployment_config (Union[object, Dict]): \
                 Deployment Configuration Object.
 
         Returns:
             deployment_result (Dict): The deployment result metadata in a dictionary.
 
         Raises:
-            SeldonDeploymentException: Raised when the deployment failed.
+            DeploymentException: Raised when the deployment failed.
         """
         deployment_name = deployment_config["metadata"]["name"]
 
@@ -146,13 +146,13 @@ class SeldonDeployment:
             bool: Boolean result of deployment deletion.
 
         Raises:
-            SeldonDeploymentException: Raised when the deployment failed.
+            DeploymentException: Raised when the deployment failed.
         """
         return self.delete(deployment_config["metadata"]["name"])
 
     def delete(self, deployment_name: str) -> bool:
         """
-        Deploy the ML Model
+        Delete the ML Model Deployment from Kubernetes cluster by name.
 
         Args:
             deployment_name (Union[object, Dict]): Deployment name.
@@ -161,7 +161,7 @@ class SeldonDeployment:
             bool: Boolean result of deployment deletion.
 
         Raises:
-            SeldonDeploymentException: Raised when the deployment failed.
+            DeploymentException: Raised when the deployment failed.
         """
         try:
             deployment_existence = self.check_deployment_exist(
@@ -177,6 +177,6 @@ class SeldonDeployment:
                     namespace=self.namespace)
                 if deletion_result:
                     return True
-        except SeldonDeploymentException as deployment_exception:
+        except DeploymentException as deployment_exception:
             print("Deployment deletion failed,", str(deployment_exception))
             return False
