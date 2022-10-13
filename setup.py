@@ -22,6 +22,7 @@ def read(*paths, **kwargs):
 
 
 requirements = [
+    "click",
     "dvc",
     "google-cloud",
     "google-cloud-container",
@@ -62,5 +63,8 @@ setup(
     author="Koinworks Data Team",
     packages=find_packages(exclude=["tests", ".github"]),
     install_requires=requirements,
+    entry_points={
+        "console_scripts": ["klops = klops.__main__:main"]
+    },
     extras_require={"test": requirements_test},
 )
