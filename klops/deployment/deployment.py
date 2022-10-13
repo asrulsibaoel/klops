@@ -1,5 +1,6 @@
 """
-Deployment Module for Seldon Core.
+Deployment module implementation to deploy the machine learning models \
+    to Seldon Kubernetes Cluster.
 """
 import json
 import pathlib
@@ -14,7 +15,8 @@ from klops.deployment.exception import DeploymentException
 
 class Deployment:
     """
-    CRUD Kubernetes operation class implementation for Seldon ML Deployment.
+    CRUD Kubernetes operation class implementation for ML \
+        Deployment Using Seldon Core as its engine.
     """
 
     api: client.CustomObjectsApi = None
@@ -46,7 +48,7 @@ class Deployment:
         api_client = client.ApiClient(configuration=configuration)
         self.api = client.CustomObjectsApi(api_client=api_client)
 
-    def load_deployment_configuration(self, file_name: str):
+    def load_deployment_configuration(self, file_name: str) -> Dict:
         """
         Load the deployment configuration file into a Python dictionary.
 
@@ -55,7 +57,7 @@ class Deployment:
                 It can be Yaml file (.yml or .yaml) or JSON file.
 
         Returns:
-            deployment_config (dict): Seldon Deployment configuration dictionary.
+            deployment_config (Dict): Seldon Deployment configuration dictionary.
 
         Raises:
             ValueError: When the file type are not yaml or json.
@@ -111,7 +113,7 @@ class Deployment:
         return deployment_result
 
     def check_deployment_exist(self, deployment_name: str) -> bool:
-        """ 
+        """
         Check the deployment already exists.
 
         Args:
