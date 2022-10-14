@@ -9,6 +9,11 @@ from .deployment import Deployment
 @click.command()
 @click.option('--docker', is_flag=True, help='Indicates the project should be built into docker image')
 def build(docker):
+    """_summary_
+
+    Args:
+        docker (_type_): _description_
+    """
     if docker:
         print(f'Building this repo into a docker image...')
     else:
@@ -22,6 +27,13 @@ def build(docker):
 @click.option('--cloud', '-c', default="aws",
               type=click.Choice(['aws', 'gcp', 'azure'],case_sensitive=False),
               prompt='Enter cloud to deploy to', help='Cloud to deploy to')
-def deploy(env, cloud):
+def deploy(env: str, cloud: str):
+    """Deploy our machine learning project to the seldon cluster.
+
+    Args:
+        env (str): the environment name.
+        cloud (str): _description_
+    """
+
     print(
         f'Deploying current application artifact to {env} environment in {cloud} cloud...')

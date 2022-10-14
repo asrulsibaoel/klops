@@ -6,11 +6,11 @@ from .deployment import build, deploy
 def deployment():
     pass
 
-@click.group(help="CLI tool to start and manage our experiments.")
+@click.group(help="[Under development] CLI tool to start and manage our experiments.")
 def experiment():
     pass
 
-@click.group(help="CLI tool to manage data versioning.")
+@click.group(help="[Under development] CLI tool to manage data versioning.")
 def versioning():
     pass
 
