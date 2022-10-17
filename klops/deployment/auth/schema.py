@@ -48,6 +48,7 @@ class AbstractKubernetesAuth(ABC):
             file_name (Optional[str], optional): The file name, including its path. \
                 Defaults to None. If None given, it would set to "<current_work_dir>/.klopsrc".
         """
+
         if file_name is None:
             file_name = os.path.join(os.getcwd(), '.klopsrc')
 

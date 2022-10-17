@@ -1,6 +1,6 @@
 import click
 
-from .deployment import build, deploy
+from .deployment import gke, default
 
 @click.group(help="CLI tool to manage full development cycle of machine learning projects.")
 def deployment():
@@ -20,8 +20,8 @@ def cli():
     pass
 
 
-deployment.add_command(build)
-deployment.add_command(deploy)
+deployment.add_command(default)
+deployment.add_command(gke)
 
 cli.add_command(deployment)
 cli.add_command(experiment)
