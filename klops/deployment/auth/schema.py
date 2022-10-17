@@ -21,34 +21,32 @@ class AbstractKubernetesAuth(ABC):
     def __init__(self, **kwargs) -> None:
         self.kwargs = kwargs
 
-    @abstractmethod
+    @property
     def get_token(self) -> str:
         """
         Get token string from platforms.
         Returns:
             str: A string of Authorization token.
         """
+        return self.token
 
-    @abstractmethod
+    @property
     def get_cluster_endpoint(self) -> str:
         """
         Get cluster host URI endpoint from platfroms.
         Returns:
             str: A string of host URI endpoint.
         """
+        return self.cluster_endpoint
 
-    @staticmethod
     def read_config(
-            config_title: str, file_name: Optional[str] = None) -> Dict:
+            self, config_title: str, file_name: Optional[str] = None) -> None:
         """Read from existing configuration file.
 
         Args:
             config_title (str): The config title section.
             file_name (Optional[str], optional): The file name, including its path. \
                 Defaults to None. If None given, it would set to "<current_work_dir>/.klopsrc".
-
-        Returns:
-            configparser.ConfigParser: Return the
         """
         if file_name is None:
             file_name = os.path.join(os.getcwd(), '.klopsrc')
@@ -56,8 +54,8 @@ class AbstractKubernetesAuth(ABC):
         config = configparser.ConfigParser()
         config.read(file_name)
 
-        return {"cluster_endpoint": config[config_title]["cluster_endpoint"],
-                "token": config[config_title]["token"]}
+        self.cluster_endpoint = config[config_title]["cluster_endpoint"]
+        self.token = config[config_title]["token"]
 
     def store_config(self, config_title: str, file_name: Optional[str] = None) -> bool:
         """Store config session file for The Kubernetes Authentication.
