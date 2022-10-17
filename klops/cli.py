@@ -15,7 +15,7 @@ def versioning():
     pass
 
 
-@click.group(help="Main Klops CLI tool.")
+@click.group(help="Klops: KoinMLOps. Build Your End to End Machine Learning Projects.")
 def cli():
     pass
 

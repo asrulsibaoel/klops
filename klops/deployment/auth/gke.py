@@ -23,7 +23,8 @@ class GKEAuthentication(AbstractKubernetesAuth):
         cluster = cluster_manager_client.get_cluster(
             name=f'projects/{self.kwargs["project_id"]}/locations/{self.kwargs["zone"]}/clusters/{self.kwargs["cluster_id"]}')
 
-        return f"https://{cluster.endpoint}:443"
+        self.cluster_endpoint = f"https://{cluster.endpoint}:443"
+        return self.cluster_endpoint
 
     def get_token(self) -> str:
         """
@@ -33,7 +34,8 @@ class GKEAuthentication(AbstractKubernetesAuth):
         """
         credentials = compute_engine.Credentials()
         credentials.refresh(transport.requests.Request())
-        return credentials.token
+        self.token = credentials.token
+        return self.token
 
 
 __all__ = ["GKEAuthentication"]
