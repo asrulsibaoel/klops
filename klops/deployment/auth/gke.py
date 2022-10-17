@@ -13,7 +13,7 @@ class GKEAuthentication(AbstractKubernetesAuth):
     Google Kubernetes Engine (GKE) Class Implementation for Kubernetes authentication.
     """
 
-    def get_custer_endpoint(self) -> str:
+    def get_cluster_endpoint(self) -> str:
         """
         Get GKE Cluster host URI endpoint
         Returns:

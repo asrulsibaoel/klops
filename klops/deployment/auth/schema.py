@@ -30,15 +30,16 @@ class AbstractKubernetesAuth(ABC):
         """
 
     @abstractmethod
-    def get_custer_endpoint(self) -> str:
+    def get_cluster_endpoint(self) -> str:
         """
         Get cluster host URI endpoint from platfroms.
         Returns:
             str: A string of host URI endpoint.
         """
 
+    @staticmethod
     def read_config(
-            self, config_title: str, file_name: Optional[str] = None) -> Dict:
+            config_title: str, file_name: Optional[str] = None) -> Dict:
         """Read from existing configuration file.
 
         Args:
@@ -58,7 +59,7 @@ class AbstractKubernetesAuth(ABC):
         return {"cluster_endpoint": config[config_title]["cluster_endpoint"],
                 "token": config[config_title]["token"]}
 
-    def store_config_cache(self, config_title: str, file_name: Optional[str] = None) -> bool:
+    def store_config(self, config_title: str, file_name: Optional[str] = None) -> bool:
         """Store config session file for The Kubernetes Authentication.
 
         Args:

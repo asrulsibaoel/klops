@@ -25,7 +25,7 @@ class DefaultAuthentication(AbstractKubernetesAuth):
         self.token = token
         super(DefaultAuthentication, self).__init__(**kwargs)
 
-    def get_custer_endpoint(self) -> str:
+    def get_cluster_endpoint(self) -> str:
         """
         Get Default Cluster Host URI endpoint.
 

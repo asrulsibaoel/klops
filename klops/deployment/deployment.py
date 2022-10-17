@@ -40,7 +40,7 @@ class Deployment:
         Connect to the kubernetes cluster given from the constructor arguments.
         """
         configuration = client.Configuration()
-        configuration.host = self.authentication.get_custer_endpoint()
+        configuration.host = self.authentication.get_cluster_endpoint()
         configuration.verify_ssl = False
         configuration.api_key['authorization'] = "Bearer " + \
             self.authentication.get_token()
