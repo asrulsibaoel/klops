@@ -3,9 +3,9 @@ Unit Test for Seldon Deployment
 """
 from unittest import TestCase
 from unittest.mock import Mock, patch
-
-from klops.seldon_core import SeldonDeployment
 from kubernetes.client import CustomObjectsApi
+
+from klops.deployment import SeldonDeployment
 
 
 class TestSeldonDeployment(TestCase):
@@ -30,7 +30,8 @@ class TestSeldonDeployment(TestCase):
         """
         Test deploy for new deployment.
         """
-        with patch.object(self.seldon_deployment, "check_deployment_exist", return_value=False) as mocked_check_deployment:
+        with patch.object(self.seldon_deployment,
+                          "check_deployment_exist", return_value=False) as mocked_check_deployment:
             self.seldon_deployment.deploy(
                 deployment_config=self.deployment_config)
             mocked_check_deployment.assert_called_once_with(
@@ -42,7 +43,9 @@ class TestSeldonDeployment(TestCase):
         """
         Test deploy or existing deployment.
         """
-        with patch.object(self.seldon_deployment, "check_deployment_exist", return_value=True) as mocked_check_deployment:
+        with patch.object(self.seldon_deployment,
+                          "check_deployment_exist",
+                          return_value=True) as mocked_check_deployment:
             self.seldon_deployment.deploy(
                 deployment_config=self.deployment_config)
             mocked_check_deployment.assert_called_once_with(
@@ -54,13 +57,16 @@ class TestSeldonDeployment(TestCase):
         """
         Test the delete deployment
         """
-        with patch.object(self.seldon_deployment, "check_deployment_exist", return_value=True) as mocked_check_deployment:
+        with patch.object(self.seldon_deployment,
+                          "check_deployment_exist", return_value=True) as mocked_check_deployment:
             self.seldon_deployment.delete(self.deployment_config)
             mocked_check_deployment.assert_called_once_with(
                 deployment_name=self.deployment_config["metadata"]["name"])
             mocked_delete_deployment.assert_called_once()
 
-    @patch.object(CustomObjectsApi, "list_namespaced_custom_object", return_value={"items": [{"metadata": {"name": "mockedLearn"}}]})
+    @patch.object(CustomObjectsApi,
+                  "list_namespaced_custom_object",
+                  return_value={"items": [{"metadata": {"name": "mockedLearn"}}]})
     def testcheck_deployment_exist(self, mocked_list_object):
         """
         Test Check deployment exists

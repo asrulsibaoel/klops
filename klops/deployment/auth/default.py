@@ -21,27 +21,9 @@ class DefaultAuthentication(AbstractKubernetesAuth):
             cluster_host (str, optional):  Defaults to "localhost".
             token (str, optional):  Defaults to "TokenString123".
         """
-        self.cluster_host = cluster_host
+        self.cluster_endpoint = f"https://{cluster_host}:443"
         self.token = token
         super(DefaultAuthentication, self).__init__(**kwargs)
-
-    def get_custer_endpoint(self) -> str:
-        """
-        Get Default Cluster Host URI endpoint.
-
-        Returns:
-            str: A string of Basic Cluster Host URI endpoint.
-        """
-        return f"https://{self.cluster_host}:443"
-
-    def get_token(self) -> str:
-        """
-        Get Default Bearer Token String.
-        Returns:
-            str: A string of Bearer Token.
-        """
-        return self.token
-
 
 
 __all__ = ["DefaultAuthentication"]

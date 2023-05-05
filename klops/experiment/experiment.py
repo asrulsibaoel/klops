@@ -21,10 +21,10 @@ import klops
 from klops.experiment.exception import ExperimentFailedException, \
     UnknownExperimentTunerTypeException
 from klops.experiment.runner.base import BaseRunner
-from klops.seldon_core import SeldonDeployment
+from klops.deployment import Deployment
 from klops.experiment.runner import BasicRunner, GridsearchRunner, HyperOptRunner
-from klops.seldon_core.auth.schema import AbstractKubernetesAuth
-from klops.seldon_core.exception import SeldonDeploymentException
+from klops.deployment.auth.schema import AbstractKubernetesAuth
+from klops.deployment.exception import DeploymentException
 
 KLOPS_PATH = klops.__path__[0]
 
@@ -243,7 +243,7 @@ class Experiment(MlflowClient):
                 Kubernetes JSON template file path. Recommended using default template.
         """
         try:
-            deployment = SeldonDeployment(
+            deployment = Deployment(
                 authentication=authentication, namespace=namespace)
             if deployment_template is None:
                 print("Klops path:", KLOPS_PATH)
@@ -258,7 +258,7 @@ class Experiment(MlflowClient):
 
             return deployment.deploy(config)
         except ApiException as api_exception:
-            raise SeldonDeploymentException(
+            raise DeploymentException(
                 status=api_exception.status,
                 reason=api_exception.reason,
                 http_resp="Failed to deploy.") from api_exception
