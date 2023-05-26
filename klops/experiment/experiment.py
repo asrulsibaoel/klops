@@ -38,6 +38,7 @@ class Experiment(MlflowClient):
     """
 
     best: Dict = {}
+    _tracking_uri: str = ""
 
     def __init__(self, name: str,
                  tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", None)) -> None:
@@ -52,11 +53,15 @@ class Experiment(MlflowClient):
         self.name = name
         if tracking_uri in ["", None]:
             raise ValueError("Tracking uri must be specified in the configuration.")
-        self.tracking_uri = tracking_uri
+        # self.tracking_uri = tracking_uri
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
 
 
         mlflow.set_experiment(name)
+
+    # @property
+    # def tracking_uri(self):
+    #     return self._tracking_uri
 
     def start(self,
               classifier: Any,
