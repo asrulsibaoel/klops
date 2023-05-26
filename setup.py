@@ -67,4 +67,6 @@ setup(
         "console_scripts": ["klops = klops.__main__:main"]
     },
     extras_require={"test": requirements_test},
+    package_data={'': ['klops/*.json']},
+    include_package_data=True
 )

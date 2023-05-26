@@ -65,13 +65,13 @@ class BasicRunner(BaseRunner):
 
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = self.call_metrices("rmse", self.y_test, preds)
+            metric_name, score = self.call_metrices("root_mean_squared_error", self.y_test, preds)
             for metric, arguments in metrices.items():
                 self.call_metrices(metric, self.y_test, preds, **arguments)
 
             mlflow.end_run()
 
-            return {"best_param": {**self.hyparams}, "model": model, "score":  1 - rmse}
+            return {"best_param": {**self.hyparams}, "model": model, "score":  1 - score}
         except Exception as exception:
             raise ExperimentFailedException(
                 message=str(exception)) from exception

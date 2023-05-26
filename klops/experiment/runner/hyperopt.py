@@ -3,7 +3,7 @@
 from typing import Any, Dict, List, Union
 from datetime import datetime
 
-from hyperopt import STATUS_OK, fmin, Trials
+from hyperopt import STATUS_OK, fmin, Trials, tpe
 import mlflow
 import numpy as np
 import pandas as pd
@@ -71,7 +71,7 @@ class HyperOptRunner(BaseRunner):
             model = self.estimator
             model.fit(self.x_train, self.y_train)
             preds = model.predict(self.x_test)
-            rmse = self.call_metrices("rmse", self.y_test, preds)
+            rmse = self.call_metrices("root_mean_squared_error", self.y_test, preds)
             for metric, arguments in self.metrices.items():
                 metric_name, score = self.call_metrices(metric, self.y_test, preds, **arguments)
                 result[metric_name] = score
@@ -101,12 +101,14 @@ class HyperOptRunner(BaseRunner):
             best_fit = fmin(
                 fn=self.objective,
                 space=self.search_spaces,
+                algo=tpe.suggest,
                 max_evals=self.max_evals,
                 trials=trials,
                 **kwargs
             )
 
             best = trials.results[np.argmin([r['loss'] for r in trials.results])]
+            print(best)
 
             return {"best_param": {**best_fit}, "model": best.model, "score": 1 - best.loss}
         except Exception as exception:
