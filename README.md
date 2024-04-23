@@ -1,6 +1,6 @@
 
 <h1 align="center">
-    Klops: Koin MLOps
+    Klops: Kube MLOps
 </h1>
 
 <p align="center">
@@ -12,9 +12,9 @@
     <a href="#" title="Python Version"><img src="https://img.shields.io/badge/Python-3.8%2B-green"></a>
     <!-- <a href="https://www.codacy.com/gh/ml-tooling/lazydocs/dashboard" title="Codacy Analysis"><img src="https://app.codacy.com/project/badge/Grade/1c8ad486ce9547b6b713cce7ca1d1ec3"></a> -->
     <!-- <a href="" title="Build status"><img src="https://img.shields.io/github/workflow/status/ml-tooling/lazydocs/build-pipeline?style=flat"></a> -->
-    <a href="#" title="Project License"><img src="https://img.shields.io/badge/License-Koinworks-red"></a>
+    <a href="#" title="Project License"><img src="https://img.shields.io/badge/License-Apache_2.0-red"></a>
     <!-- <a href="https://gitter.im/ml-tooling/lazydocs" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/lazydocs.svg"></a> -->
-    <a href="https://twitter.com/mltooling" title="ML Tooling on Twitter"><img src="https://img.shields.io/twitter/follow/mltooling.svg?label=follow&style=social"></a>
+    <a href="https://linkedin.com/in/asrulsibaoel" title="My Linkedin Profile"><img src="https://img.shields.io/badge/LinkedIn-0077B5?logo=linkedin&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@ Klops is an End-to-End machine learning development pipeline ops. Its build on t
 
 ## Prerequisites  
 - Seldon Core Installed on your Kubernetes cluster. Guidance [here](https://docs.seldon.io/projects/seldon-core/en/latest/workflow/install.html)  
-- MLflow Tracking Server deployed. Recommended to use the schenario 5  [here](https://www.mlflow.org/docs/latest/tracking.html#scenario-5-mlflow-tracking-server-enabled-with-proxied-artifact-storage-access)  
+- MLflow Tracking Server deployed. Recommended to use the scenario 5  [here](https://www.mlflow.org/docs/latest/tracking.html#scenario-5-mlflow-tracking-server-enabled-with-proxied-artifact-storage-access)  
 - Local or remote storage such as Amazon S3 or Google Cloud Storage (GCS) or similar.
 
 ## Installation  
@@ -43,7 +43,7 @@ This is the best way to get the lastest published library, including the experim
 
 Clone this repo  
 ```bash
-$ git clone https://gitlab-engineering.koinworks.com/data-team/klops.git
+$ git clone https://github.com/asrulsibaoel/klops.git
 ```  
 Change your directory to your klops folder:  
 ```bash
