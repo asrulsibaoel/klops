@@ -25,7 +25,7 @@
   <!-- <a href="https://github.com/ml-tooling/lazydocs/releases">Changelog</a> -->
 </p>
 
-Klops is an End-to-End machine learning development pipeline ops. Its build on top of Seldon Core, MLflow and DVC. The goal of this project is to make easier for Data Scientist to develop, maintain, log their experiments and deploy their machine learning projects.  
+Klops is an End-to-End machine learning development pipeline ops. It's built on top of Seldon Core, MLflow and DVC. The goal of this project is to make it easier for Data Scientists to develop, maintain, log their experiments and deploy their machine learning projects.  
 
 ## Prerequisites  
 - Seldon Core Installed on your Kubernetes cluster. Guidance [here](https://docs.seldon.io/projects/seldon-core/en/latest/workflow/install.html)  
@@ -34,12 +34,12 @@ Klops is an End-to-End machine learning development pipeline ops. Its build on t
 
 ## Installation  
 ### From PyPI
-Using pip is the best option if you want to get the stable version and easier way to install.
+Using pip is the best option if you want to get a stable version and an easier way to install.
 ```bash
 $ pip install klops
 ```
 ### Build From Source  
-This is the best way to get the lastest published library, including the experimental version.
+This is the best way to get the latest published library, including the experimental version.
 
 Clone this repo  
 ```bash
@@ -58,7 +58,7 @@ $ python setup.py install
 Klops consists of three modules. Versioning, Experiment and Deployment.
 
 ### Klops Experiment  
-Klops Experiment is a class that wraps the [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html). Below are the simple example to begin with.
+Klops Experiment is a class that wraps the [MLflow Tracking](https://www.mlflow.org/docs/latest/tracking.html). Below is a simple example to begin with.
 ```py
 from klops.experiment import Experiment
 from sklearn.datasets import load_iris
@@ -80,7 +80,7 @@ You would see your experiment result in your Mlflow Tracking UI like below:
 ![Tracking result](/resources/images/experiment_ui.png)
 For the complete tutorials could be seen through this [documentation](/docs/tutorial.experiment.md).  
 ### Klops Versioning  
-Klops Versioning is a kind of version control based on DVC. This module wrapped the commandline and python APIs from [DVC](https://dvc.org).
+Klops Versioning is a kind of version control based on DVC. This module wrapped the command line and python APIs from [DVC](https://dvc.org).
 ```py
 from klops.versioning import Versioning
 
@@ -99,17 +99,17 @@ versioning.push()
 Complete examples could be seen on this [tutorial](/docs/tutorial.versioning.md) page.  
 
 ### Klops Deployment  
-Klops Deployment is a module to deploy the development machine learning projects into Seldon Core instance. Below is the example on how to done with.
+Klops Deployment is a module to deploy the development machine learning projects into [Seldon Core](https://docs.seldon.io/projects/seldon-core/) instance. Below is the example on how to done with.
 
 ```py
-from klops.seldon_core import SeldonDeployment
-from klops.seldon_core.auth import GKEAuthentication
+from klops.deployment import Deployment
+from klops.deployment.auth import GKEAuthentication
 
 gke = GKEAuthentication(
     project_id="your-project-id",
     zone="your-project-region",
     cluster_id="your-cluster-id")
-deployment = SeldonDeployment(gke, "seldon")
+deployment = Deployment(gke, "seldon")
 
 ## Config file could be json or yaml/yml file.
 config = deployment.load_deployment_configuration("<deployment-config>.json")
